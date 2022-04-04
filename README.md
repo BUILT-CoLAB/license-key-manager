@@ -4,24 +4,34 @@
 
 # How to run
 
-From the repository's main directory start the Virtual Environment using the following command:
+> Update: Due to some unexpected virtual environment distinctions between Win/Linux distributions (namely environment variables), the system will now run in a global scenario without the need for a Virtual Environment.
 
-``` 
-source KLM-Pro/bin/activate
-```
-
-Inside the Virtual Environment, run the following commands:
+**Step 1:** From the main directory (the repository's directory), run the following command:
 
 ```
-export FLASK_APP=project
-export FLASK_DEBUG=1
+pip install -r requirements.txt
 ```
 
-And then start the server with:
+**Step 2:** Set up the env variable for flask. This process has two commands, which the one that fits your OS:
 
+Windows:
 ```
-flask run
+set FLASK_APP=bin
+$env:FLASK_APP = "bin"
 ```
+
+Linux:
+```
+export FLASK_APP=bin
+```
+
+**Step 3:** Run the flask application using the following commands:
+
+Windows / Linux:
+```
+python3 -m flask run
+```
+
+If you are in a Linux distribution, you can just type: ```flask run```
 
 By default, the website will be available inside ```http://localhost:5000/```
-
