@@ -41,22 +41,21 @@
           <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
             <h1>Key License Manager - Pro</h1>
             <h6>Admin Login</h6>
-            <form style="margin-top: 5vh;">
-              <!-- Email input -->
-              <div class="form-outline mb-4">
-                <input type="email" id="form1Example23" class="form-control form-control-lg" />
-                <label class="form-label" for="form1Example23">Account ID</label>
-              </div>
+            <div id="spacer" style="height: 1px; margin-top: 4vh; margin-bottom: 0px;"></div>
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <input type="email" id="form1Example23" class="form-control form-control-lg form-content-data" />
+              <label class="form-label" for="form1Example23">Account ID</label>
+            </div>
 
-              <!-- Password input -->
-              <div class="form-outline mb-4">
-                <input type="password" id="form1Example23" class="form-control form-control-lg" />
-                <label class="form-label" for="form1Example23">Password</label>
-              </div>
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <input type="password" id="form1Example23" class="form-control form-control-lg form-content-data" />
+              <label class="form-label" for="form1Example23">Password</label>
+            </div>
 
-              <!-- Submit button -->
-              <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
-            </form>
+            <!-- Submit button -->
+            <button id="submitLoginData" class="btn btn-primary btn-lg btn-block">Sign in</button>
           </div>
         </div>
       </div>
@@ -64,9 +63,21 @@
   </body>
 
   <script>
-    document.querySelectorAll('.form-outline').forEach((formOutline) => {
-      new mdb.Input(formOutline).init();
-    });
+    document.getElementById("submitLoginData").addEventListener("click", submitRequest);
+
+    function submitRequest(){
+      let activeElements = document.getElementsByClassName("form-content-data");
+      // Get login data:
+      let loginData = {
+        'emailData' : activeElements[0].value,
+        'passwordData' : activeElements[1].value
+      }
+
+      var httpRequest = new XMLHttpRequest();
+      httpRequest.open("POST", "/login", true);
+      httpRequest.setRequestHeader('Content-Type', 'application/json');
+      httpRequest.send(JSON.stringify(loginData));
+    }
   </script>
 
 <script
