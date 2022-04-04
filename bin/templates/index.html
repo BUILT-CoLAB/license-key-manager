@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>LKM - Pro | Login Page</title>
+      <!-- Font Awesome -->
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css"
+  rel="stylesheet"
+/>
+      <style>
+        .divider:after,
+        .divider:before {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: #eee;
+        }
+      </style>
+  </head>
+
+  <body>
+    <section class="vh-100">
+      <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+          <div class="col-md-8 col-lg-7 col-xl-6">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+              class="img-fluid" alt="Phone image">
+          </div>
+          <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+            <h1>Key License Manager - Pro</h1>
+            <h6>Admin Login</h6>
+            <form style="margin-top: 5vh;">
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="form1Example23" class="form-control form-control-lg" />
+                <label class="form-label" for="form1Example23">Account ID</label>
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="form1Example23" class="form-control form-control-lg" />
+                <label class="form-label" for="form1Example23">Password</label>
+              </div>
+
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+
+  <script>
+    document.querySelectorAll('.form-outline').forEach((formOutline) => {
+      new mdb.Input(formOutline).init();
+    });
+  </script>
+
+<script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"
+></script>
+
+</html>
