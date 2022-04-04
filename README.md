@@ -7,7 +7,8 @@
 From the repository's main directory start the Virtual Environment using the following command:
 
 ``` 
-source KLM-Pro/bin/activate
+source KLM-Pro/bin/activate (LINUX)
+KLM-Pro/bin/activate (Windows)
 ```
 
 Inside the Virtual Environment, run the following commands:
