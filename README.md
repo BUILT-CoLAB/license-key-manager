@@ -12,7 +12,7 @@
 pip install -r requirements.txt
 ```
 
-**Step 2:** Set up the env variable for flask. This process has two commands, which the one that fits your OS:
+**Step 2:** Set up the env variable for flask. This process has two commands, choose the one that fits your OS:
 
 Windows:
 ```
