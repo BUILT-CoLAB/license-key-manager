@@ -10,3 +10,7 @@ def index():
 @main.route('/profile')
 def profile():
     return render_template('profile.html')
+
+@main.route('/cpanel')
+def cpanel():
+    return render_template('cpanel.html')
