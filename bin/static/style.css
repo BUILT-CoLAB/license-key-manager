@@ -124,3 +124,15 @@ main{
   padding-left: 2rem !important;
   padding-right: 2rem !important;
 }
+
+.border-left-blue{
+  border-left: 4px solid #0080ff!important;
+}
+
+.border-left-green{
+  border-left: 4px solid rgb(25,135,84) !important;
+}
+
+.border-left-yellow{
+  border-left: 4px solid rgb(200, 150, 0) !important;
+}
