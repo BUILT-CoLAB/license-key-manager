@@ -14,3 +14,7 @@ def profile():
 @main.route('/cpanel')
 def cpanel():
     return render_template('cpanel.html')
+
+@main.route('/cpanel/product/id/<productid>')
+def productDisplay(productid):
+    return render_template('product.html', prodID = productid)
