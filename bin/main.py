@@ -18,3 +18,7 @@ def cpanel():
 @main.route('/cpanel/product/id/<productid>')
 def productDisplay(productid):
     return render_template('product.html', prodID = productid)
+
+@main.route('/cpanel/product/id/<productid>/createkey')
+def createKey(productid):
+    return render_template('product.html', prodID = productid)
