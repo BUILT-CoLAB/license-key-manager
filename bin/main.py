@@ -1,7 +1,13 @@
 from flask import Blueprint, render_template, request
 from sqlalchemy import text
+from .models import Product
+from Crypto.PublicKey import RSA
+import random
+import string
+import json
 
 from . import db
+from . import _KEY_LENGTH_
 
 main = Blueprint('main', __name__)
 
@@ -29,9 +35,20 @@ def cpanel():
 def createProduct():
     dataInfo = request.get_json()
     print(dataInfo)
-    sql = text("INSERT into product (name, logo, privateK, publicK, apiK) VALUES ('dasda', 'asdasda', 'asdasda', 'asdasda', 'asdasda')")
-    result = db.engine.execute(sql)
-    return "XD"
+
+    # ################# Storage Data ####################
+    AsyncKEYs = RSA.generate(1024)
+    privateKey = AsyncKEYs.public_key().export_key('PEM')
+    publicKey = AsyncKEYs.export_key('PEM')
+    apiKey = generateAPIKey(_KEY_LENGTH_)
+    name = dataInfo.get('name')
+    logo = dataInfo.get('URL')
+    # ###################################################
+
+    newProduct = Product(name=name, logo=logo, privateK=privateKey, publicK=publicKey, apiK=apiKey)
+    db.session.add(newProduct)
+    db.session.commit()
+    return "OKAY"
 
 ###########################################################################
 
@@ -44,7 +61,15 @@ def createKey(productid):
     return render_template('product.html', prodID = productid)
 
 def getProduct(searchString):
-    sql = text('select name from product')
-    result = db.engine.execute(sql)
-    names = [row[0] for row in result]
-    print(names)
+    products = Product.query.all()
+    for product in products:
+        print(product.name)
+        print(product.logo)
+        print(product.privateK)
+        print(product.publicK)
+        print(product.apiK)
+
+def generateAPIKey(length):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    apiKey = ''.join(random.choice(characters) for i in range(length))
+    return apiKey

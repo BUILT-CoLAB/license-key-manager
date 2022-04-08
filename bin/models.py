@@ -13,8 +13,8 @@ class Product(db.Model):
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String(100), unique=True )
     logo = db.Column( db.String(150) )
-    privateK = db.Column(db.String(100), unique=True)
-    publicK = db.Column(db.String(100), unique=True)
+    privateK = db.Column(db.String(1100), unique=True)
+    publicK = db.Column(db.String(1100), unique=True)
     apiK = db.Column( db.String(100), unique=True )
 
 class Key(db.Model):
