@@ -1,13 +1,12 @@
 from flask import Blueprint, render_template, request
 from sqlalchemy import text
 from .models import Product
-from Crypto.PublicKey import RSA
 import random
 import string
 import json
-
 from . import db
 from . import _KEY_LENGTH_
+from .keys import create_product
 
 main = Blueprint('main', __name__)
 
@@ -36,17 +35,12 @@ def createProduct():
     dataInfo = request.get_json()
     print(dataInfo)
 
-    # ################# Storage Data ####################
-    AsyncKEYs = RSA.generate(1024)
-    privateKey = AsyncKEYs.public_key().export_key('PEM')
-    publicKey = AsyncKEYs.export_key('PEM')
-    apiKey = generateAPIKey(_KEY_LENGTH_)
+    # ################# Storage Data ####################    
     name = dataInfo.get('name')
     logo = dataInfo.get('URL')
     # ###################################################
 
-    newProduct = Product(name=name, logo=logo, privateK=privateKey, publicK=publicKey, apiK=apiKey)
-    db.session.add(newProduct)
+    db.session.add(create_product(name,logo))
     db.session.commit()
     return "OKAY"
 

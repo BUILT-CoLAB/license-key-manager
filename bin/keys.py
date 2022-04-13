@@ -1,19 +1,13 @@
+from uuid import uuid4
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-from flask import Blueprint, request
-from . import db
+from cryptography.hazmat.primitives  import serialization
+from .models import Product
 
-
-keys = Blueprint('keys',__name__,url_prefix='/lkey')
-
-@keys.route('/create',methods=['POST'])
-def create():
+def create_product(new_name,new_logo):
     private_key = Ed25519PrivateKey.generate()
-    signature = private_key.sign(b"my authenticated message")
+    api_key = uuid4()
+    
     public_key = private_key.public_key()
-    # Raises InvalidSignature if verification fails
-    public_key.verify(signature, b"my authenticated message")
-
-    return {
-        'message': 'working',
-        'method': 'POST'
-    }
+    newProduct = Product(name=new_name,logo=new_logo,privateK=private_key.private_bytes(serialization.Encoding.Raw,serialization.PrivateFormat.Raw,serialization.NoEncryption()),publicK=public_key.public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw),apiK=str(api_key))
+    
+    return newProduct
