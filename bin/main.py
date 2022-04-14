@@ -1,5 +1,7 @@
+from lib2to3.pgen2 import token
 from flask import Blueprint, render_template, request
-from sqlalchemy import text
+from flask_httpauth import HTTPTokenAuth
+from sqlalchemy import text, true
 from .models import Product
 import random
 import string
@@ -9,6 +11,15 @@ from . import _KEY_LENGTH_
 from .keys import create_product
 
 main = Blueprint('main', __name__)
+
+auth = HTTPTokenAuth(scheme='Bearer')
+tokens = []
+
+@auth.verify_token
+def verify_token(token):
+    if token in tokens:
+        return True
+    return False
 
 #
 # sql = text('SELECT * FROM product')
@@ -39,8 +50,10 @@ def createProduct():
     name = dataInfo.get('name')
     logo = dataInfo.get('URL')
     # ###################################################
-
-    db.session.add(create_product(name,logo))
+    new_product = create_product(name,logo)
+    db.session.add(new_product)
+    tokens.append(new_product.apiK)
+    print(tokens)
     db.session.commit()
     return "OKAY"
 
@@ -67,3 +80,13 @@ def generateAPIKey(length):
     characters = string.ascii_letters + string.digits + string.punctuation
     apiKey = ''.join(random.choice(characters) for i in range(length))
     return apiKey
+
+
+@main.route('/validate',methods=['POST'])
+def validate_product():
+    dataInfo = request.get_json()
+    if(not verify_token(dataInfo['apiKey'])):
+        print(dataInfo['apiKey']+"not a user")
+        return "not a user"
+    print("its a user")
+    return "its a user"

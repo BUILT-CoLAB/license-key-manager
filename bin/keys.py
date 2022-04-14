@@ -11,3 +11,7 @@ def create_product(new_name,new_logo):
     newProduct = Product(name=new_name,logo=new_logo,privateK=private_key.private_bytes(serialization.Encoding.Raw,serialization.PrivateFormat.Raw,serialization.NoEncryption()),publicK=public_key.public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw),apiK=str(api_key))
     
     return newProduct
+
+def generate_license_key(product_id,user_email):
+    return "lel"
+
