@@ -1,7 +1,8 @@
 from lib2to3.pgen2 import token
 from flask import Blueprint, render_template, request
 from flask_httpauth import HTTPTokenAuth
-from sqlalchemy import text, true
+from regex import P
+from sqlalchemy import text, true,select
 from .models import Product
 import random
 import string
@@ -14,14 +15,13 @@ main = Blueprint('main', __name__)
 
 auth = HTTPTokenAuth(scheme='Bearer')
 
-def get_tokens():
-    return Product.query.all().apiK
-
 @auth.verify_token
 def verify_token(token):
-   if token in get_tokens():
-       return True
-   return False
+    tokens = Product.query.filter_by(apiK=token).first()
+    if tokens is None:
+        return False
+
+    return True
 
 #
 # sql = text('SELECT * FROM product')
@@ -88,9 +88,12 @@ def validate_product():
 
     # Validating user with api key
     if(not verify_token(dataInfo['apiKey'])):
-        print(dataInfo['apiKey']+"not a user")
-        return "HTTP CODE ERROR 3XX"
-    
-    
+        return{
+            'HttpCode' : '401',
+            'Message' : 'Unexistent API key'
+        }
 
-    return "HTTP CODE 200"
+    return {
+        'HttpCode' : '200',
+        'Message' : 'API key accepted'
+    }
