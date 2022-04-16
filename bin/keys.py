@@ -8,7 +8,7 @@ def create_product(new_name,new_logo):
     api_key = uuid4()
     
     public_key = private_key.public_key()
-    newProduct = Product(name=new_name,logo=new_logo,privateK=private_key.private_bytes(serialization.Encoding.Raw,serialization.PrivateFormat.Raw,serialization.NoEncryption()),publicK=public_key.public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw),apiK=str(api_key))
+    newProduct = Product(name=new_name,logo=new_logo,privateK=private_key.private_bytes(serialization.Encoding.PEM,serialization.PrivateFormat.OpenSSH,serialization.NoEncryption()),publicK=public_key.public_bytes(serialization.Encoding.OpenSSH,serialization.PublicFormat.OpenSSH),apiK=str(api_key))
     
     return newProduct
 
