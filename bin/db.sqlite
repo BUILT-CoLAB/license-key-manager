@@ -1,5 +1,0 @@
-CREATE TABLE devices(
-  licenseKey CHAR(150),
-  hardwareID CHAR(150),
-  PRIMARY KEY(licenseKey, hardwareID)
-);
