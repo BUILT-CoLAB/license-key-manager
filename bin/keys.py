@@ -15,3 +15,10 @@ def create_product(new_name,new_logo):
 def generate_license_key(product_id,user_email):
     return "lel"
 
+def get_private_key(product):
+    return Ed25519PrivateKey.from_private_bytes(product.privateK)
+
+# Assumir formato dos dados = HWID-LicenseKey
+def verify_data(data,productID):
+    divided_string = data.split('-',1)
+    #Função buscar LicenseKey através de HWID

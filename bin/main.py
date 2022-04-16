@@ -13,13 +13,15 @@ from .keys import create_product
 main = Blueprint('main', __name__)
 
 auth = HTTPTokenAuth(scheme='Bearer')
-tokens = []
+
+def get_tokens():
+    return Product.query.all().apiK
 
 @auth.verify_token
 def verify_token(token):
-    if token in tokens:
-        return True
-    return False
+   if token in get_tokens():
+       return True
+   return False
 
 #
 # sql = text('SELECT * FROM product')
@@ -52,8 +54,6 @@ def createProduct():
     # ###################################################
     new_product = create_product(name,logo)
     db.session.add(new_product)
-    tokens.append(new_product.apiK)
-    print(tokens)
     db.session.commit()
     return "OKAY"
 
@@ -85,8 +85,12 @@ def generateAPIKey(length):
 @main.route('/validate',methods=['POST'])
 def validate_product():
     dataInfo = request.get_json()
+
+    # Validating user with api key
     if(not verify_token(dataInfo['apiKey'])):
         print(dataInfo['apiKey']+"not a user")
-        return "not a user"
-    print("its a user")
-    return "its a user"
+        return "HTTP CODE ERROR 3XX"
+    
+    
+
+    return "HTTP CODE 200"

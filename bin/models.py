@@ -1,3 +1,4 @@
+from pickle import TRUE
 from flask_login import UserMixin
 from . import db
 
@@ -24,3 +25,8 @@ class Key(db.Model):
     serialkey = db.Column( db.String(100) )
     maxdevices = db.Column( db.Integer )
     devices = db.Column( db.Integer )
+
+class Devices(db.Model):
+    __tablename__ = "devices"
+    licensekey = db.Column(db.String(150),primary_key = True)
+    hardwareID = db.Column(db.String(150),primary_key = True)
