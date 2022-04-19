@@ -28,8 +28,8 @@ def profile():
 
 @main.route('/cpanel')
 def cpanel():
-    getProduct("hey")
-    return render_template('cpanel.html')
+    productList = getProduct("")
+    return render_template('cpanel.html', productList = productList)
 
 @main.route('/cpanel/product/create', methods=['POST'])
 def createProduct():
@@ -60,16 +60,12 @@ def productDisplay(productid):
 def createKey(productid):
     return render_template('product.html', prodID = productid)
 
-def getProduct(searchString):
-    products = Product.query.all()
-    for product in products:
-        print(product.name)
-        print(product.logo)
-        print(product.privateK)
-        print(product.publicK)
-        print(product.apiK)
-
 def generateAPIKey(length):
     characters = string.ascii_letters + string.digits + string.punctuation
     apiKey = ''.join(random.choice(characters) for i in range(length))
     return apiKey
+
+
+######################### DATABASE API ###########################
+def getProduct(searchString):
+    return Product.query.all()
