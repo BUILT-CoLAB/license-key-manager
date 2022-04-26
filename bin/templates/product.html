@@ -162,21 +162,12 @@
                 <!-- Main Content -->
                 <div id="content">
 
-                    <!-- Topbar -->
-                    <nav class="navbar navbar-expand bg-white navbar-light topbar mb-4 static-top top-bar">
-                        <!-- Topbar Search -->
-                        <div class="search-bar-top mx-auto">
-                            <input class="search-bar" type="text" placeholder="Search for products ..." aria-label="Search for products ...">
-                        </div>
-                    </nav>
-                    <!-- End of Topbar -->
-
                     <!-- Begin Page Content -->
-                    <div class="container-fluid special-padding">
+                    <div class="container-fluid special-padding main-body-setting">
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-800">Admin Panel - Product Overview</h1>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <a id="createProductCall" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                                 <svg class="bi" width="16" height="16" role="img" aria-label="Home">
                                     <use xlink:href="#addproduct"/>
                                 </svg> 
@@ -188,13 +179,15 @@
                             <div class="card mb-5">
                                 <h5 class="card-header">Product Information</h5>
                                 <div class="card-body">
-                                  <p class="card-text"><bold class="font-weight-bold">Name: </bold> Hello world!</p>
-                                  <p class="card-text"><bold class="font-weight-bold">Public Key: </bold> 1273128398918237123as7d8asd8</p>
-                                  <p class="card-text"><bold class="font-weight-bold">API Key: </bold> 1273asdazc918237123as7d8asd8</p>
+                                  <p class="card-text"><bold class="font-weight-bold">Product ID: </bold> {{ prodID }}</p>
+                                  <p class="card-text"><bold class="font-weight-bold">Name: </bold> {{ pcontent.name }}</p>
+                                  <p class="card-text"><bold class="font-weight-bold">API Key: </bold> {{ pcontent.apiK }}</p>
                                 </div>
                             </div>
 
                             <div class="table-responsive custom-table-responsive">
+
+                                {% if keyList|length > 0 %}
                                 <table class="table custom-table">
                                     <thead>
                                         <tr>
@@ -205,161 +198,46 @@
                                                 </label>
                                             </th>
                                             <th scope="col">Key ID</th>
+                                            <th scope="col">Customer's Name</th>
                                             <th scope="col">Serial Number</th>
-                                            <th scope="col"></th>
                                             <th scope="col">Device Limit</th>
                                             <th scope="col">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr scope="row">
-                                            <th scope="row">
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            <td>
-                                                1392
-                                            </td>
-                                            <td>aehawe891q27893yaswujkidaus871237123</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary">Primary</button>
-                                            </td>
-                                            <td>
-                                                10
-                                                <small class="d-block"><bold>Currently active:</bold> 3</small>
-                                            </td>
-                                            <td class="status-active">Active</td>
-                                        </tr>
-                                        <tr class="spacer">
-                                            <td colspan="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            <td>4616</td>
-                                            <td>aehawe891q27893yaswujkidaus871237123</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary">Primary</button>
-                                            </td>
-                                            <td>
-                                                2
-                                                <small class="d-block"><bold>Currently active:</bold> 1</small>
-                                            </td>
-                                            <td class="status-active">Active</td>
-                                        </tr>
-                                        <tr class="spacer">
-                                            <td colspan="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            <td>9841</td>
-                                            <td>aehawe891q27893yaswujkidaus871237123</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary">Primary</button>
-                                            </td>
-                                            <td>
-                                                4
-                                                <small class="d-block"><bold>Currently active:</bold> 2</small>
-                                            </td>
-                                            <td class="status-active">Active</td>
-                                        </tr>
-                                        <tr class="spacer">
-                                            <td colspan="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            <td>9548</td>
-                                            <td>aehawe891q27893yaswujkidaus871237123</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary">Primary</button>
-                                            </td>
-                                            <td>
-                                                0
-                                                <small class="d-block"><bold>Currently active:</bold> 0</small>
-                                            </td>
-                                            <td class="status-revoked">Revoked</td>
-                                        </tr>
-                                        <tr class="spacer">
-                                            <td colspan="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            <td>4616</td>
-                                            <td>aehawe891q27893yaswujkidaus871237123</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary">Primary</button>
-                                            </td>
-                                            <td>
-                                                15
-                                                <small class="d-block"><bold>Currently active:</bold> 0</small>
-                                            </td>
-                                            <td class="status-inactive">Not used</td>
-                                        </tr>
-                                        <tr class="spacer">
-                                            <td colspan="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            <td>9841</td>
-                                            <td>aehawe891q27893yaswujkidaus871237123</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary">Primary</button>
-                                            </td>
-                                            <td>
-                                                2
-                                                <small class="d-block"><bold>Currently active:</bold> 1</small>
-                                            </td>
-                                            <td class="status-active">Active</td>
-                                        </tr>
-                                        <tr class="spacer">
-                                            <td colspan="100"></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>
-                                            </th>
-                                            <td>9548</td>
-                                            <td>aehawe891q27893yaswujkidaus871237123</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-primary">Primary</button>
-                                            </td>
-                                            <td>
-                                                2
-                                                <small class="d-block"><bold>Currently active:</bold> 1</small>
-                                            </td>
-                                            <td class="status-active">Active</td>
+                                        {%for key in keyList%}
+                                            <tr scope="row">
+                                                <th scope="row">
+                                                    <label class="control control--checkbox">
+                                                        <input type="checkbox" class="checkbox-selector-marker"/>
+                                                        <div class="control__indicator"></div>
+                                                    </label>
+                                                </th>
+                                                <td>
+                                                    {{ key.id }}
+                                                </td>
+                                                <td>{{ key.customername }}</td>
+                                                <td>{{ key.serialkey }}</td>
+                                                <td>
+                                                    {{ key.maxdevices }}
+                                                    <small class="d-block"><bold>Currently active:</bold> {{ key.devices }}</small>
+                                                </td>
+                                                <td class="status-active">Active</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary">></button>
+                                                </td>
+                                            </tr>
+                                            <tr class="spacer">
+                                                <td colspan="100"></td>
+                                            </tr>
+                                        {%endfor%}
                                         </tr>
                                     </tbody>
                                 </table>
+                                {% else %}
+                                    <h2 class="empty-header-text">Oh no ... There are no keys here :(</h2>
+                                    <p class="empty-paragraph-text">Click on "Generate new Key" to get started!</p>
+                                {% endif %}
                             </div>
 
                             <div class="d-flex justify-content-center mb-5">
@@ -382,8 +260,100 @@
                     </div>
                 </footer>
                 <!-- End of Footer -->
+
+                <div class="modal" id="modalCreation" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Publish new Key</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-3 align-items-center mb-4">
+                                <div class="col-auto">
+                                  <label for="inputPassword6" class="col-form-label">Customer's name</label>
+                                </div>
+                                <div class="col-auto">
+                                  <input type="text" id="inputName" class="form-control" aria-describedby="passwordHelpInline">
+                                </div>
+                                <div class="col-auto" style="display: none;">
+                                  <span id="nameHelpInline" class="form-text">
+                                    Must be 8-20 characters long.
+                                  </span>
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center mb-4">
+                                <div class="col-auto">
+                                  <label for="inputPassword6" class="col-form-label">Max Devices</label>
+                                </div>
+                                <div class="col-auto">
+                                  <input type="text" id="inputMaxDevices" class="form-control" aria-describedby="passwordHelpInline">
+                                </div>
+                                <div class="col-auto">
+                                  <span id="passwordHelpInline" class="form-text">
+                                    If empty, the default value will be 23.
+                                  </span>
+                                </div>
+                            </div>
+                            <span class="form-text">A serial key will be automatically generated by the server.</span>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button id="submitCreation" type="button" class="btn btn-primary">Create Product</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
 </div>
         </div>
-		<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}""></script>
-	</body>
+		<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+
+        <script>
+            let modalCreation = new bootstrap.Modal( document.getElementById('modalCreation') )
+            document.getElementById("createProductCall").addEventListener("click", createProductProcess.bind(this))
+            document.getElementById("submitCreation").addEventListener("click", submitProductProcess.bind(this))
+
+            function createProductProcess(){
+                modalCreation.show();
+            }
+
+            function submitProductProcess(){
+                let name = document.getElementById("inputName").value;
+                let maxDevices = document.getElementById("inputMaxDevices").value;
+
+                let loginData = {
+                    'name' : name,
+                    'maxDevices' : maxDevices
+                }
+
+                var httpRequest = new XMLHttpRequest();
+                httpRequest.open("POST", "/cpanel/product/id/" + "{{ prodID }}" + "/createkey", true);
+                httpRequest.setRequestHeader('Content-Type', 'application/json');
+                httpRequest.send(JSON.stringify(loginData));
+
+                httpRequest.onreadystatechange = function() {
+                        if (httpRequest.readyState === 4) {
+                            if (httpRequest.status === 200) {
+                                location.reload()
+                            } else {
+                                console.error("Something wrong happened!")
+                            }
+                        }
+                    }
+                }
+        </script>
+
+        <!-- The following script handles all features related to 'Delete', 'Revoke', 'Reset', 'More Info' -->
+        <script>
+            let selectedList = [];
+            let selectableList = document.getElementsByClassName("checkbox-selector-marker");
+
+            for(let i = 0; i < selectableList.length; i++)
+                selectableList[i].addEventListener("change", selectKey.bind(this, i))
+
+            function selectKey(keyNumber){
+                console.log("Pressed " + keyNumber);
+            }
+        </script>
+    </body>
 </html>

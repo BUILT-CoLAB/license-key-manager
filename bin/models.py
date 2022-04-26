@@ -21,6 +21,15 @@ class Key(db.Model):
     __tablename__ = "key"
     id = db.Column(db.Integer, primary_key=True)
     productid = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    customername = db.Column( db.String(50) )
     serialkey = db.Column( db.String(100) )
     maxdevices = db.Column( db.Integer )
     devices = db.Column( db.Integer )
+    status = db.Column( db.Integer )
+
+class Changelog(db.Model):
+    __tablename__ = "ChangeLog"
+    id = db.Column(db.Integer, primary_key=True)
+    keyID = db.Column(db.Integer, db.ForeignKey('key.id'), nullable=False)
+    timestamp = db.Column(db.Integer, nullable=False)
+    action = db.Column(db.String(25))
