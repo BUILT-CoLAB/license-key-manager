@@ -11,8 +11,6 @@ auth = HTTPTokenAuth(scheme='Bearer')
 @auth.verify_token
 def verify_token(token):
     tokens = Product.query.filter_by(apiK=token).first()
-    if tokens is None:
-        return None
 
     return tokens
 
@@ -112,7 +110,7 @@ def validate_product():
     
     # Validating user with api key
     product = verify_token(dataInfo['apiKey'])
-    if(product==None):
+    if(product==None or product==[]):
         return{
             'HttpCode' : 401,
             'Message' : 'Unexistent API key'
@@ -122,12 +120,14 @@ def validate_product():
     
     keys = DBAPI.getKeysBySerialKey(decrypted_data[0],product.id)
 
-    if(keys==None):
+    if(keys==None or keys==[]):
         return {
             'HttpCode' : 404,
             'Message' : 'Serial/License key not found'
         }
-
+    print('Keys vector-',keys)
+    print(keys.maxdevices)
+    print(keys.devices)
     if(DBAPI.getDevice(decrypted_data[0],decrypted_data[1])==None):
         if(keys.devices <keys.maxdevices):#Add device to list of devices
             DBAPI.addDevice(decrypted_data[0],decrypted_data[1],keys)

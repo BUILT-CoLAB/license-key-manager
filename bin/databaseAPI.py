@@ -47,7 +47,9 @@ def getKeys(productID):
     return Key.query.filter_by(productid = productID).all()
 
 def getKeysBySerialKey(serialKey,productID):
-    return Key.query.filter_by(serialkey = serialKey,productid=productID).all()
+    print('ID-',productID)
+    print('Serial-',serialKey)
+    return Key.query.filter_by(serialkey = serialKey,productid=productID).first()
 
 def createKey(productid, customername, serialkey, maxdevices):
     """

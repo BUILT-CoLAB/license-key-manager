@@ -2,6 +2,7 @@ from uuid import uuid4,uuid1
 from cryptography.hazmat.primitives.asymmetric import rsa,padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
+import base64
 
 def create_product_keys():
     private_key = rsa.generate_private_key(key_size=1024,public_exponent=65537)
@@ -22,7 +23,7 @@ def create_product_keys():
             str(api_key)]
 
 def get_private_key(product):
-    return serialization.load_ssh_private_key(product.privateK,password=None)
+    return serialization.load_pem_private_key(product.privateK,password=None)
 
 def generate_new_serial_key():
     return str(uuid1())
@@ -32,15 +33,17 @@ def generate_new_serial_key():
 def decrypt_data(payload,product):
     private_key = get_private_key(product)
     
+    original_payload= base64.b64decode(payload.encode('utf-8'))
+    
     plaintext = private_key.decrypt(
-        payload,
+        original_payload,
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
             label=None
     ))
     print(plaintext)
-    return plaintext.split(':')
+    return plaintext.decode('utf-8').split(':')
 
 
     
