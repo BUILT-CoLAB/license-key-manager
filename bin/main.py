@@ -1,16 +1,8 @@
-from asyncio.windows_events import NULL
-from lib2to3.pgen2 import token
 from flask import Blueprint, render_template, request
 from flask_httpauth import HTTPTokenAuth
-from regex import P
-from sqlalchemy import text, true,select
 from .models import Product
-import random
-import string
-import json
-from . import db
-from . import _KEY_LENGTH_
-from .keys import create_product, decrypt_data, verify_data
+from . import databaseAPI as DBAPI
+from .keys import create_product_keys, decrypt_data,generate_new_serial_key
 
 main = Blueprint('main', __name__)
 
@@ -41,8 +33,8 @@ def profile():
 
 @main.route('/cpanel')
 def cpanel():
-    getProduct("hey")
-    return render_template('cpanel.html')
+    productList = DBAPI.getProduct('_ALL_')
+    return render_template('cpanel.html', productList = productList)
 
 @main.route('/cpanel/product/create', methods=['POST'])
 def createProduct():
@@ -53,34 +45,66 @@ def createProduct():
     name = dataInfo.get('name')
     logo = dataInfo.get('URL')
     # ###################################################
-    new_product = create_product(name,logo)
-    db.session.add(new_product)
-    db.session.commit()
+    product_keys = create_product_keys()
+
+    DBAPI.createProduct(name, logo, product_keys[0],product_keys[1], product_keys[2])
     return "OKAY"
 
 ###########################################################################
 
 @main.route('/cpanel/product/id/<productid>')
 def productDisplay(productid):
-    return render_template('product.html', prodID = productid)
+    keyList = DBAPI.getKeys(productid)
+    productContent = DBAPI.getProductByID(productid)
+    return render_template('product.html', prodID = productid, keyList = keyList, pcontent = productContent)
 
-@main.route('/cpanel/product/id/<productid>/createkey')
+@main.route('/cpanel/keydata/id/<keyid>')
+def keyDataDisplay(keyid):
+    keyData = DBAPI.getKeyData(keyid)
+    logData = DBAPI.getKeyLogs(keyid)
+    logData.reverse()
+    return render_template('keydata.html', keyData = keyData, logData = logData)
+
+@main.route('/cpanel/product/id/<productid>/createkey', methods=['POST'])
 def createKey(productid):
-    return render_template('product.html', prodID = productid)
+    dataInfo = request.get_json()
+    print(dataInfo)
 
-def getProduct(searchString):
-    products = Product.query.all()
-    for product in products:
-        print(product.name)
-        print(product.logo)
-        print(product.privateK)
-        print(product.publicK)
-        print(product.apiK)
+    serialKey = generate_new_serial_key()
+    keyId = DBAPI.createKey(productid, dataInfo.get('name'), serialKey, dataInfo.get('maxDevices'))
+    DBAPI.submitLog(keyId, 'Created')
+    return "OKAY"
 
-def generateAPIKey(length):
-    characters = string.ascii_letters + string.digits + string.punctuation
-    apiKey = ''.join(random.choice(characters) for i in range(length))
-    return apiKey
+"""
+KEY STATUS:
+0 --> Awaiting Approval
+1 --> Active
+2 --> Revoked
+"""
+
+@main.route('/cpanel/editkeys', methods=['POST'])
+def updateKeyState():
+    dataInfo = request.get_json()
+    print(dataInfo)
+
+    # Handle "REVOKE" Request
+    if(dataInfo.get('action') == 'REVOKE'):
+        for keyID in dataInfo.get('keyList'):
+            DBAPI.setKeyState(keyID, 2)
+            DBAPI.submitLog(keyID, 'Revoked')
+            
+    # Handle "DELETE" Request
+    if(dataInfo.get('action') == 'DELETE'):
+        for keyID in dataInfo.get('keyList'):
+            DBAPI.deleteKey(keyID)
+
+    # Handle "RESET" Request
+    if(dataInfo.get('action') == 'RESET'):
+        for keyID in dataInfo.get('keyList'):
+            DBAPI.resetKey(keyID)
+            DBAPI.submitLog(keyID, 'Reset')
+
+    return "OK"
 
 
 @main.route('/validate',methods=['POST'])
@@ -101,3 +125,4 @@ def validate_product():
         'HttpCode' : '200',
         'Message' : 'API key accepted'
     }
+

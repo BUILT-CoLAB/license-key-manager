@@ -164,96 +164,44 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid special-padding main-body-setting">
+                        <a href="{{ url_for('main.productDisplay', productid = keyData.productid) }}" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                            </svg>
+                            Return to Product</a>
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Admin Panel - Product Overview</h1>
-                            <a id="createProductCall" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                                <svg class="bi" width="16" height="16" role="img" aria-label="Home">
-                                    <use xlink:href="#addproduct"/>
-                                </svg> 
-                                Generate new Key</a>
+                            <h1 class="h3 mb-0 text-gray-800">Admin Panel - Key Overview</h1>
                         </div>
                         <!-- Content Row -->
                         
                         <div class="container-fluid p-0">
                             <div class="card mb-5">
-                                <h5 class="card-header">Product Information</h5>
+                                <h5 class="card-header {% if keyData.status == 2 %}red-header{% endif %}">Key Information</h5>
                                 <div class="card-body">
-                                  <p class="card-text"><bold class="font-weight-bold">Product ID: </bold> {{ prodID }}</p>
-                                  <p class="card-text"><bold class="font-weight-bold">Name: </bold> {{ pcontent.name }}</p>
-                                  <p class="card-text"><bold class="font-weight-bold">API Key: </bold> {{ pcontent.apiK }}</p>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive custom-table-responsive">
-
-                                {% if keyList|length > 0 %}
-                                <table class="table custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">
-                                                <!--
-                                                <label class="control control--checkbox">
-                                                    <input type="checkbox" class="checkbox-select-all"/>
-                                                    <div class="control__indicator"></div>
-                                                </label>-->
-                                                ---
-                                            </th>
-                                            <th scope="col">Key ID</th>
-                                            <th scope="col">Customer's Name</th>
-                                            <th scope="col">Serial Number</th>
-                                            <th scope="col">Device Limit</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {%for key in keyList%}
-                                            <tr scope="row">
-                                                <th scope="row">
-                                                    <label class="control control--checkbox">
-                                                        <input type="checkbox" class="checkbox-selector-marker"/>
-                                                        <div class="control__indicator"></div>
-                                                    </label>
-                                                </th>
-                                                <td class="key-id-data">
-                                                    {{ key.id }}
-                                                </td>
-                                                <td>{{ key.customername }}</td>
-                                                <td>{{ key.serialkey }}</td>
-                                                <td>
-                                                    {{ key.maxdevices }}
-                                                    <small class="d-block"><bold>Currently active:</bold> {{ key.devices }}</small>
-                                                </td>
-                                                {% if key.status == 0 %}
-                                                    <td class="status-inactive">Awaiting Activation</td>
-                                                {% elif key.status == 1 %}                  
-                                                    <td class="status-active">Active</td>
-                                                {% elif key.status == 2 %}  
-                                                    <td class="status-revoked">Revoked</td>
+                                    <p class="card-text"><bold class="font-weight-bold">Product ID: </bold> {{ keyData.productid }}</p>
+                                    <p class="card-text"><bold class="font-weight-bold">Client's Name: </bold> {{ keyData.customername }}</p>
+                                    <p class="card-text"><bold class="font-weight-bold">Serial Key: </bold> {{ keyData.serialkey }}</p>
+                                    <hr style="height: 2px;">
+                                    <h4>Changelogs</h4>
+                                    <div class="col-lg-8 col-md-10 col-12">
+                                        {%for log in logData%}
+                                            <h6 class="mt-4">
+                                                {% if log.action == 'Created' %}
+                                                    <span class="p-2 bg-light shadow rounded text-success"> Created</span> 
+                                                {% elif log.action == 'Revoked' %}                  
+                                                    <span class="p-2 bg-light shadow rounded text-danger"> Revoked</span>
+                                                {% elif log.action == 'Reset' %}  
+                                                    <span class="p-2 bg-light shadow rounded text-secondary"> Reset</span>
+                                                {% elif log.action == 'Enacted' %}  
+                                                    <span class="p-2 bg-light shadow rounded text-warning"> Enacted</span>
+                                                {% elif log.action == 'Activated' %}  
+                                                    <span class="p-2 bg-light shadow rounded text-success"> Activated</span>
                                                 {% endif %}
-                                                <td>
-                                                    <a href="{{ url_for('main.keyDataDisplay', keyid = key.id) }}">
-                                                        <button type="button" class="btn btn-outline-info">></button>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr class="spacer">
-                                                <td colspan="100"></td>
-                                            </tr>
+                                            - <span class="timestamp-line">{{log.timestamp}}</span></h6>
                                         {%endfor%}
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                {% else %}
-                                    <h2 class="empty-header-text">Oh no ... There are no keys here :(</h2>
-                                    <p class="empty-paragraph-text">Click on "Generate new Key" to get started!</p>
-                                {% endif %}
-                            </div>
-
-                            <div class="d-flex justify-content-center mb-5">
-                                <button type="button" class="btn btn-lg btn-outline-danger ms-4 me-4 action-on-key disabled">Delete</button>
-                                <button type="button" class="btn btn-lg btn-outline-warning ms-4 me-4 action-on-key disabled">Revoke</button>
-                                <button type="button" class="btn btn-lg btn-outline-dark ms-4 me-4 action-on-key disabled">Reset</button>
+                                    </div><!--end col-->
+                                </div>
                             </div>
                         </div>
 
@@ -271,173 +219,25 @@
                 </footer>
                 <!-- End of Footer -->
 
-                <div class="modal" id="modalCreation" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Publish new Key</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row g-3 align-items-center mb-4">
-                                <div class="col-auto">
-                                  <label for="inputPassword6" class="col-form-label">Customer's name</label>
-                                </div>
-                                <div class="col-auto">
-                                  <input type="text" id="inputName" class="form-control" aria-describedby="passwordHelpInline">
-                                </div>
-                                <div class="col-auto" style="display: none;">
-                                  <span id="nameHelpInline" class="form-text">
-                                    Must be 8-20 characters long.
-                                  </span>
-                                </div>
-                            </div>
-                            <div class="row g-3 align-items-center mb-4">
-                                <div class="col-auto">
-                                  <label for="inputPassword6" class="col-form-label">Max Devices</label>
-                                </div>
-                                <div class="col-auto">
-                                  <input type="text" id="inputMaxDevices" class="form-control" aria-describedby="passwordHelpInline">
-                                </div>
-                                <div class="col-auto">
-                                  <span id="passwordHelpInline" class="form-text">
-                                    If empty, the default value will be 23.
-                                  </span>
-                                </div>
-                            </div>
-                            <span class="form-text">A serial key will be automatically generated by the server.</span>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button id="submitCreation" type="button" class="btn btn-primary">Create Product</button>
-                        </div>
-                      </div>
-                    </div>
-                </div>
+                <script>
+                    let timestamps = document.getElementsByClassName("timestamp-line");
+                    for(let i = 0; i < timestamps.length; i++){
+                        let timestampV = timestamps[i].textContent;
+                        let dateObj = new Date(timestampV * 1000);
+
+                        var month = dateObj.getUTCMonth() + 1;
+                        var day = dateObj.getUTCDate();
+                        var year = dateObj.getUTCFullYear();
+                        var hours = dateObj.getHours();
+                        var minutes = "0" + dateObj.getMinutes();
+                        var seconds = "0" + dateObj.getSeconds();
+
+                        let newdate = day + "/" + month + "/" + year + " - " + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                        timestamps[i].textContent = newdate;
+                    }
+                </script>
 </div>
         </div>
 		<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
-
-        <script>
-            let modalCreation = new bootstrap.Modal( document.getElementById('modalCreation') )
-            document.getElementById("createProductCall").addEventListener("click", createProductProcess.bind(this))
-            document.getElementById("submitCreation").addEventListener("click", submitProductProcess.bind(this))
-
-            function createProductProcess(){
-                modalCreation.show();
-            }
-
-            function submitProductProcess(){
-                let name = document.getElementById("inputName").value;
-                let maxDevices = document.getElementById("inputMaxDevices").value;
-
-                let productData = {
-                    'name' : name,
-                    'maxDevices' : maxDevices
-                }
-
-                var httpRequest = new XMLHttpRequest();
-                httpRequest.open("POST", "/cpanel/product/id/" + "{{ prodID }}" + "/createkey", true);
-                httpRequest.setRequestHeader('Content-Type', 'application/json');
-                httpRequest.send(JSON.stringify(productData));
-
-                httpRequest.onreadystatechange = function() {
-                        if (httpRequest.readyState === 4) {
-                            if (httpRequest.status === 200) {
-                                location.reload()
-                            } else {
-                                console.error("Something wrong happened!")
-                            }
-                        }
-                    }
-                }
-        </script>
-
-        <!-- The following script handles all features related to 'Delete', 'Revoke', 'Reset', 'More Info' -->
-        <script>
-            // Acquire Elements
-            let selectedList = [];
-            let selectableList = document.getElementsByClassName("checkbox-selector-marker");
-            let selectableIDs = document.getElementsByClassName("key-id-data");
-
-            ////////////////// Buttons
-            let actionButtons = document.getElementsByClassName("action-on-key");
-            //////////////////////////
-
-
-            // Assign Event Listeners
-            for(let i = 0; i < selectableList.length; i++)
-                selectableList[i].addEventListener("change", selectKey.bind(this, i))
-            
-            for(let i = 0; i < actionButtons.length; i++)
-                actionButtons[i].addEventListener("click", actionOnKeys.bind(this, i))
-            //////////////////////////
-
-            function selectKey(keyIndex){
-                addIfNotExists(selectedList, parseInt(selectableIDs[keyIndex].textContent) );
-                updateButtons();
-            }
-
-            function actionOnKeys(buttonNumber){
-                let action = "";
-                if(buttonNumber === 0)
-                    action = "DELETE";
-                else if(buttonNumber === 1)
-                    action = "REVOKE";
-                else
-                    action = "RESET";
-                
-                let updateData = {
-                    'keyList' : selectedList,
-                    'action' : action
-                }
-
-                var httpRequest = new XMLHttpRequest();
-                httpRequest.open("POST", "/cpanel/editkeys", true);
-                httpRequest.setRequestHeader('Content-Type', 'application/json');
-                httpRequest.send(JSON.stringify(updateData));
-
-                httpRequest.onreadystatechange = function() {
-                    if (httpRequest.readyState === 4) {
-                        if (httpRequest.status === 200) {
-                            location.reload()
-                        } else {
-                            console.error("Something wrong happened!")
-                        }
-                    }
-                }
-            }
-
-            /// BUTTONS SECTION
-            let buttonsOff = true;
-            function updateButtons(){
-                if(selectedList.length === 0 && buttonsOff)
-                    return;
-                if(selectedList.length > 0 && !buttonsOff)
-                    return;
-                if(selectedList.length === 0 && !buttonsOff)
-                    setButtonState(false);
-                if(selectedList.length > 0 && buttonsOff)
-                    setButtonState(true);
-            }
-
-            function setButtonState(enableButton){
-                for(let i = 0; i < actionButtons.length; i++)
-                    if(enableButton)
-                        actionButtons[i].classList.remove("disabled");
-                    else
-                        actionButtons[i].classList.add("disabled")
-                buttonsOff = !enableButton;
-            }
-
-            /// UTILITIES
-            function addIfNotExists(array, value){
-                let indexL = array.indexOf(value)
-                if(indexL === -1)
-                    array.push(value);
-                else
-                    array.splice(indexL, 1);
-            }
-        </script>
     </body>
 </html>
