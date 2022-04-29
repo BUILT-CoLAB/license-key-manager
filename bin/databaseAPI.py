@@ -1,6 +1,5 @@
-from .models import Product
-from .models import Key
-from .models import Changelog
+from numpy import product
+from .models import Product,Key,Changelog,Device
 from . import db
 from time import time
 
@@ -47,14 +46,19 @@ def getKeys(productID):
     """
     return Key.query.filter_by(productid = productID).all()
 
+def getKeysBySerialKey(serialKey,productID):
+    return Key.query.filter_by(serialkey = serialKey,productid=productID).all()
+
 def createKey(productid, customername, serialkey, maxdevices):
     """
         Creates a new Product and stores it in the database.
         The function returns the id of the newly created product.
     """
     newKey = Key(productid = productid, customername = customername, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0)
+    
     db.session.add(newKey)
     db.session.commit()
+    print(newKey.id)
     return newKey.id
 
 def setKeyState(keyid, newState):
@@ -90,3 +94,24 @@ def submitLog(keyid, action):
 
 def getKeyLogs(keyid):
     return Changelog.query.filter_by(keyID=keyid).all()
+
+
+"""
+//////////////////////////////////////////////////////////////////////////////
+///////////  Device Section ///////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+"""
+
+def getDevice(licenseKey,hardwareID):
+    return Device.query.get((licenseKey,hardwareID))
+
+def addDevice(license,hwID,keys):
+    #Add new device by for a specific license key and specific hardwareID
+    newDevice = Device(licenseKey=license,hardwareID=hwID)
+    db.session.add(newDevice)
+
+    #Update number of active devices for a specific license key
+    new_number_active_devices=keys.devices+1
+    keys.devices=new_number_active_devices
+
+    db.session.commit()

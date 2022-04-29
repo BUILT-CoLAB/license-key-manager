@@ -39,14 +39,13 @@ def cpanel():
 @main.route('/cpanel/product/create', methods=['POST'])
 def createProduct():
     dataInfo = request.get_json()
-    print(dataInfo)
 
     # ################# Storage Data ####################    
     name = dataInfo.get('name')
     logo = dataInfo.get('URL')
     # ###################################################
     product_keys = create_product_keys()
-
+    print(product_keys)
     DBAPI.createProduct(name, logo, product_keys[0],product_keys[1], product_keys[2])
     return "OKAY"
 
@@ -115,14 +114,35 @@ def validate_product():
     product = verify_token(dataInfo['apiKey'])
     if(product==None):
         return{
-            'HttpCode' : '401',
+            'HttpCode' : 401,
             'Message' : 'Unexistent API key'
         }
 
     decrypted_data = decrypt_data(dataInfo['payload'],product)
     
-    return {
-        'HttpCode' : '200',
-        'Message' : 'API key accepted'
-    }
+    keys = DBAPI.getKeysBySerialKey(decrypted_data[0],product.id)
+
+    if(keys==None):
+        return {
+            'HttpCode' : 404,
+            'Message' : 'Serial/License key not found'
+        }
+
+    if(DBAPI.getDevice(decrypted_data[0],decrypted_data[1])==None):
+        if(keys.devices <keys.maxdevices):#Add device to list of devices
+            DBAPI.addDevice(decrypted_data[0],decrypted_data[1],keys)
+            return {
+                'HttpCode' : 200,
+                'Message' : 'Device added to list'
+            }
+        else:#No more devices available
+            return {
+                'HttpCode' : 400,
+                'Message' : 'Maximum number of devices reached for that license key'
+            }
+    else:#Device recognized - TODo- returning amount of time left for license key
+        return {
+            'HttpCode' : 200,
+            'Message' : 'Everything okay'
+        }
 
