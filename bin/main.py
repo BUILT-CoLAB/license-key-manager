@@ -1,15 +1,18 @@
 from flask import Blueprint, render_template, request
-from sqlalchemy import text
-from Crypto.PublicKey import RSA
-import random
-import string
-import json
-
+from flask_httpauth import HTTPTokenAuth
+from .models import Product
 from . import databaseAPI as DBAPI
-from . import db
-from . import _KEY_LENGTH_
+from .keys import create_product_keys, decrypt_data,generate_new_serial_key
 
 main = Blueprint('main', __name__)
+
+auth = HTTPTokenAuth(scheme='Bearer')
+
+@auth.verify_token
+def verify_token(token):
+    tokens = Product.query.filter_by(apiK=token).first()
+
+    return tokens
 
 #
 # sql = text('SELECT * FROM product')
@@ -34,18 +37,14 @@ def cpanel():
 @main.route('/cpanel/product/create', methods=['POST'])
 def createProduct():
     dataInfo = request.get_json()
-    print(dataInfo)
 
-    # ################# Storage Data ####################
-    AsyncKEYs = RSA.generate(1024)
-    privateKey = AsyncKEYs.public_key().export_key('PEM')
-    publicKey = AsyncKEYs.export_key('PEM')
-    apiKey = generateAPIKey(_KEY_LENGTH_)
+    # ################# Storage Data ####################    
     name = dataInfo.get('name')
     logo = dataInfo.get('URL')
     # ###################################################
-
-    DBAPI.createProduct(name, logo, privateKey, publicKey, apiKey)
+    product_keys = create_product_keys()
+    print(product_keys)
+    DBAPI.createProduct(name, logo, product_keys[0],product_keys[1], product_keys[2])
     return "OKAY"
 
 ###########################################################################
@@ -68,7 +67,7 @@ def createKey(productid):
     dataInfo = request.get_json()
     print(dataInfo)
 
-    serialKey = generateSerialKey(20)
+    serialKey = generate_new_serial_key()
     keyId = DBAPI.createKey(productid, dataInfo.get('name'), serialKey, dataInfo.get('maxDevices'))
     DBAPI.submitLog(keyId, 'Created')
     return "OKAY"
@@ -104,16 +103,46 @@ def updateKeyState():
 
     return "OK"
 
-def generateAPIKey(length):
-    characters = string.ascii_letters + string.digits + string.punctuation
-    apiKey = ''.join(random.choice(characters) for i in range(length))
-    return apiKey
 
-def generateSerialKey(length):
-    characters = string.ascii_uppercase + string.digits
-    serialKey = ''
-    for i in range(length):
-        if(i % 5 == 0 and i != 0):
-            serialKey += '-'
-        serialKey += random.choice(characters)
-    return serialKey
+@main.route('/validate',methods=['POST'])
+def validate_product():
+    dataInfo = request.get_json()
+    
+    # Validating user with api key
+    product = verify_token(dataInfo['apiKey'])
+    if(product==None or product==[]):
+        return{
+            'HttpCode' : 401,
+            'Message' : 'Unexistent API key'
+        }
+
+    decrypted_data = decrypt_data(dataInfo['payload'],product)
+    
+    keys = DBAPI.getKeysBySerialKey(decrypted_data[0],product.id)
+
+    if(keys==None or keys==[]):
+        return {
+            'HttpCode' : 404,
+            'Message' : 'Serial/License key not found'
+        }
+    print('Keys vector-',keys)
+    print(keys.maxdevices)
+    print(keys.devices)
+    if(DBAPI.getDevice(decrypted_data[0],decrypted_data[1])==None):
+        if(keys.devices <keys.maxdevices):#Add device to list of devices
+            DBAPI.addDevice(decrypted_data[0],decrypted_data[1],keys)
+            return {
+                'HttpCode' : 200,
+                'Message' : 'Device added to list'
+            }
+        else:#No more devices available
+            return {
+                'HttpCode' : 400,
+                'Message' : 'Maximum number of devices reached for that license key'
+            }
+    else:#Device recognized - TODo- returning amount of time left for license key
+        return {
+            'HttpCode' : 200,
+            'Message' : 'Everything okay'
+        }
+
