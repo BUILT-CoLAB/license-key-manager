@@ -176,7 +176,7 @@
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-800">Admin Panel - Overview</h1>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <a id="createProductCall" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                                 <svg class="bi" width="16" height="16" role="img" aria-label="Home">
                                     <use xlink:href="#addproduct"/>
                                 </svg> 
@@ -193,7 +193,7 @@
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                     Number of products
                                                 </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ productList|length }}</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -284,7 +284,7 @@
 
                         <!--Profile Card 3-->
                         <div id="productGallery" class="row row-cols-1 row-cols-md-6">
-                            {%for i in range(0, 8)%}
+                            {%for product in productList%}
                                 <div class="col mb-4">
                                     <div class="weather-card one">
                                         <div class="top">
@@ -294,8 +294,8 @@
                                         </div>
                                         <div class="bottom">
                                             <div class="d-flex flex-column justify-content-between text-center card-structure">
-                                                <span class="ctext-bold">Best Product Ever!</span>
-                                                <a href="{{ url_for('main.productDisplay', productid = 1) }}"><button type="button" class="btn btn-primary btn-sm card-button-st">Manage keys</button></a>
+                                                <span class="ctext-bold">{{ product.name }}</span>
+                                                <a href="{{ url_for('main.productDisplay', productid = product.id) }}"><button type="button" class="btn btn-primary btn-sm card-button-st">Manage</button></a>
                                                 <span class="ctext-light mt-auto">25th Abril, 2022</span>
                                             </div>
                                         </div>
@@ -316,8 +316,87 @@
                     </div>
                 </footer>
                 <!-- End of Footer -->
+
+                <div class="modal" id="modalCreation" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Publish new Product</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-3 align-items-center mb-4">
+                                <div class="col-auto">
+                                  <label for="inputPassword6" class="col-form-label">Product name</label>
+                                </div>
+                                <div class="col-auto">
+                                  <input type="text" id="inputName" class="form-control" aria-describedby="passwordHelpInline">
+                                </div>
+                                <div class="col-auto" style="display: none;">
+                                  <span id="nameHelpInline" class="form-text">
+                                    Must be 8-20 characters long.
+                                  </span>
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center mb-4">
+                                <div class="col-auto">
+                                  <label for="inputPassword6" class="col-form-label">Product image</label>
+                                </div>
+                                <div class="col-auto">
+                                  <input type="text" id="inputURL" class="form-control" aria-describedby="passwordHelpInline">
+                                </div>
+                                <div class="col-auto">
+                                  <span id="passwordHelpInline" class="form-text">
+                                    If empty, a default image will be used.
+                                  </span>
+                                </div>
+                            </div>
+                            <span class="form-text">A product key, private key and API key will be generated after you create the product.</span>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button id="submitCreation" type="button" class="btn btn-primary">Create Product</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
 </div>
         </div>
-		<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}""></script>
+		<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+
+        <script>
+            let modalCreation = new bootstrap.Modal( document.getElementById('modalCreation') )
+            document.getElementById("createProductCall").addEventListener("click", createProductProcess.bind(this))
+            document.getElementById("submitCreation").addEventListener("click", submitProductProcess.bind(this))
+
+            function createProductProcess(){
+                modalCreation.show();
+            }
+
+            function submitProductProcess(){
+                let name = document.getElementById("inputName").value;
+                let urlimg = document.getElementById("inputURL").value;
+
+                let loginData = {
+                    'name' : name,
+                    'URL' : urlimg
+                }
+
+                var httpRequest = new XMLHttpRequest();
+                httpRequest.open("POST", "/cpanel/product/create", true);
+                httpRequest.setRequestHeader('Content-Type', 'application/json');
+                httpRequest.send(JSON.stringify(loginData));
+
+                httpRequest.onreadystatechange = function() {
+                        if (httpRequest.readyState === 4) {
+                            if (httpRequest.status === 200) {
+                                location.reload()
+                            } else {
+                                console.error("Something wrong happened!")
+                            }
+                        }
+                    }
+                }
+        </script>
 	</body>
 </html>

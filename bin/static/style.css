@@ -331,8 +331,9 @@ main{
   border: 2px solid #ccc; }
 
 .control__indicator:after {
-  font-family: 'icomoon';
-  content: '\e5ca';
+  font-family: 'Arial';
+  font-size: 1rem;
+  content: '';
   position: absolute;
   display: none; 
 }
@@ -370,4 +371,24 @@ main{
 
 .status-revoked{
   color: red !important;
+}
+
+.main-body-setting{
+  margin-top: 5vh !important;
+}
+
+.empty-header-text{
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.empty-paragraph-text{
+  margin-top: 0;
+  margin-bottom: 5vh;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.red-header{
+  background-color: #dc3545;
 }

@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
+_KEY_LENGTH_ = 64
 
 def create_app():
     app = Flask(__name__)
