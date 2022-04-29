@@ -3,6 +3,8 @@ from cryptography.hazmat.primitives.asymmetric import rsa,padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
 import base64
+import string
+import random
 
 def create_product_keys():
     private_key = rsa.generate_private_key(key_size=1024,public_exponent=65537)
@@ -23,16 +25,21 @@ def create_product_keys():
             str(api_key)]
 
 def get_private_key(product):
-    return serialization.load_pem_private_key(product.privateK,password=None)
+    return serialization.load_pem_private_key(product.privateK, password=None)
 
-def generate_new_serial_key():
-    return str(uuid1())
+def generateSerialKey(length):
+    characters = string.ascii_uppercase + string.digits
+    serialKey = ''
+    for i in range(length):
+        if(i % 5 == 0 and i != 0):
+            serialKey += '-'
+        serialKey += random.choice(characters)
+    return serialKey
 
-
-# Formato dos dados: licensekey-hardwareID 
-def decrypt_data(payload,product):
+# Data Format: licensekey-hardwareID 
+def decrypt_data(payload, product):
     private_key = get_private_key(product)
-    
+
     original_payload= base64.b64decode(payload.encode('utf-8'))
     
     plaintext = private_key.decrypt(

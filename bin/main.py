@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request
 from flask_httpauth import HTTPTokenAuth
 from .models import Product
 from . import databaseAPI as DBAPI
-from .keys import create_product_keys, decrypt_data,generate_new_serial_key
+from .keys import create_product_keys, decrypt_data, generateSerialKey
 
 main = Blueprint('main', __name__)
 
@@ -11,7 +11,6 @@ auth = HTTPTokenAuth(scheme='Bearer')
 @auth.verify_token
 def verify_token(token):
     tokens = Product.query.filter_by(apiK=token).first()
-
     return tokens
 
 #
@@ -53,7 +52,7 @@ def createProduct():
 def productDisplay(productid):
     keyList = DBAPI.getKeys(productid)
     productContent = DBAPI.getProductByID(productid)
-    return render_template('product.html', prodID = productid, keyList = keyList, pcontent = productContent)
+    return render_template('product.html', prodID = productid, keyList = keyList, pcontent = productContent, pubKey = productContent.publicK.decode('utf-8'))
 
 @main.route('/cpanel/keydata/id/<keyid>')
 def keyDataDisplay(keyid):
@@ -67,7 +66,7 @@ def createKey(productid):
     dataInfo = request.get_json()
     print(dataInfo)
 
-    serialKey = generate_new_serial_key()
+    serialKey = generateSerialKey(20)
     keyId = DBAPI.createKey(productid, dataInfo.get('name'), serialKey, dataInfo.get('maxDevices'))
     DBAPI.submitLog(keyId, 'Created')
     return "OKAY"
@@ -108,7 +107,7 @@ def updateKeyState():
 def validate_product():
     dataInfo = request.get_json()
     
-    # Validating user with api key
+    # Validate user with API key.
     product = verify_token(dataInfo['apiKey'])
     if(product==None or product==[]):
         return{
@@ -128,7 +127,7 @@ def validate_product():
     print('Keys vector-',keys)
     print(keys.maxdevices)
     print(keys.devices)
-    if(DBAPI.getDevice(decrypted_data[0],decrypted_data[1])==None):
+    if(DBAPI.getDevice(decrypted_data[0],decrypted_data[1]) == None):
         if(keys.devices <keys.maxdevices):#Add device to list of devices
             DBAPI.addDevice(decrypted_data[0],decrypted_data[1],keys)
             return {
@@ -140,7 +139,7 @@ def validate_product():
                 'HttpCode' : 400,
                 'Message' : 'Maximum number of devices reached for that license key'
             }
-    else:#Device recognized - TODo- returning amount of time left for license key
+    else:
         return {
             'HttpCode' : 200,
             'Message' : 'Everything okay'

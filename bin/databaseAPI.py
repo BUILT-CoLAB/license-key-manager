@@ -1,5 +1,4 @@
-from numpy import product
-from .models import Product,Key,Changelog,Device
+from .models import Product, Key, Changelog, Device
 from . import db
 from time import time
 
@@ -71,6 +70,7 @@ def setKeyState(keyid, newState):
 def deleteKey(keyid):
     Key.query.filter_by(id=keyid).delete()
     db.session.commit()
+    deleteLogs(keyid)
 
 def resetKey(keyid):
     specificKey = Key.query.filter_by(id=keyid).first()
@@ -97,6 +97,12 @@ def submitLog(keyid, action):
 def getKeyLogs(keyid):
     return Changelog.query.filter_by(keyID=keyid).all()
 
+def deleteLogs(keyid):
+    keyLogs = getKeyLogs(keyid)
+    for keyLog in keyLogs:
+        db.session.delete(keyLog)
+    db.session.commit()
+
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -108,11 +114,11 @@ def getDevice(licenseKey,hardwareID):
     return Device.query.get((licenseKey,hardwareID))
 
 def addDevice(license,hwID,keys):
-    #Add new device by for a specific license key and specific hardwareID
+    # Add new device by for a specific license key and specific hardwareID
     newDevice = Device(licenseKey=license,hardwareID=hwID)
     db.session.add(newDevice)
 
-    #Update number of active devices for a specific license key
+    # Update number of active devices for a specific license key
     new_number_active_devices=keys.devices+1
     keys.devices=new_number_active_devices
 
