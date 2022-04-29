@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from lib2to3.pgen2 import token
 from flask import Blueprint, render_template, request
 from flask_httpauth import HTTPTokenAuth
@@ -9,7 +10,7 @@ import string
 import json
 from . import db
 from . import _KEY_LENGTH_
-from .keys import create_product
+from .keys import create_product, decrypt_data, verify_data
 
 main = Blueprint('main', __name__)
 
@@ -19,9 +20,9 @@ auth = HTTPTokenAuth(scheme='Bearer')
 def verify_token(token):
     tokens = Product.query.filter_by(apiK=token).first()
     if tokens is None:
-        return False
+        return None
 
-    return True
+    return tokens
 
 #
 # sql = text('SELECT * FROM product')
@@ -85,14 +86,17 @@ def generateAPIKey(length):
 @main.route('/validate',methods=['POST'])
 def validate_product():
     dataInfo = request.get_json()
-
+    
     # Validating user with api key
-    if(not verify_token(dataInfo['apiKey'])):
+    product = verify_token(dataInfo['apiKey'])
+    if(product==None):
         return{
             'HttpCode' : '401',
             'Message' : 'Unexistent API key'
         }
 
+    decrypted_data = decrypt_data(dataInfo['payload'],product)
+    
     return {
         'HttpCode' : '200',
         'Message' : 'API key accepted'

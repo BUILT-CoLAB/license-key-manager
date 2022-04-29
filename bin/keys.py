@@ -1,24 +1,38 @@
-from uuid import uuid4
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-from cryptography.hazmat.primitives  import serialization
+from uuid import uuid4,uuid1
+from cryptography.hazmat.primitives.asymmetric import rsa,padding
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import serialization
 from .models import Product
 
 def create_product(new_name,new_logo):
-    private_key = Ed25519PrivateKey.generate()
+    private_key = rsa.generate_private_key(size=1024,public_exponent=65537)
     api_key = uuid4()
     
     public_key = private_key.public_key()
-    newProduct = Product(name=new_name,logo=new_logo,privateK=private_key.private_bytes(serialization.Encoding.PEM,serialization.PrivateFormat.OpenSSH,serialization.NoEncryption()),publicK=public_key.public_bytes(serialization.Encoding.OpenSSH,serialization.PublicFormat.OpenSSH),apiK=str(api_key))
+    newProduct = Product(name=new_name,logo=new_logo,privateK=private_key.private_bytes(encoding=serialization.Encoding.PEM,format=serialization.PrivateFormat.TraditionalOpenSSL,encryption_algorithm=serialization.NoEncryption()),publicK=public_key.public_bytes(encoding=serialization.Encoding.PEM,format=serialization.PublicFormat.SubjectPublicKeyInfo),apiK=str(api_key))
     
     return newProduct
 
-def generate_license_key(product_id,user_email):
-    return "lel"
-
 def get_private_key(product):
-    return Ed25519PrivateKey.from_private_bytes(product.privateK)
+    return serialization.load_ssh_private_key(product.privateK,password=None)
 
-# Assumir formato dos dados = HWID-LicenseKey
-def verify_data(data,productID):
-    divided_string = data.split('-',1)
-    #Função buscar LicenseKey através de HWID
+def generate_new_serial_key(hardwareID):
+    return uuid1()
+
+
+# Formato dos dados: licensekey-hardwareID 
+def decrypt_data(payload,product):
+    private_key = get_private_key(product)
+    
+    plaintext = private_key.decrypt(
+        payload,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+    ))
+    print(plaintext)
+    return plaintext
+
+
+    
