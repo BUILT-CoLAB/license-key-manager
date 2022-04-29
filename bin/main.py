@@ -56,16 +56,64 @@ def productDisplay(productid):
     productContent = DBAPI.getProductByID(productid)
     return render_template('product.html', prodID = productid, keyList = keyList, pcontent = productContent)
 
+@main.route('/cpanel/keydata/id/<keyid>')
+def keyDataDisplay(keyid):
+    keyData = DBAPI.getKeyData(keyid)
+    logData = DBAPI.getKeyLogs(keyid)
+    logData.reverse()
+    return render_template('keydata.html', keyData = keyData, logData = logData)
+
 @main.route('/cpanel/product/id/<productid>/createkey', methods=['POST'])
 def createKey(productid):
     dataInfo = request.get_json()
     print(dataInfo)
 
-    serialKey = generateAPIKey(25)
-    DBAPI.createKey(productid, dataInfo.get('name'), serialKey, dataInfo.get('maxDevices'))
+    serialKey = generateSerialKey(20)
+    keyId = DBAPI.createKey(productid, dataInfo.get('name'), serialKey, dataInfo.get('maxDevices'))
+    DBAPI.submitLog(keyId, 'Created')
     return "OKAY"
+
+"""
+KEY STATUS:
+0 --> Awaiting Approval
+1 --> Active
+2 --> Revoked
+"""
+
+@main.route('/cpanel/editkeys', methods=['POST'])
+def updateKeyState():
+    dataInfo = request.get_json()
+    print(dataInfo)
+
+    # Handle "REVOKE" Request
+    if(dataInfo.get('action') == 'REVOKE'):
+        for keyID in dataInfo.get('keyList'):
+            DBAPI.setKeyState(keyID, 2)
+            DBAPI.submitLog(keyID, 'Revoked')
+            
+    # Handle "DELETE" Request
+    if(dataInfo.get('action') == 'DELETE'):
+        for keyID in dataInfo.get('keyList'):
+            DBAPI.deleteKey(keyID)
+
+    # Handle "RESET" Request
+    if(dataInfo.get('action') == 'RESET'):
+        for keyID in dataInfo.get('keyList'):
+            DBAPI.resetKey(keyID)
+            DBAPI.submitLog(keyID, 'Reset')
+
+    return "OK"
 
 def generateAPIKey(length):
     characters = string.ascii_letters + string.digits + string.punctuation
     apiKey = ''.join(random.choice(characters) for i in range(length))
     return apiKey
+
+def generateSerialKey(length):
+    characters = string.ascii_uppercase + string.digits
+    serialKey = ''
+    for i in range(length):
+        if(i % 5 == 0 and i != 0):
+            serialKey += '-'
+        serialKey += random.choice(characters)
+    return serialKey
