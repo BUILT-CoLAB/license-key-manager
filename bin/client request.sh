@@ -1,1 +1,0 @@
-curl -X POST 127.0.0.1:5000/validate -H "Content-Type: Application/json" -d '{"apiKey":"5b806cbe-9ed1-486e-ad95-ef7f33954f8d","payload":"lelele" }'

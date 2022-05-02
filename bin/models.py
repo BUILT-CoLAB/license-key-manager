@@ -28,10 +28,11 @@ class Key(db.Model):
     devices = db.Column( db.Integer )
     status = db.Column( db.Integer )
 
-class Device(db.Model):
-    __tablename__ = "device"
-    licenseKey = db.Column(db.String(150), primary_key=True)
-    hardwareID = db.Column(db.String(150), primary_key=True)
+class Registration(db.Model):
+    __tablename__ = "registration"
+    id = db.Column(db.Integer, primary_key=True)
+    keyID = db.Column(db.Integer, db.ForeignKey('key.id'), nullable=False)
+    hardwareID = db.Column(db.String(200), nullable=False)
     
 class Changelog(db.Model):
     __tablename__ = "changeLog"

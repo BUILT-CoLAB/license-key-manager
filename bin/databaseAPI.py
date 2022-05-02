@@ -1,4 +1,4 @@
-from .models import Product, Key, Changelog, Device
+from .models import Product, Key, Changelog, Registration
 from . import db
 from time import time
 
@@ -45,10 +45,10 @@ def getKeys(productID):
     """
     return Key.query.filter_by(productid = productID).all()
 
-def getKeysBySerialKey(serialKey,productID):
+def getKeysBySerialKey(serialKey, productID):
     print('ID-',productID)
     print('Serial-',serialKey)
-    return Key.query.filter_by(serialkey = serialKey,productid=productID).first()
+    return Key.query.filter_by(serialkey = serialKey, productid=productID).first()
 
 def createKey(productid, customername, serialkey, maxdevices):
     """
@@ -106,20 +106,21 @@ def deleteLogs(keyid):
 
 """
 //////////////////////////////////////////////////////////////////////////////
-///////////  Device Section ///////////////////////////////////////////////
+///////////  Registration Section ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 """
 
-def getDevice(licenseKey,hardwareID):
-    return Device.query.get((licenseKey,hardwareID))
+def getRegistration(keyID, hardwareID):
+    return Registration.query.filter_by(keyID = keyID, hardwareID = hardwareID).first()
 
-def addDevice(license,hwID,keys):
-    # Add new device by for a specific license key and specific hardwareID
-    newDevice = Device(licenseKey=license,hardwareID=hwID)
+def addRegistration(keyID, hardwareID, keyObject):
+    # Add a new Registration that links a KeyID with an HardwareID
+    newDevice = Registration(keyID = keyID, hardwareID = hardwareID)
     db.session.add(newDevice)
 
-    # Update number of active devices for a specific license key
-    new_number_active_devices=keys.devices+1
-    keys.devices=new_number_active_devices
+    # Update the number of active devices of a license key
+    newActiveDevices = keyObject.devices + 1
+    keyObject.devices=newActiveDevices
 
+    # Submit all changes
     db.session.commit()

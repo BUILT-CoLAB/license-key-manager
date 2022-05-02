@@ -5,7 +5,6 @@ from . import databaseAPI as DBAPI
 from .keys import create_product_keys, decrypt_data, generateSerialKey
 
 main = Blueprint('main', __name__)
-
 auth = HTTPTokenAuth(scheme='Bearer')
 
 @auth.verify_token
@@ -107,34 +106,40 @@ def updateKeyState():
 def validate_product():
     dataInfo = request.get_json()
     
-    # Validate user with API key.
+    # 1st Step: Validate user with API key.
     product = verify_token(dataInfo['apiKey'])
     if(product==None or product==[]):
         return{
             'HttpCode' : 401,
             'Message' : 'Unexistent API key'
         }
+    # #####################################
 
-    decrypted_data = decrypt_data(dataInfo['payload'],product)
-    
-    keys = DBAPI.getKeysBySerialKey(decrypted_data[0],product.id)
+    decryptedData = decrypt_data(dataInfo['payload'], product)
 
-    if(keys==None or keys==[]):
+    # decryptedData[0] - Serial Key
+    # decryptedData[1] - Hardware ID
+
+    keyObject = DBAPI.getKeysBySerialKey(decryptedData[0], product.id)
+
+    if(keyObject==None or keyObject==[]):
         return {
             'HttpCode' : 404,
             'Message' : 'Serial/License key not found'
         }
-    print('Keys vector-',keys)
-    print(keys.maxdevices)
-    print(keys.devices)
-    if(DBAPI.getDevice(decrypted_data[0],decrypted_data[1]) == None):
-        if(keys.devices <keys.maxdevices):#Add device to list of devices
-            DBAPI.addDevice(decrypted_data[0],decrypted_data[1],keys)
+
+    print("[NOTE] Request received to authenticate HWID '" + str(decryptedData[1]) + "' with serial key '" + str(keyObject.id) + "'.")
+    print("[NOTE] Maximum number of devices: " + str(keyObject.maxdevices) + ".")
+    print("[NOTE] Current number of devices (pre-validation): " + str(keyObject.devices) + ".")
+
+    if(DBAPI.getRegistration(keyObject.id, decryptedData[1]) == None):
+        if(keyObject.devices < keyObject.maxdevices): # Add device to list of devices
+            DBAPI.addRegistration(keyObject.id, decryptedData[1], keyObject)
             return {
                 'HttpCode' : 200,
                 'Message' : 'Device added to list'
             }
-        else:#No more devices available
+        else:   # No more devices available
             return {
                 'HttpCode' : 400,
                 'Message' : 'Maximum number of devices reached for that license key'

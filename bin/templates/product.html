@@ -329,8 +329,8 @@
                 modalCreation.show();
             }
 
-            function getPubKey(){
-                navigator.clipboard.writeText(`{{ pubKey }}`);
+            async function getPubKey(){
+                await navigator.clipboard.writeText(`{{ pubKey }}`);
                 alert("Public Key has been copied to your clipboard.");
             }
 
