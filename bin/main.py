@@ -57,8 +57,9 @@ def productDisplay(productid):
 def keyDataDisplay(keyid):
     keyData = DBAPI.getKeyData(keyid)
     logData = DBAPI.getKeyLogs(keyid)
+    registrations = DBAPI.getKeyHWIDs(keyid)
     logData.reverse()
-    return render_template('keydata.html', keyData = keyData, logData = logData)
+    return render_template('keydata.html', keyData = keyData, logData = logData, registrations = registrations)
 
 @main.route('/cpanel/product/id/<productid>/createkey', methods=['POST'])
 def createKey(productid):
@@ -66,16 +67,9 @@ def createKey(productid):
     print(dataInfo)
 
     serialKey = generateSerialKey(20)
-    keyId = DBAPI.createKey(productid, dataInfo.get('name'), serialKey, dataInfo.get('maxDevices'))
+    keyId = DBAPI.createKey(productid, dataInfo.get('name'), dataInfo.get('email'), dataInfo.get('phoneNumber'), serialKey, dataInfo.get('maxDevices'))
     DBAPI.submitLog(keyId, 'Created')
     return "OKAY"
-
-"""
-KEY STATUS:
-0 --> Awaiting Approval
-1 --> Active
-2 --> Revoked
-"""
 
 @main.route('/cpanel/editkeys', methods=['POST'])
 def updateKeyState():
@@ -83,10 +77,15 @@ def updateKeyState():
     print(dataInfo)
 
     # Handle "REVOKE" Request
-    if(dataInfo.get('action') == 'REVOKE'):
-        for keyID in dataInfo.get('keyList'):
-            DBAPI.setKeyState(keyID, 2)
-            DBAPI.submitLog(keyID, 'Revoked')
+    if(dataInfo.get('action') == 'SWITCHSTATE'):
+        for keyID in dataInfo.get('keyList'):       # For this operation only 1 key is given
+            keyData = DBAPI.getKeyData(keyID)
+            if keyData.status != 2:
+                DBAPI.setKeyState(keyID, 2)
+                DBAPI.submitLog(keyID, 'Revoked')
+            else:
+                DBAPI.setKeyState(keyID, getStatus(keyData.devices))
+                DBAPI.submitLog(keyID, 'Reactivated')
             
     # Handle "DELETE" Request
     if(dataInfo.get('action') == 'DELETE'):
@@ -132,12 +131,21 @@ def validate_product():
     print("[NOTE] Maximum number of devices: " + str(keyObject.maxdevices) + ".")
     print("[NOTE] Current number of devices (pre-validation): " + str(keyObject.devices) + ".")
 
+
     if(DBAPI.getRegistration(keyObject.id, decryptedData[1]) == None):
+        # Check if the key is revoked
+        if(keyObject.status == 2):
+            return {
+                'HttpCode' : 403,
+                'Message' : 'Forbbiden access :: Key revoked! Your hardware was not registered.'
+            }
+
+        # Check if the number of devices if okay
         if(keyObject.devices < keyObject.maxdevices): # Add device to list of devices
             DBAPI.addRegistration(keyObject.id, decryptedData[1], keyObject)
             return {
-                'HttpCode' : 200,
-                'Message' : 'Device added to list'
+                'HttpCode' : 201,
+                'Message' : 'Registration successful'
             }
         else:   # No more devices available
             return {
@@ -147,6 +155,17 @@ def validate_product():
     else:
         return {
             'HttpCode' : 200,
-            'Message' : 'Everything okay'
+            'Message' : 'Your device is registered.',
+            'KeyStatus' : keyObject.id
         }
 
+
+
+
+
+
+# Auxiliary Methods
+def getStatus(activeDevices):
+    if(activeDevices > 0):
+        return 1
+    return 0

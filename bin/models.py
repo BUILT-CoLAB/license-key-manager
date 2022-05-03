@@ -22,7 +22,9 @@ class Key(db.Model):
     __tablename__ = "key"
     id = db.Column(db.Integer, primary_key=True)
     productid = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-    customername = db.Column( db.String(50) )
+    customername = db.Column( db.String(100) )
+    customeremail = db.Column( db.String(100) )
+    customerphone = db.Column( db.String(20) )
     serialkey = db.Column( db.String(100) )
     maxdevices = db.Column( db.Integer )
     devices = db.Column( db.Integer )

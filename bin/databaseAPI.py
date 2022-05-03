@@ -35,8 +35,12 @@ def createProduct(name, logo, privateK, publicK, apiK):
 //////////////////////////////////////////////////////////////////////////////
 ///////////  Key Section /////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-"""
 
+KEY STATUS:
+0 --> Awaiting Approval
+1 --> Active
+2 --> Revoked
+"""
 
 def getKeys(productID):
     """
@@ -50,12 +54,12 @@ def getKeysBySerialKey(serialKey, productID):
     print('Serial-',serialKey)
     return Key.query.filter_by(serialkey = serialKey, productid=productID).first()
 
-def createKey(productid, customername, serialkey, maxdevices):
+def createKey(productid, customername, email, phonenumber, serialkey, maxdevices):
     """
         Creates a new Product and stores it in the database.
         The function returns the id of the newly created product.
     """
-    newKey = Key(productid = productid, customername = customername, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0)
+    newKey = Key(productid = productid, customername = customername, customeremail = email, customerphone = phonenumber, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0)
     
     db.session.add(newKey)
     db.session.commit()
@@ -71,9 +75,11 @@ def deleteKey(keyid):
     Key.query.filter_by(id=keyid).delete()
     db.session.commit()
     deleteLogs(keyid)
+    deleteRegistrationsOfKey(keyid)
 
 def resetKey(keyid):
     specificKey = Key.query.filter_by(id=keyid).first()
+    deleteRegistrationsOfKey(keyid)
     specificKey.status = 0
     specificKey.devices = 0
     db.session.commit()
@@ -98,9 +104,7 @@ def getKeyLogs(keyid):
     return Changelog.query.filter_by(keyID=keyid).all()
 
 def deleteLogs(keyid):
-    keyLogs = getKeyLogs(keyid)
-    for keyLog in keyLogs:
-        db.session.delete(keyLog)
+    Changelog.query.filter_by(keyID=keyid).delete()
     db.session.commit()
 
 
@@ -113,14 +117,26 @@ def deleteLogs(keyid):
 def getRegistration(keyID, hardwareID):
     return Registration.query.filter_by(keyID = keyID, hardwareID = hardwareID).first()
 
+def getKeyHWIDs(keyID):
+    return Registration.query.filter_by(keyID = keyID).all()
+
+def deleteRegistrationsOfKey(keyID):
+    Registration.query.filter_by(keyID = keyID).delete()
+    db.session.commit()
+
 def addRegistration(keyID, hardwareID, keyObject):
     # Add a new Registration that links a KeyID with an HardwareID
     newDevice = Registration(keyID = keyID, hardwareID = hardwareID)
     db.session.add(newDevice)
 
-    # Update the number of active devices of a license key
+    # Update the number of active devices of a license key and its state
     newActiveDevices = keyObject.devices + 1
-    keyObject.devices=newActiveDevices
+    keyObject.devices = newActiveDevices
+    if(keyObject.status != 1):
+        keyObject.status = 1
 
     # Submit all changes
     db.session.commit()
+
+    # Log the changes
+    submitLog(keyID, 'Activated')
