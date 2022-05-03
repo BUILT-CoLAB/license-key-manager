@@ -6,18 +6,18 @@ import requests
 import base64
 
 publicKey = """-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD2xLOGfCjj4hYyStE+dQudzbaM
-mOVPqpXYuPLasgk9mYa/kyx6ElRn3qmkeQ7awxdUT2A3SUB3NpsVF2ODXKUiK1fx
-7iUsyG1817K/M2OeLYThDDuEzotirNLJluelvo7eTQk3u5hc2QXScZ0nP9L8aTlu
-Q2P5Pum1o2KDgfy9ewIDAQAB
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDtk6/DwflYICLE+JKBLc6HTOHd
+12qSFxApeea2dHsrg6JZ8nLqeRI/CX8SfPiuJOXHVdR46uC1UMgGVTbq27uPGgsl
+XlLXbNppx18b+jD5PUUgVd6BWa5+ZmpWYleQdHmiysG2Hgg0htqtwNEiyhXNajUT
+oOesGyB1QASRNig/gwIDAQAB
 -----END PUBLIC KEY-----
 """
 
 public_key = serialization.load_pem_public_key( str.encode(publicKey) )
 
-api_key = 'b4df7b73-129f-4771-b527-19a321e3e7fd'
-serial = 'W28DL-6BUN6-88QB7-C4PB8'
-hwid= 'TestingHWID_2' # Deterministic UID
+api_key = '072c95b0-bacb-4b53-9102-600651825cfa'
+serial = '0RBXU-GQYO5-37J7B-S1E8W'
+hwid= 'TestingHWID_N4' # Deterministic UID
 
 plaintexts = bytes(serial + ':' + hwid[:23],'utf-8')
 
