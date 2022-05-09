@@ -1,34 +1,29 @@
-from flask import Blueprint, render_template, request
-from flask_login import login_user
+from flask import Blueprint, request, flash, redirect, url_for
+from flask_login import login_user, logout_user
+from werkzeug.security import check_password_hash
 from . import db
+from . import databaseAPI as DBAPI
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login')
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
-
-@auth.route('/login', methods=['POST'])
-def login_post():
-    # Login process
+    # Obtain form data
     dataInfo = request.get_json()
-    print(dataInfo)
-    return 'Login XD'
 
-    # check if the user actually exists
-    # take the user-supplied password, hash it, and compare it to the hashed password in the database
-    #if not user or not check_password_hash(user.password, password):
-    #    flash('Please check your login details and try again.')
-    #    return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
+    username = dataInfo.get('emailData')
+    passwordData = dataInfo.get('passwordData')
 
-    # if the above check passes, then we know the user has the right credentials
-    # login_user(user, remember=remember)
-    # return redirect(url_for('main.profile'))
+    userObject = DBAPI.obtainUser(username)
 
-@auth.route('/signup')
-def signup():
-    return render_template('signup.html')
+    if not userObject or not check_password_hash(userObject.password, passwordData):
+        return "The account does not exist or the login data is incorrect."
+
+    login_user(userObject)
+    return "OK"
 
 @auth.route('/logout')
 def logout():
-    return 'Logout'
+    logout_user()
+    flash('You have been logged out')
+    return redirect(url_for('main.index'))

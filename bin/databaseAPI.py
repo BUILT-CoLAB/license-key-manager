@@ -1,6 +1,35 @@
-from .models import Product, Key, Changelog, Registration
+from .models import Product, Key, Changelog, Registration, User
+from werkzeug.security import generate_password_hash
 from . import db
 from time import time
+
+
+"""
+//////////////////////////////////////////////////////////////////////////////
+///////////  Admin Section ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+"""
+def generateUser(username, password, email):
+    """ 
+        The following function creates a user account with the indicated data.
+    """
+    print("Creating root user :: ", end="")
+    if( len( User.query.filter_by(name = username).all() ) > 0):
+        print("USER ALREADY EXISTS! ... OK")
+        return
+    print("USER DOES NOT EXIST --- ", end="")
+    newAccount = User(email = email, password = generate_password_hash(password), name = username)
+    db.session.add(newAccount)
+    db.session.commit()
+    print("CREATED! ... OK", end="")
+
+def obtainUser(username):
+    """ 
+        The following function simulates a SELECT statement to obtain the account that has the same username.
+    """
+    return User.query.filter_by(name = username).first()
+
+
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -9,7 +38,8 @@ from time import time
 """
 
 def getProduct(productName):
-    """ The following function queries the database for a given product. If you wish to extract ALL 
+    """ 
+        The following function queries the database for a given product. If you wish to extract ALL 
         products, the productName should be '_ALL_'
     """
     if(productName == '_ALL_'):

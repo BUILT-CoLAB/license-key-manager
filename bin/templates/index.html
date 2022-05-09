@@ -31,7 +31,8 @@
           <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
             <h1>Key License Manager - Pro</h1>
             <h6>Admin Login</h6>
-            <div id="spacer" style="height: 1px; margin-top: 4vh; margin-bottom: 0px;"></div>
+            <p class="mb-4 text-danger" id="loginErrorMessage">
+            </p>
             <!-- Email input -->
             <div class="form-outline mb-4">
               <input type="email" id="form1Example23" class="form-control form-control-lg form-content-data" />
@@ -66,6 +67,13 @@
       var httpRequest = new XMLHttpRequest();
       httpRequest.open("POST", "/login", true);
       httpRequest.setRequestHeader('Content-Type', 'application/json');
+      httpRequest.onload = function (e) {
+        if (httpRequest.readyState === 4 && httpRequest.status === 200){
+          if( httpRequest.responseText == "OK" )
+            window.location.href = "{{ url_for('main.cpanel') }}";
+          document.getElementById("loginErrorMessage").innerText = httpRequest.responseText;
+        }
+    };
       httpRequest.send(JSON.stringify(loginData));
     }
   </script>

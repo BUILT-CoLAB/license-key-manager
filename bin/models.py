@@ -6,8 +6,8 @@ from . import db
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-    name = db.Column(db.String(100))
+    password = db.Column(db.String(150))
+    name = db.Column(db.String(100), unique=True)
 
 class Product(db.Model):
     __tablename__ = "product"
@@ -25,7 +25,7 @@ class Key(db.Model):
     customername = db.Column( db.String(100) )
     customeremail = db.Column( db.String(100) )
     customerphone = db.Column( db.String(20) )
-    serialkey = db.Column( db.String(100) )
+    serialkey = db.Column( db.String(100), unique = True)
     maxdevices = db.Column( db.Integer )
     devices = db.Column( db.Integer )
     status = db.Column( db.Integer )

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 from flask_httpauth import HTTPTokenAuth
+from flask_login import login_required
 from .models import Product
 from . import databaseAPI as DBAPI
 from .keys import create_product_keys, decrypt_data, generateSerialKey
@@ -22,17 +23,20 @@ def index():
     return render_template('index.html')
 
 @main.route('/profile')
+@login_required
 def profile():
     return render_template('profile.html')
 
 ###########################################################################
 
 @main.route('/cpanel')
+@login_required
 def cpanel():
     productList = DBAPI.getProduct('_ALL_')
     return render_template('cpanel.html', productList = productList)
 
 @main.route('/cpanel/product/create', methods=['POST'])
+@login_required
 def createProduct():
     dataInfo = request.get_json()
 
@@ -48,12 +52,14 @@ def createProduct():
 ###########################################################################
 
 @main.route('/cpanel/product/id/<productid>')
+@login_required
 def productDisplay(productid):
     keyList = DBAPI.getKeys(productid)
     productContent = DBAPI.getProductByID(productid)
     return render_template('product.html', prodID = productid, keyList = keyList, pcontent = productContent, pubKey = productContent.publicK.decode('utf-8'))
 
 @main.route('/cpanel/keydata/id/<keyid>')
+@login_required
 def keyDataDisplay(keyid):
     keyData = DBAPI.getKeyData(keyid)
     logData = DBAPI.getKeyLogs(keyid)
@@ -62,6 +68,7 @@ def keyDataDisplay(keyid):
     return render_template('keydata.html', keyData = keyData, logData = logData, registrations = registrations)
 
 @main.route('/cpanel/product/id/<productid>/createkey', methods=['POST'])
+@login_required
 def createKey(productid):
     dataInfo = request.get_json()
     print(dataInfo)
@@ -72,6 +79,7 @@ def createKey(productid):
     return "OKAY"
 
 @main.route('/cpanel/editkeys', methods=['POST'])
+@login_required
 def updateKeyState():
     dataInfo = request.get_json()
     print(dataInfo)
@@ -158,11 +166,6 @@ def validate_product():
             'Message' : 'Your device is registered.',
             'KeyStatus' : keyObject.id
         }
-
-
-
-
-
 
 # Auxiliary Methods
 def getStatus(activeDevices):
