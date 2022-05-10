@@ -157,4 +157,4 @@ In order to facilitate the transition between databases, the entire web app conn
 
 ## Section 4 :: API Documentation
 
-![API Documentation Image](https://raw.githubusercontent.com/BUILT-CoLAB/license-key-manager/main/docs/apiDocumentation.png?token=GHSAT0AAAAAABTDVVQ522YFT6RWIKJBPUTYYTZYS7Q)
+![API Documentation Image](https://raw.githubusercontent.com/BUILT-CoLAB/license-key-manager/main/docs/apiDocumentation.png?token=GHSAT0AAAAAABTDVVQ4MYEAOQA4SUK2ST54YTZYWXQ)
