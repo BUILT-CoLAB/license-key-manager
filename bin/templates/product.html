@@ -283,13 +283,13 @@
                                 <div class="col-3">
                                   <label for="inputPassword6" class="col-form-label">Customer's name</label>
                                 </div>
-                                <div class="col-auto">
+                                <div class="col-4">
                                   <input type="text" id="inputName" class="form-control" aria-describedby="passwordHelpInline">
                                 </div>
-                                <div class="col-auto" style="display: none;">
-                                  <span id="nameHelpInline" class="form-text">
-                                    Must be 8-20 characters long.
-                                  </span>
+                                <div class="col-auto">
+                                    <span id="nameHelpInline" class="form-text text-danger">
+                                      
+                                    </span>
                                 </div>
                             </div>
 
@@ -297,12 +297,12 @@
                                 <div class="col-3">
                                   <label for="inputPassword6" class="col-form-label">Customer's email</label>
                                 </div>
-                                <div class="col-auto">
+                                <div class="col-4">
                                   <input type="text" id="inputEmail" class="form-control" aria-describedby="passwordHelpInline">
                                 </div>
-                                <div class="col-auto" style="display: none;">
-                                  <span id="nameHelpInline" class="form-text">
-                                    Must be 8-20 characters long.
+                                <div class="col-auto">
+                                  <span id="emailHelpInline" class="form-text text-danger">
+                                    
                                   </span>
                                 </div>
                             </div>
@@ -311,13 +311,13 @@
                                 <div class="col-3">
                                   <label for="inputPassword6" class="col-form-label">Customer's phone</label>
                                 </div>
-                                <div class="col-auto">
+                                <div class="col-4">
                                   <input type="text" id="inputPhone" class="form-control" aria-describedby="passwordHelpInline">
                                 </div>
-                                <div class="col-auto" style="display: none;">
-                                  <span id="nameHelpInline" class="form-text">
-                                    Must be 8-20 characters long.
-                                  </span>
+                                <div class="col-auto">
+                                    <span id="phoneHelpInline" class="form-text text-danger">
+                                    
+                                    </span>
                                 </div>
                             </div>
 
@@ -325,12 +325,12 @@
                                 <div class="col-3">
                                   <label for="inputPassword6" class="col-form-label">Max Devices</label>
                                 </div>
-                                <div class="col-auto">
+                                <div class="col-4">
                                   <input type="text" id="inputMaxDevices" class="form-control" aria-describedby="passwordHelpInline">
                                 </div>
                                 <div class="col-auto">
                                   <span id="passwordHelpInline" class="form-text">
-                                    If empty, the default value will be 5.
+                                    If empty, the default value will be 3.
                                   </span>
                                 </div>
                             </div>
@@ -339,15 +339,20 @@
                                 <div class="col-3">
                                   <label for="inputPassword6" class="col-form-label">Expiry Date:</label>
                                 </div>
-                                <input class="col-auto" type="datetime-local" id="expiryDate" name="expiry-date">
+                                <div class="col-4">
+                                    <input type="datetime-local" id="expiryDate" name="expiry-date" style="padding: 0.375rem 0.75rem;">
+                                </div>
                                 <div class="col-auto">
                                   <span id="passwordHelpInline" class="form-text">
-                                    If empty, this key will have no expiry date (lifetime).
+                                    If empty, the license will be lifetime.
                                   </span>
                                 </div>
                             </div>
-                            <span class="form-text">A serial key will be automatically generated by the server.<br></span>
-                            <span class="form-text">All fields are mandatory.</span>
+                            <hr>
+                            <h6>Notes:</h6>
+                            <span class="form-text">- The serial key will be automatically generated by the server.<br></span>
+                            <span class="form-text">- The indicated date will always be set according to the server's UTC.<br></span>
+                            <span class="form-text">- All fields are mandatory.</span>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -381,6 +386,10 @@
                 let phoneNumber = document.getElementById("inputPhone").value;
                 let maxDevices = document.getElementById("inputMaxDevices").value;
                 
+                // Check State
+                if( !checkInputs(name, email, phoneNumber, maxDevices) )
+                    return;
+
                 let productData = {
                     'name' : name,
                     'maxDevices' : maxDevices,
@@ -391,7 +400,7 @@
                 var httpRequest = new XMLHttpRequest();
                 httpRequest.open("POST", "/cpanel/product/id/" + "{{ prodID }}" + "/createkey", true);
                 httpRequest.setRequestHeader('Content-Type', 'application/json');
-                httpRequest.send(JSON.stringify(productData));
+                // httpRequest.send(JSON.stringify(productData));
 
                 httpRequest.onreadystatechange = function() {
                         if (httpRequest.readyState === 4) {
@@ -402,7 +411,30 @@
                             }
                         }
                     }
-                }
+            }
+
+            function checkInputs(name, email, phoneNumber, maxDevices, expiryDate){
+                let mayContinue = true;
+                let validatorBuffer = false;
+
+                // Check Name
+                validatorBuffer = /\d/.test(name);
+                document.getElementById("nameHelpInline").innerText = validatorBuffer ? "You have entered an invalid name." : " ";
+                mayContinue = !validatorBuffer;
+
+                // Check Email
+                let emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                validatorBuffer = email.match(emailRegex);
+                document.getElementById("emailHelpInline").innerText = validatorBuffer ? " " : "You have entered an invalid email.";
+                mayContinue = validatorBuffer;
+
+                // Check PhoneNumber
+                validatorBuffer = /^\d+$/.test(phoneNumber);
+                document.getElementById("phoneHelpInline").innerText = validatorBuffer ? " " : "You have entered an invalid phone number.";
+                mayContinue = validatorBuffer;
+
+                return mayContinue;
+            }
         </script>
 
         <!-- The following script handles all features related to 'Delete', 'Revoke', 'Reset', 'More Info' -->

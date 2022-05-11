@@ -71,7 +71,8 @@
         if (httpRequest.readyState === 4 && httpRequest.status === 200){
           if( httpRequest.responseText == "OK" )
             window.location.href = "{{ url_for('main.cpanel') }}";
-          document.getElementById("loginErrorMessage").innerText = httpRequest.responseText;
+          else
+            document.getElementById("loginErrorMessage").innerText = httpRequest.responseText;
         }
     };
       httpRequest.send(JSON.stringify(loginData));
