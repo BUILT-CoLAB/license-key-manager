@@ -29,6 +29,7 @@ class Key(db.Model):
     maxdevices = db.Column( db.Integer )
     devices = db.Column( db.Integer )
     status = db.Column( db.Integer )
+    expirydate = db.Column( db.Integer, nullable=False)
 
 class Registration(db.Model):
     __tablename__ = "registration"

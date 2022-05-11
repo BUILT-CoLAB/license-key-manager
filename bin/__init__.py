@@ -36,7 +36,10 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     with app.app_context():
+        from os.path import exists
         from . import databaseAPI as DBAPI
+        if( not exists('./bin/sqlite.db') ):
+            db.create_all(app=app)
         DBAPI.generateUser("root", "root", "randomemail@gg.com")
 
     return app

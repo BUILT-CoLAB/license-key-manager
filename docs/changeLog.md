@@ -10,3 +10,7 @@
 
 ## May 9
 - Implementation of the Login System and overhaul of the README file.
+
+## May 11
+- The system now creates the Database file if it does not yet exist.
+- Time format added for Key creation.

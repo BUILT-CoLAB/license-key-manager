@@ -89,7 +89,7 @@ def createKey(productid, customername, email, phonenumber, serialkey, maxdevices
         Creates a new Product and stores it in the database.
         The function returns the id of the newly created product.
     """
-    newKey = Key(productid = productid, customername = customername, customeremail = email, customerphone = phonenumber, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0)
+    newKey = Key(productid = productid, customername = customername, customeremail = email, customerphone = phonenumber, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0, expirydate = 0)
     
     db.session.add(newKey)
     db.session.commit()
