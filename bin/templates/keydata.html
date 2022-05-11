@@ -188,18 +188,19 @@
                             <div class="card mb-5">
                                 <h5 class="card-header {% if keyData.status == 2 %}red-header{% endif %}">Key Information</h5>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-8">
+                                    <div class="row justify-content-between">
+                                        <div class="col-auto">
                                             <p class="card-text"><bold class="fw-bold">Product ID: </bold> {{ keyData.productid }}</p>
                                             <p class="card-text"><bold class="fw-bold">Client's Name: </bold> {{ keyData.customername }}</p>
                                             <p class="card-text"><bold class="fw-bold">Client's Email address: </bold> {{ keyData.customeremail }}</p>
                                             <p class="card-text"><bold class="fw-bold">Client's Phone number: </bold> {{ keyData.customerphone }}</p>
                                             <p class="card-text"><bold class="fw-bold">Serial Key: </bold> {{ keyData.serialkey }}</p>
+                                            <p class="card-text"><bold class="fw-bold">Expiration Date: </bold> <span class="timestamp-line">{{ keyData.expirydate }}</span></p>
                                         </div>
-                                        <div class="col-4 text-end">
+                                        <div class="col-auto text-end">
                                             <p class="card-text">Device List: {{ keyData.devices }} / {{ keyData.maxdevices }}</p>
                                             {%for registration in registrations%}
-                                                <p class="fw-light font-monospace lh-1 fs-6 fst-italic devices-registered">{{registration.hardwareID}}</p>
+                                                <a href="#" class="no-underline"><p class="fw-light font-monospace lh-1 fs-6 fst-italic devices-registered">{{registration.hardwareID}}</p></a>
                                             {%endfor%}
                                         </div>
                                     </div>
@@ -218,6 +219,8 @@
                                                     <span class="p-2 bg-light shadow rounded text-warning"> Reactivated</span>
                                                 {% elif log.action == 'Activated' %}  
                                                     <span class="p-2 bg-light shadow rounded text-success"> Validated</span>
+                                                {% else %}
+                                                    <span class="p-2 bg-light shadow rounded text-danger"> {{log.action}}</span>
                                                 {% endif %}
                                             - <span class="timestamp-line">{{log.timestamp}}</span></h6>
                                         {%endfor%}
@@ -249,6 +252,25 @@
                     </div>
                 </div>
 
+                <div class="modal" id="modalConfirmationDelHW" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Confirmation</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>You are about to unlink the Hardware ID number: '<span id="actionHW">---</span>' from this key. This action is irreversible and will be logged into the database.</p>
+                            <p>Do you wish to proceed?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button id="confirmRemoval" type="button" class="btn btn-outline-danger">Confirm</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
                 <!-- Footer -->
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
@@ -262,6 +284,10 @@
                 <script>
                     let timestamps = document.getElementsByClassName("timestamp-line");
                     for(let i = 0; i < timestamps.length; i++){
+                        if( timestamps[i].textContent === "0" ){
+                            timestamps[i].textContent = "Not specified";
+                            continue;
+                        }
                         let timestampV = timestamps[i].textContent;
                         let dateObj = new Date(timestampV * 1000);
 
@@ -334,8 +360,44 @@
                     }
                 }
             }
+        </script>
 
+        <script>
+            let modalConfirmation2 = new bootstrap.Modal( document.getElementById('modalConfirmationDelHW') )
+            let HWIDFiller = document.getElementById("actionHW");
+            let buttonConfirm = document.getElementById("confirmRemoval");
 
+            let hardwareRemoval = document.getElementsByClassName("devices-registered");
+            for(let i = 0; i < hardwareRemoval.length; i++)
+                	hardwareRemoval[i].addEventListener("click", confirmModalShow)
+            buttonConfirm.addEventListener("click", confirmRemovalHWID)
+
+            function confirmModalShow(event){
+                HWIDFiller.innerText = event.target.innerText;
+                modalConfirmation2.show();
+            }
+
+            function confirmRemovalHWID(){
+                let updateData = {
+                    'hardwareID' : HWIDFiller.innerText
+                }
+
+                var httpRequest = new XMLHttpRequest();
+                httpRequest.open("POST", '/cpanel/removehwid/' + '{{ keyData.id }}', true);
+                httpRequest.setRequestHeader('Content-Type', 'application/json');
+                httpRequest.send(JSON.stringify(updateData));
+
+                httpRequest.onreadystatechange = function() {
+                    if (httpRequest.readyState === 4) {
+                        if (httpRequest.status === 200) {
+                            location.reload()
+                        } else {
+                            console.error("Something wrong happened!")
+                        }
+                    }
+                }
+                modalConfirmation2.hide();
+            }
         </script>
     </body>
 </html>

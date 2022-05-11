@@ -392,3 +392,12 @@ main{
 .red-header{
   background-color: #dc3545;
 }
+
+.devices-registered:hover{
+  text-decoration: line-through;
+}
+
+.no-underline{
+  text-decoration: none !important;
+  color: black !important;
+}

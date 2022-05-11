@@ -84,12 +84,12 @@ def getKeysBySerialKey(serialKey, productID):
     print('Serial-',serialKey)
     return Key.query.filter_by(serialkey = serialKey, productid=productID).first()
 
-def createKey(productid, customername, email, phonenumber, serialkey, maxdevices):
+def createKey(productid, customername, email, phonenumber, serialkey, maxdevices, expiryDate):
     """
         Creates a new Product and stores it in the database.
         The function returns the id of the newly created product.
     """
-    newKey = Key(productid = productid, customername = customername, customeremail = email, customerphone = phonenumber, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0, expirydate = 0)
+    newKey = Key(productid = productid, customername = customername, customeremail = email, customerphone = phonenumber, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0, expirydate = expiryDate)
     
     db.session.add(newKey)
     db.session.commit()
@@ -152,6 +152,10 @@ def getKeyHWIDs(keyID):
 
 def deleteRegistrationsOfKey(keyID):
     Registration.query.filter_by(keyID = keyID).delete()
+    db.session.commit()
+
+def deleteRegistrationOfHWID(keyID, hardwareID):
+    Registration.query.filter_by(keyID = keyID, hardwareID = hardwareID).delete()
     db.session.commit()
 
 def addRegistration(keyID, hardwareID, keyObject):

@@ -74,7 +74,7 @@ def createKey(productid):
     print(dataInfo)
 
     serialKey = generateSerialKey(20)
-    keyId = DBAPI.createKey(productid, dataInfo.get('name'), dataInfo.get('email'), dataInfo.get('phoneNumber'), serialKey, dataInfo.get('maxDevices'))
+    keyId = DBAPI.createKey(productid, dataInfo.get('name'), dataInfo.get('email'), dataInfo.get('phoneNumber'), serialKey, dataInfo.get('maxDevices'), dataInfo.get('expiryDate'))
     DBAPI.submitLog(keyId, 'Created')
     return "OKAY"
 
@@ -108,6 +108,13 @@ def updateKeyState():
 
     return "OK"
 
+@main.route('/cpanel/removehwid/<keyid>', methods=['POST'])
+@login_required
+def hardwareIDRemove(keyid):
+    dataInfo = request.get_json()
+    DBAPI.deleteRegistrationOfHWID(keyid, dataInfo.get('hardwareID'))
+    DBAPI.submitLog(keyid, "Unlinked Hardware ID: '" + dataInfo.get('hardwareID') + "'")
+    return "OK"
 
 @main.route('/validate',methods=['POST'])
 def validate_product():
