@@ -14,3 +14,6 @@
 ## May 11
 - The system now creates the Database file if it does not yet exist.
 - Time format added for Key creation.
+
+## May 17
+- User variables are now loaded with .env rather than being a fixed constant in the `__init__.py` file.

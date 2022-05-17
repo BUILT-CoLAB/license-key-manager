@@ -36,10 +36,14 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     with app.app_context():
+        import os
+        from dotenv import load_dotenv
         from os.path import exists
         from . import databaseAPI as DBAPI
+
+        load_dotenv()
         if( not exists('./bin/sqlite.db') ):
             db.create_all(app=app)
-        DBAPI.generateUser("root", "root", "randomemail@gg.com")
+        DBAPI.generateUser(os.getenv("USERNAME"), os.getenv("PASSWORD"), os.getenv("ADMINEMAIL"))
 
     return app

@@ -19,12 +19,12 @@ python3 -m flask run
 
 The website will be available inside ```http://localhost:5000/```. 
 
-The login data is:
+The default login data is:
 ```
 Username: root
 Password: root
 ```
-(You can see how to these parameters by checking Section 3 of this document)
+In order to change these login details, you will need to modify the .env variable.
 
 You do not need to set-up any environmental variables as the project now uses `python-dotenv` to load the `.env` file present in this repository. Without this file your application throw an error, forcing you to either reacquire this file or to manually set the environment variable `FLASK_APP=bin`.
 
