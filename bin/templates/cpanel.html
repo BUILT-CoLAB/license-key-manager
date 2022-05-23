@@ -166,7 +166,7 @@
                     <nav class="navbar navbar-expand bg-white navbar-light topbar mb-4 static-top top-bar">
                         <!-- Topbar Search -->
                         <div class="search-bar-top mx-auto">
-                            <input class="search-bar" type="text" placeholder="Search for products ..." aria-label="Search for products ...">
+                            <input class="search-bar" type="text" placeholder="Search for products ..." aria-label="Search for products ..." id="productSearcher">
                         </div>
                     </nav>
                     <!-- End of Topbar -->
@@ -382,7 +382,7 @@
                     'URL' : urlimg
                 }
 
-                var httpRequest = new XMLHttpRequest();
+                let httpRequest = new XMLHttpRequest();
                 httpRequest.open("POST", "/cpanel/product/create", true);
                 httpRequest.setRequestHeader('Content-Type', 'application/json');
                 httpRequest.send(JSON.stringify(loginData));
@@ -397,6 +397,52 @@
                         }
                     }
                 }
+        </script>
+
+        <script>
+            const searchBox = document.getElementById("productSearcher");
+            const productGallery = document.getElementById("productGallery");
+            searchBox.addEventListener("input", acquireProducts)
+
+            function acquireProducts(){
+                queryData = {
+                    'searchstring' : searchBox.value == "" ? '_ALL_' : searchBox.value
+                }
+
+                let httpRequest = new XMLHttpRequest();
+                httpRequest.open("POST", "/cpanel/getids", true);
+                httpRequest.setRequestHeader('Content-Type', 'application/json');
+                httpRequest.send(JSON.stringify(queryData));
+
+                httpRequest.onreadystatechange = function() {
+                    if (httpRequest.readyState === 4) {
+                        if (httpRequest.status === 200) {
+                            responseJSON = JSON.parse(httpRequest.responseText)
+                            productGallery.innerHTML = "";
+                            for(let i = 0; i < responseJSON.length; i++){
+                                productGallery.innerHTML += `<div class="col mb-4">
+                                    <div class="weather-card one">
+                                        <div class="top">
+                                            <div class="wrapper">
+                                                <!-- Nothing here -->
+                                            </div>
+                                        </div>
+                                        <div class="bottom">
+                                            <div class="d-flex flex-column justify-content-between text-center card-structure">
+                                                <span class="ctext-bold">` + responseJSON[i].name + `</span>
+                                                <a href="#"><button type="button" class="btn btn-primary btn-sm card-button-st">Manage</button></a>
+                                                <span class="ctext-light mt-auto">25th Abril, 2022</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                            }
+                        } else {
+                            console.error("Something wrong happened!")
+                        }
+                    }
+                }
+            }
         </script>
 	</body>
 </html>

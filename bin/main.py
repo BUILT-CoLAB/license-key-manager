@@ -4,6 +4,7 @@ from flask_login import login_required
 from .models import Product
 from . import databaseAPI as DBAPI
 from .keys import create_product_keys, decrypt_data, generateSerialKey
+import json
 
 main = Blueprint('main', __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -34,6 +35,17 @@ def profile():
 def cpanel():
     productList = DBAPI.getProduct('_ALL_')
     return render_template('cpanel.html', productList = productList)
+
+@main.route('/cpanel/getids', methods=['POST'])
+@login_required
+def queryProducts():
+    dataInfo = request.get_json()
+    print("Searching for: " + str(dataInfo.get('searchstring')))
+    responseList = []
+    productList = DBAPI.getProduct(dataInfo.get('searchstring'))
+    for product in productList:
+        responseList.append({ 'id':product.id, 'name':product.name, 'logo':product.logo })
+    return json.dumps(responseList)
 
 @main.route('/cpanel/product/create', methods=['POST'])
 @login_required

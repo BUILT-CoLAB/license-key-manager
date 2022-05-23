@@ -44,7 +44,7 @@ def getProduct(productName):
     """
     if(productName == '_ALL_'):
         return Product.query.all()
-    return Product.query.filter_by(name = productName).first()
+    return Product.query.filter(Product.name.contains(productName)).all()
 
 def getProductByID(productID):
     """ 
