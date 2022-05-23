@@ -44,6 +44,6 @@ def create_app():
         load_dotenv()
         if( not exists('./bin/sqlite.db') ):
             db.create_all(app=app)
-        DBAPI.generateUser(os.getenv("USERNAME"), os.getenv("PASSWORD"), os.getenv("ADMINEMAIL"))
+        DBAPI.generateUser(os.getenv("ADMINUSERNAME"), os.getenv("ADMINPASSWORD"), os.getenv("ADMINEMAIL"))
 
     return app

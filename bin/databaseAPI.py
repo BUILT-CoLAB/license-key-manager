@@ -13,7 +13,7 @@ def generateUser(username, password, email):
     """ 
         The following function creates a user account with the indicated data.
     """
-    print("Creating root user :: ", end="")
+    print("Creating user (username='" + username + "', password='" + password + "') ", end="")
     if( len( User.query.filter_by(name = username).all() ) > 0):
         print("USER ALREADY EXISTS! ... OK")
         return
@@ -117,7 +117,10 @@ def resetKey(keyid):
 def getKeyData(keyid):
     return Key.query.filter_by(id=keyid).first()
 
-
+def getKeyStatistics():
+    activated = Key.query.filter_by(status=1).count()
+    awaitingApproval = Key.query.filter_by(status=0).count()
+    return activated, awaitingApproval
 """
 //////////////////////////////////////////////////////////////////////////////
 ///////////  ChangeLog Section ///////////////////////////////////////////////

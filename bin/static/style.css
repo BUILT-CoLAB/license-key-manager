@@ -99,6 +99,7 @@ main{
     left: 0;
     top: 0;
     width: 5vw;
+    min-width: 64px;
 }
 
 .right-display{
@@ -109,7 +110,7 @@ main{
 .top-bar{
     box-shadow: 0 4px 2px -2px rgb(231, 231, 231);
     border-bottom: 2.5px solid rgb(0, 34, 255);
-    min-height: 70px;
+    min-height: 68px;
 }
 
 .search-bar-top{

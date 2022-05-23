@@ -1,50 +1,111 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+		<meta name="generator" content="Hugo 0.88.1">
+		<title>{% block title %}CPanel | Home{% endblock %}</title>
+		<link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sidebars/">
+		<!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+		<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        {% block head %}
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flask Auth Example</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
-</head>
+        {% endblock %}
+		<style>
+			.bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+			}
+			@media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+			}
+		</style>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Quicksand:wght@600&display=swap');
+        </style>
+	</head>
+	<body>
 
-<body>
-    <section class="hero is-primary is-fullheight">
+        <!-- -------------------- SVG definitions -------------------- -->
+		<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="addproduct" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
+                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+            </symbol>
+			<symbol id="home" viewBox="0 0 16 16">
+				<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+			</symbol>
+			<symbol id="people-circle" viewBox="0 0 16 16">
+				<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+				<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+			</symbol>
+            <symbol id="logout" viewBox="0 0 16 16">
+                <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15H1.5zM11 2h.5a.5.5 0 0 1 .5.5V15h-1V2zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
+            </symbol>
+            <symbol id="dashboard" viewBox="0 0 16 16">
+                <path d="M2.146 3.146a.5.5 0 0 1 .708 0l.823.824a.75.75 0 0 1 0 1.06l-.823.824a.5.5 0 1 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 0-.708ZM4 6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1A.5.5 0 0 1 4 6Zm6.354-2.854a.5.5 0 0 0-.708.708l.647.646-.647.646a.5.5 0 1 0 .708.708l.823-.824a.75.75 0 0 0 0-1.06l-.823-.824ZM12 5.5a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1Z"/>
+                <path d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3Zm2-1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h5.5V2H2Zm6.5 0v12H14a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H8.5Z"/>      
+            </symbol>
+            <symbol id="keylogo" viewBox="0 0 16 16">
+                <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+            </symbol>
+		</svg>
+        <!-- ------------------------------------------------------------------------------------ -->
 
-        <div class="hero-head">
-            <nav class="navbar">
-                <div class="container">
-                    <div id="navbarMenuHeroA" class="navbar-menu">
-                        <div class="navbar-end">
-                            <a href="{{ url_for('main.index') }}" class="navbar-item">
-                                Home
-                            </a>
-                            <a href="{{ url_for('main.profile') }}" class="navbar-item">
-                                Profile
-                            </a>
-                            <a href="{{ url_for('auth.login') }}" class="navbar-item">
-                                Login
-                            </a>
-                            <a href="{{ url_for('auth.signup') }}" class="navbar-item">
-                                Sign Up
-                            </a>
-                            <a href="{{ url_for('auth.logout') }}" class="navbar-item">
-                                Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-
-        <div class="hero-body">
-            <div class="container has-text-centered">
-               {% block content %}
-               {% endblock %}
+        <section class="left-nav vh-100">
+            <div class="d-flex flex-column bg-light vh-100" style="width: 5vw;">
+                <a href="/" class="d-block p-3 link-dark text-decoration-none text-center nav-link" title="Icon-only" data-bs-toggle="tooltip" data-bs-placement="right">
+                    <svg class="bi" width="30" height="30" role="img" aria-label="Home">
+                        <use xlink:href="#keylogo"/>
+                    </svg>
+                </a>
+                <ul class="nav flex-grow-1 nav-pills nav-flush flex-column mb-auto text-center">
+                    <li class="nav-item">
+                        <a href="{{ url_for('main.cpanel') }}" class="{% block topnav %}nav-link active py-3 border-bottom{% endblock %}" aria-current="page" title="Home" data-bs-toggle="tooltip" data-bs-placement="right">
+                            <svg class="bi" width="24" height="24" role="img" aria-label="Home">
+                                <use xlink:href="#home"/>
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="{% block midnav %}nav-link py-3 border-bottom{% endblock %}" title="Dashboard" data-bs-toggle="tooltip" data-bs-placement="right">
+                            <svg class="bi" width="24" height="24" role="img" aria-label="Customers">
+                                <use xlink:href="#dashboard"/>
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link py-3 border-bottom" title="Customers" data-bs-toggle="tooltip" data-bs-placement="right">
+                            <svg class="bi" width="24" height="24" role="img" aria-label="Customers">
+                                <use xlink:href="#logout"/>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </div>
-    </section>
-</body>
+        </section>
 
+
+
+
+
+        <div class="container-fluid right-display">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+		{% block scripts %}
+
+        {% endblock %}
+	</body>
 </html>

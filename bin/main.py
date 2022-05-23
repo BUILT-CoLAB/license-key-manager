@@ -34,13 +34,14 @@ def profile():
 @login_required
 def cpanel():
     productList = DBAPI.getProduct('_ALL_')
-    return render_template('cpanel.html', productList = productList)
+    activated, awaitingApproval = DBAPI.getKeyStatistics()
+    ratio = ( activated / (activated + awaitingApproval) ) * 100
+    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, percentage = round(ratio) )
 
 @main.route('/cpanel/getids', methods=['POST'])
 @login_required
 def queryProducts():
     dataInfo = request.get_json()
-    print("Searching for: " + str(dataInfo.get('searchstring')))
     responseList = []
     productList = DBAPI.getProduct(dataInfo.get('searchstring'))
     for product in productList:
