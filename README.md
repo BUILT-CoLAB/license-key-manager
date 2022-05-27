@@ -4,20 +4,25 @@
 
 ## Section 1 :: Setting up the Project
 
-**Step 1:** In the main directory of the repository, run the following command:
+After cloning the project from this repository, simply:
 
+**Step 1:** Build the docker image
 ```
-pip install -r requirements.txt
-```
-
-**Step 2:** While in the same directory as in the previous step, run the flask application using the following command:
-
-Windows / Linux:
-```
-python3 -m flask run
+docker build --tag license-manager .
 ```
 
-The website will be available inside ```http://localhost:5000/```. 
+**Step 2:** Run it with the command 
+```
+docker run -d -p 5000:5000 license-manager
+```
+
+Now the project should simply be available at ```http://localhost:5000/```. 
+
+
+**Step 3:** To stop the image from running simply run
+```
+docker stop $(docker ps -q --filter ancestor=license-manager )
+```
 
 The default login data is:
 ```
