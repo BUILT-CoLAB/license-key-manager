@@ -37,7 +37,10 @@ def profile():
 def cpanel():
     productList = DBAPI.getProduct('_ALL_')
     activated, awaitingApproval = DBAPI.getKeyStatistics()
-    ratio = ( activated / (activated + awaitingApproval) ) * 100
+    if( activated == 0 and awaitingApproval == 0 ):
+        ratio = 100
+    else:
+        ratio = ( activated / (activated + awaitingApproval) ) * 100
     return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, percentage = round(ratio) )
 
 @main.route('/cpanel/getids', methods=['POST'])
