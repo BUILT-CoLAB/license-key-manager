@@ -5,6 +5,8 @@ from .models import Product
 from . import databaseAPI as DBAPI
 from .keys import create_product_keys, decrypt_data, generateSerialKey
 import json
+import time
+import math
 
 main = Blueprint('main', __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -159,13 +161,23 @@ def validate_product():
     print("[NOTE] Maximum number of devices: " + str(keyObject.maxdevices) + ".")
     print("[NOTE] Current number of devices (pre-validation): " + str(keyObject.devices) + ".")
 
+    isStillValid = isDateWithin(keyObject.expirydate)
 
     if(DBAPI.getRegistration(keyObject.id, decryptedData[1]) == None):
         # Check if the key is revoked
         if(keyObject.status == 2):
             return {
                 'HttpCode' : 403,
-                'Message' : 'Forbbiden access :: Key revoked! Your hardware was not registered.'
+                'Message' : 'Forbbiden access :: Key revoked! Your hardware was not registered.',
+                'Code' : 'KEY_REVOKED'
+            }
+
+        # Check if the key is still valid
+        if( not isStillValid ):
+            return {
+                'HttpCode' : 400,
+                'Message' : 'Registration denied :: The key has expired.',
+                'Code' : 'KEY_EXPIRED'
             }
 
         # Check if the number of devices if okay
@@ -173,22 +185,41 @@ def validate_product():
             DBAPI.addRegistration(keyObject.id, decryptedData[1], keyObject)
             return {
                 'HttpCode' : 201,
-                'Message' : 'Registration successful'
+                'Message' : 'Registration successful',
+                'Code' : 'SUCCESS',
+                'ExpiryTimestamp' : keyObject.expirydate
             }
         else:   # No more devices available
             return {
                 'HttpCode' : 400,
-                'Message' : 'Maximum number of devices reached for that license key'
+                'Message' : 'Maximum number of devices reached for that license key',
+                'Code' : 'KEY_DEVICES_FULL'
             }
     else:
-        return {
-            'HttpCode' : 200,
-            'Message' : 'Your device is registered.',
-            'KeyStatus' : keyObject.id
-        }
+        if( not isStillValid):
+            return {
+                'HttpCode' : 400,
+                'Message' : 'Your registration has expired. Update required.',
+                'Code' : 'KEY_EXPIRED'
+            }
+        else:
+            return {
+                'HttpCode' : 200,
+                'Message' : 'Your device is still registered.',
+                'KeyStatus' : keyObject.id,
+                'Code' : 'OKAY'
+            }
 
 # Auxiliary Methods
 def getStatus(activeDevices):
     if(activeDevices > 0):
         return 1
     return 0
+
+def isDateWithin(limitDate):
+    if( limitDate == 0 ):   # Life-time license
+        return True
+    if( math.floor( time.time() ) > int(limitDate) ):
+        return False
+    return True
+    
