@@ -6,18 +6,18 @@ import requests
 import base64
 
 publicKey = """-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCxtr0kGDL1jFuCYuu9lS/hIlvL
-OfSNJtLY7v3xygEqnexMoY1pLHqx+uOysW5x/tMCx3UrJG+/pP7zZC6gcuHmfNCD
-DBLCsvmTrn9ONenJNBNLg20fXntKGfkWw8d2yS5mC9SGY0HhR+hMoilfLcZ1FCZR
-T6tE85KkLxHjLMLuYQIDAQAB
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCk8QtER0SUC0ORKHqo31rRAlqv
+854rXRBwYR5atwSjPHVxCFFASdHngsVRCCUkEfKiW8FlRO71NdYMO8yrTC/+pkMp
+SbR2vQDIDqrFfQ7mXmjJeL7Jl8sNxJ82HMvuz71hXyrodjkSjd3AmdXUJ6FYNXB0
+bPNFEwBMvmUUmDU5sQIDAQAB
 -----END PUBLIC KEY-----
 """
 
 public_key = serialization.load_pem_public_key( str.encode(publicKey) )
 
-api_key = '7a98c7e2-a62d-4dd7-930c-b14c34d08e50'
-serial = '97ILY-DPIWQ-LUIFQ-IDZL5'
-hwid= 'TestingHWID_N3' # Deterministic UID
+api_key = '3a228d02-f489-4a5d-acc6-872af0b75b7a'
+serial = 'TTICG-PGTW3-NFQPD-0OPSH'
+hwid= 'TestingHWID_N5' # Deterministic UID
 
 plaintexts = bytes(serial + ':' + hwid[:23],'utf-8')
 
@@ -34,7 +34,7 @@ if(isinstance(public_key, rsa.RSAPublicKey)):
     print(plaintexts)
     final_payload=base64.b64encode(payload).decode('utf-8')
     
-    r = requests.post('http://127.0.0.1:5000/validate',json={
+    r = requests.post('http://127.0.0.1:8150/validate',json={
         "apiKey":api_key,"payload":final_payload
     })
 
