@@ -2,6 +2,11 @@
 
 :root {
   --product-card-height: 20vh;
+  --dynamic-mode-color: #1a1a1b;
+  --dynamic-mode-text-color: white;
+  --dynamic-mode-border-color: rgba(255,255,255,0.125);
+  --dynamic-mode-border-color-s: rgba(255,255,255,1);
+  --dynamic-mode-color-light: #303032;
 }
 
 body {
@@ -152,7 +157,7 @@ main{
   background: #fff;
   box-shadow: 0 1px 38px rgba(0, 0, 0, 0.15), 0 5px 12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 0px;
 }
 .weather-card .top {
   position: relative;
@@ -246,7 +251,7 @@ main{
   .custom-table thead tr, .custom-table thead th {
     border-top: none;
     border-bottom: none !important;
-    color: rgb(0, 0, 0); }
+    color: var(--dynamic-mode-text-color); }
   .custom-table tbody th, .custom-table tbody td {
     color: #777;
     font-weight: 400;
@@ -266,7 +271,7 @@ main{
       -webkit-box-shadow: 0 2px 10px -5px rgba(0, 0, 0, 0.1);
       box-shadow: 0 2px 10px -5px rgba(0, 0, 0, 0.1); }
   .custom-table tbody tr th, .custom-table tbody tr td {
-    background: #ffffff;
+    background: var(--dynamic-mode-color);
     border: none;
     -webkit-transition: .3s all ease;
     -o-transition: .3s all ease;
@@ -401,4 +406,48 @@ main{
 .no-underline{
   text-decoration: none !important;
   color: black !important;
+}
+
+.dynamic-mode-border-s{
+  border: 1px solid var(--dynamic-mode-border-color-s);
+}
+
+.dynamic-mode-border{
+  border: 1px solid var(--dynamic-mode-border-color);
+}
+
+.dynamic-mode-border-bottom{
+  border-bottom: 1px solid var(--dynamic-mode-border-color);
+}
+
+.dynamic-mode-bg{
+  background-color: var(--dynamic-mode-color) !important;
+}
+
+.dynamic-mode-t{
+  color: var(--dynamic-mode-text-color) !important;
+}
+
+.dynamic-mode-bg-l{
+  background-color: var(--dynamic-mode-color-light) !important;
+}
+
+.btn-outline-dynamic{
+  color: var(--dynamic-mode-text-color);
+  border-color: var(--dynamic-mode-text-color);
+}
+
+.btn-outline-dynamic:hover{
+  color: var(--dynamic-mode-color);
+  border-color: var(--dynamic-mode-text-color);
+  background-color: var(--dynamic-mode-text-color);
+}
+
+.dynamic-form{
+  background-color: var(--dynamic-mode-color-light) !important;
+  color: var(--dynamic-mode-text-color) !important;
+}
+
+.cursor-special{
+  cursor: pointer !important;
 }
