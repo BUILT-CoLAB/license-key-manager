@@ -20,7 +20,6 @@ function triggerState(){
         applyBright();
     else
         applyDark();
-    setCookie();
 }
 
 function toggleDark(){
@@ -29,6 +28,7 @@ function toggleDark(){
     else
         currentState = "DAY"
     triggerState();
+    setCookie();
 }
 
 function applyDark(){
@@ -48,16 +48,15 @@ function applyBright(){
 }
 
 function acquireCookie(){
-    console.log(document.cookie);
     try {
-        document.cookie.split('; ').find(row => row.startsWith('mode=')).split('=')[1];
+        return document.cookie.split('; ').find(row => row.startsWith('mode=')).split('=')[1];
     } catch (error) {
         return "DAY"
     }
 }
 
 function setCookie(){
-    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); })
+    document.cookie = "mode=" + currentState + ";path=/";
 }
 
 triggerState();
