@@ -14,8 +14,8 @@ def create_product_keys():
                             encoding=serialization.Encoding.PEM,
                             format=serialization.PublicFormat.SubjectPublicKeyInfo)
 
-    with open('public_key_file','wb') as public_key_out:
-        public_key_out.write(public_key)
+    #with open('public_key_file','wb') as public_key_out:
+    #    public_key_out.write(public_key)
     
     return [private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,

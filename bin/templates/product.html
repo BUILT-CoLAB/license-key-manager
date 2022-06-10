@@ -222,6 +222,7 @@ nav-link active py-3 border-bottom
             HTMLElement.classList.remove(className)
     }
 
+	let override = false;
     let modalCreation = new bootstrap.Modal( document.getElementById('modalCreation') )
     document.getElementById("createProductCall").addEventListener("click", createProductProcess.bind(this))
     document.getElementById("submitCreation").addEventListener("click", submitProductProcess.bind(this))
@@ -293,7 +294,7 @@ nav-link active py-3 border-bottom
         mayContinue = !mayContinue ? false : validatorBuffer;
 
         // Check Expiry Date
-        if(expiryDate.length !== 0){
+        if(expiryDate.length !== 0 && override === false){
             let dateObject = new Date(expiryDate);
             let HTMLObject = document.getElementById("dateHelpInline");
             validatorBuffer = Math.floor(dateObject.getTime()/1000) > Math.floor(Date.now() / 1000)
