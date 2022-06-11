@@ -9,5 +9,5 @@ serverHost = os.environ.get("SERVER_HOST")
 serverPort = os.environ.get("SERVER_PORT")
 # ################################################
 
-print("Serving request through :: " + serverHost + ":" + serverPort)
+print("Serving request through :: http://" + serverHost + ":" + serverPort)
 serve(bin.create_app(), host = serverHost, port = serverPort)

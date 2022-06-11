@@ -27,8 +27,23 @@ def index():
 
 @main.route('/products')
 @login_required
-def profile():
+def products():
     return render_template('products.html')
+
+@main.route('/customers')
+@login_required
+def customers():
+    return render_template('customers.html')
+
+@main.route('/changelog')
+@login_required
+def changelog():
+    return render_template('changelog.html')
+
+@main.route('/tutorial')
+@login_required
+def tutorial():
+    return render_template('tutorial.html')
 
 ###########################################################################
 
