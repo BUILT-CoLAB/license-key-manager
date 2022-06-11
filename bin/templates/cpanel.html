@@ -1,405 +1,304 @@
-<!doctype html>
-<html lang="en" class="h-full">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="A License Key Managing software meant to manage and create licenses.">
-		<meta name="author" content="Daniel | Isla | André">
-		<meta name="generator" content="Hugo 0.88.1">
-		<title>{% block title %}CPanel | Home{% endblock %}</title>
+{% extends "base.html" %}
+{% block title %}CPanel | Dashboard{% endblock %}
 
-		<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-		<script src="{{ url_for('static', filename='tailwind.js') }}"></script>
-	</head>
-	<body class="h-full">
-		<div>
-			<div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-			  <div class="flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white">
-				<div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-				  	<div class="flex items-center flex-shrink-0 px-4">
-						<img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg" alt="Workflow">
-				  	</div>
-				  <nav class="mt-5 flex-1 px-2 bg-white space-y-1">
-					<a href="#" class="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-						<svg class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-						</svg>
-						Dashboard
-					</a>
-		  
-					<a href="#" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-						<svg class="text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-						</svg>
-						Products
-					</a>
+{% block content %}
+<dl class="grid grid-cols-4 gap-5">
+	<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+		<div class="absolute bg-sky-500 rounded-md p-3">
+			<!-- Heroicon name: outline/users -->
+			<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+			</svg>
+		</div>
+		<p class="ml-16 text-sm font-medium text-gray-500 truncate">Products</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+		<p class="text-2xl font-semibold text-gray-900">71,897</p>
+		<p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+			<!-- Heroicon name: solid/arrow-sm-up -->
+			<svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+			<path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only"> Increased by </span>
+			122
+		</p>
+		
+		</dd>
+	</div>
 
-					<a href="#" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-						<svg class="text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-						</svg>
-						Customers
-					</a>
-		  
-					<a href="#" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-						<svg class="text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-						</svg>
-						Changelog
-					</a>
+	<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+		<div class="absolute bg-sky-500 rounded-md p-3">
+			<!-- Heroicon name: outline/mail-open -->
+			<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path>
+			</svg>
+		</div>
+		<p class="ml-16 text-sm font-medium text-gray-500 truncate">Claimed Licenses</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+		<p class="text-2xl font-semibold text-gray-900">58.16%</p>
+		<p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+			<!-- Heroicon name: solid/arrow-sm-up -->
+			<svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+			<path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only"> Increased by </span>
+			5.4%
+		</p>
+		
+		</dd>
+	</div>
 
-					<a href="#" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-						<svg class="text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-						</svg>
-						Tutorial
-					</a>
-				  </nav>
-				</div>
+	<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+		<div class="absolute bg-sky-500 rounded-md p-3">
+			<!-- Heroicon name: outline/cursor-click -->
+			<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+			</svg>
+		</div>
+		<p class="ml-16 text-sm font-medium text-gray-500 truncate">Claimed Proportion</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+		<p class="text-2xl font-semibold text-gray-900">24.57%</p>
+		<div class="w-50 bg-gray-200 rounded-full overflow-hidden">
+			<div class="h-2 bg-indigo-600 rounded-full" style="width: 37.5%"></div>
+		</div>
+		</dd>
+	</div>
 
-				<div class="flex-shrink-0 flex border-t border-gray-200 p-4 divide-x">
-					<a href="#" class="flex-shrink-0 w-2/4 group block">
-						<div class="flex items-center justify-center">
-							<div class="w-2/4">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-								</svg>
-							</div>
-							<div class="mr-3 w-2/4">
-								<p class="text-sm font-medium text-gray-700 group-hover:text-blue-900 transition-colors">Logout</p>
-							</div>
-						</div>
-					</a>
-
-					<a href="#" class="flex-shrink-0 w-2/4 group block">
-						<div class="flex items-center justify-center">
-							<div class="ml-3 w-2/4">
-								<p class="text-sm font-medium text-gray-700 group-hover:text-blue-900 transition-colors">Mode</p>
-							</div>
-							<div class="w-2/4">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
-									<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-								</svg>
-							</div>
-						</div>
-					</a>
-				</div>
-			  </div>
+	<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 rounded-md p-3">
+			<!-- Heroicon name: outline/cursor-click -->
+			<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+			</svg>
 			</div>
-			
-			<div class="md:pl-64 flex flex-col flex-1">
-
-			  <main class="flex-1">
-				<div class="py-6">
-				  <div class="px-4 sm:px-6 md:px-8">
-					<h1 class="mx-auto w-full text-2xl font-semibold text-gray-900">Dashboard</h1>
-				  </div>
-				  <div class="mx-auto px-4 sm:px-6 md:px-8">
-					<div class="py-4">
-						<div class="mx-auto w-full border-2 border-dashed border-black-200 rounded-lg h-96 h-fit">
-
-							<dl class="grid grid-cols-4 gap-5">
-								<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
-								  <dt>
-									<div class="absolute bg-sky-500 rounded-md p-3">
-									  <!-- Heroicon name: outline/users -->
-									  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-									  </svg>
-									</div>
-									<p class="ml-16 text-sm font-medium text-gray-500 truncate">Products</p>
-								  </dt>
-								  <dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
-									<p class="text-2xl font-semibold text-gray-900">71,897</p>
-									<p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-									  <!-- Heroicon name: solid/arrow-sm-up -->
-									  <svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-										<path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-									  </svg>
-									  <span class="sr-only"> Increased by </span>
-									  122
-									</p>
-									
-								  </dd>
-								</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate">Licenses Awaiting Activation</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900">24.57%</p>
+			<p class="ml-2 flex items-baseline text-sm font-semibold text-red-600">
+			<!-- Heroicon name: solid/arrow-sm-down -->
+			<svg class="self-center flex-shrink-0 h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+				<path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only"> Decreased by </span>
+			3.2%
+			</p>
+		</dd>
+	</div>
+</dl>		
 							
-								<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
-								  <dt>
-									<div class="absolute bg-sky-500 rounded-md p-3">
-									  <!-- Heroicon name: outline/mail-open -->
-									  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path>
-									  </svg>
-									</div>
-									<p class="ml-16 text-sm font-medium text-gray-500 truncate">Claimed Licenses</p>
-								  </dt>
-								  <dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
-									<p class="text-2xl font-semibold text-gray-900">58.16%</p>
-									<p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-									  <!-- Heroicon name: solid/arrow-sm-up -->
-									  <svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-										<path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-									  </svg>
-									  <span class="sr-only"> Increased by </span>
-									  5.4%
-									</p>
-									
-								  </dd>
-								</div>
-							
-								<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
-								  <dt>
-									<div class="absolute bg-sky-500 rounded-md p-3">
-									  <!-- Heroicon name: outline/cursor-click -->
-									  <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
-									  </svg>
-									</div>
-									<p class="ml-16 text-sm font-medium text-gray-500 truncate">Claimed Proportion</p>
-								  </dt>
-								  <dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
-									<p class="text-2xl font-semibold text-gray-900">24.57%</p>
-									<div class="w-50 bg-gray-200 rounded-full overflow-hidden">
-										<div class="h-2 bg-indigo-600 rounded-full" style="width: 37.5%"></div>
-									</div>
-								  </dd>
-								</div>
-
-								<div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
-									<dt>
-									  <div class="absolute bg-sky-500 rounded-md p-3">
-										<!-- Heroicon name: outline/cursor-click -->
-										<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-										  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
-										</svg>
-									  </div>
-									  <p class="ml-16 text-sm font-medium text-gray-500 truncate">Licenses Awaiting Activation</p>
-									</dt>
-									<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
-									  <p class="text-2xl font-semibold text-gray-900">24.57%</p>
-									  <p class="ml-2 flex items-baseline text-sm font-semibold text-red-600">
-										<!-- Heroicon name: solid/arrow-sm-down -->
-										<svg class="self-center flex-shrink-0 h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-										  <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-										</svg>
-										<span class="sr-only"> Decreased by </span>
-										3.2%
-									  </p>
-									</dd>
-								</div>
-							</dl>		
-							
-							<div class="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
-								<div class="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
-									<div class="flex items-center justify-between mb-4">
-										<h3 class="text-xl font-bold leading-none text-gray-900">Recent Customers</h3>
-										<a href="#" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
-											View all
-										</a>
-									</div>
-									<div class="flow-root">
-										<ul role="list" class="divide-y divide-gray-200">
-											<li class="py-3 sm:py-4">
-												<div class="flex items-center space-x-4">
-													<div class="flex-shrink-0">
-														<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/neil-sims.png" alt="Neil image">
-													</div>
-													<div class="flex-1 min-w-0">
-														<p class="text-sm font-medium text-gray-900 truncate">
-															Neil Sims
-														</p>
-														<p class="text-sm text-gray-500 truncate">
-															email@windster.com
-														</p>
-													</div>
-													<div class="inline-flex items-center text-base font-semibold text-gray-900">
-														$320
-													</div>
-												</div>
-											</li>
-											<li class="py-3 sm:py-4">
-												<div class="flex items-center space-x-4">
-													<div class="flex-shrink-0">
-														<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/bonnie-green.png" alt="Neil image">
-													</div>
-													<div class="flex-1 min-w-0">
-														<p class="text-sm font-medium text-gray-900 truncate">
-															Bonnie Green
-														</p>
-														<p class="text-sm text-gray-500 truncate">
-															email@windster.com
-														</p>
-													</div>
-													<div class="inline-flex items-center text-base font-semibold text-gray-900">
-														$3467
-													</div>
-												</div>
-											</li>
-											<li class="py-3 sm:py-4">
-												<div class="flex items-center space-x-4">
-													<div class="flex-shrink-0">
-														<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/michael-gough.png" alt="Neil image">
-													</div>
-													<div class="flex-1 min-w-0">
-														<p class="text-sm font-medium text-gray-900 truncate">
-															Michael Gough
-														</p>
-														<p class="text-sm text-gray-500 truncate">
-															email@windster.com
-														</p>
-													</div>
-													<div class="inline-flex items-center text-base font-semibold text-gray-900">
-														$67
-													</div>
-												</div>
-											</li>
-											<li class="py-3 sm:py-4">
-												<div class="flex items-center space-x-4">
-													<div class="flex-shrink-0">
-														<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/thomas-lean.png" alt="Neil image">
-													</div>
-													<div class="flex-1 min-w-0">
-														<p class="text-sm font-medium text-gray-900 truncate">
-															Thomes Lean
-														</p>
-														<p class="text-sm text-gray-500 truncate">
-															email@windster.com
-														</p>
-													</div>
-													<div class="inline-flex items-center text-base font-semibold text-gray-900">
-														$2367
-													</div>
-												</div>
-											</li>
-											<li class="pt-3 sm:pt-4 pb-0">
-												<div class="flex items-center space-x-4">
-													<div class="flex-shrink-0">
-														<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/lana-byrd.png" alt="Neil image">
-													</div>
-													<div class="flex-1 min-w-0">
-														<p class="text-sm font-medium text-gray-900 truncate">
-															Lana Byrd
-														</p>
-														<p class="text-sm text-gray-500 truncate">
-															email@windster.com
-														</p>
-													</div>
-													<div class="inline-flex items-center text-base font-semibold text-gray-900">
-														$367
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-									<h3 class="text-xl leading-none font-bold text-gray-900 mb-10">Product Statistics</h3>
-									<div class="block w-full overflow-x-auto">
-										<table class="items-center w-full bg-transparent border-collapse">
-											<thead>
-												<tr>
-													<th class="px-4 bg-gray-500 text-gray-50 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap max-w-[1rem]">Top Products</th>
-													<th class="px-4 bg-gray-500 text-gray-50 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap max-w-[1rem]">Claimings</th>
-													<th class="px-4 bg-gray-500 text-gray-50 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap min-w-140-px"></th>
-												</tr>
-											</thead>
-											<tbody class="divide-y divide-gray-100">
-												<tr class="text-gray-500">
-													<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left max-w-[1rem] truncate">This is the largest product in the world!</th>
-													<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">5,649</td>
-													<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-														<div class="flex items-center">
-															<span class="mr-2 text-xs font-medium">30%</span>
-															<div class="relative w-full">
-																<div class="w-full bg-gray-200 rounded-sm h-2">
-																	<div class="bg-cyan-600 h-2 rounded-sm" style="width: 30%"></div>
-																</div>
-															</div>
-														</div>
-													</td>
-												</tr>
-												<tr class="text-gray-500">
-													<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Referral</th>
-													<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">4,025</td>
-													<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-														<div class="flex items-center">
-															<span class="mr-2 text-xs font-medium">24%</span>
-															<div class="relative w-full">
-																<div class="w-full bg-gray-200 rounded-sm h-2">
-																	<div class="bg-orange-300 h-2 rounded-sm" style="width: 24%"></div>
-																</div>
-															</div>
-														</div>
-													</td>
-												</tr>
-												<tr class="text-gray-500">
-													<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Direct</th>
-													<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">3,105</td>
-													<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-														<div class="flex items-center">
-															<span class="mr-2 text-xs font-medium">18%</span>
-															<div class="relative w-full">
-																<div class="w-full bg-gray-200 rounded-sm h-2">
-																	<div class="bg-teal-400 h-2 rounded-sm" style="width: 18%"></div>
-																</div>
-															</div>
-														</div>
-													</td>
-												</tr>
-												<tr class="text-gray-500">
-													<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Social</th>
-													<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">1251</td>
-													<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-														<div class="flex items-center">
-															<span class="mr-2 text-xs font-medium">12%</span>
-															<div class="relative w-full">
-																<div class="w-full bg-gray-200 rounded-sm h-2">
-																	<div class="bg-pink-600 h-2 rounded-sm" style="width: 12%"></div>
-																</div>
-															</div>
-														</div>
-													</td>
-												</tr>
-												<tr class="text-gray-500">
-													<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Other</th>
-													<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">734</td>
-													<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-														<div class="flex items-center">
-															<span class="mr-2 text-xs font-medium">9%</span>
-															<div class="relative w-full">
-																<div class="w-full bg-gray-200 rounded-sm h-2">
-																	<div class="bg-indigo-600 h-2 rounded-sm" style="width: 9%"></div>
-																</div>
-															</div>
-														</div>
-													</td>
-												</tr>
-												<tr class="text-gray-500">
-													<th class="border-t-0 align-middle text-sm font-normal whitespace-nowrap p-4 pb-0 text-left">Email</th>
-													<td class="border-t-0 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4 pb-0">456</td>
-													<td class="border-t-0 align-middle text-xs whitespace-nowrap p-4 pb-0">
-														<div class="flex items-center">
-															<span class="mr-2 text-xs font-medium">7%</span>
-															<div class="relative w-full">
-																<div class="w-full bg-gray-200 rounded-sm h-2">
-																	<div class="bg-purple-500 h-2 rounded-sm" style="width: 7%"></div>
-																</div>
-															</div>
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
+<div class="grid grid-cols-1 xl:grid-cols-2 xl:gap-4 my-4">
+	<div class="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
+		<div class="flex items-center justify-between mb-4">
+			<h3 class="text-xl font-bold leading-none text-gray-900">Recent Customers</h3>
+			<a href="#" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+				View all
+			</a>
+		</div>
+		<div class="flow-root">
+			<ul role="list" class="divide-y divide-gray-200">
+				<li class="py-3 sm:py-4">
+					<div class="flex items-center space-x-4">
+						<div class="flex-shrink-0">
+							<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/neil-sims.png" alt="Neil image">
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium text-gray-900 truncate">
+								Neil Sims
+							</p>
+							<p class="text-sm text-gray-500 truncate">
+								email@windster.com
+							</p>
+						</div>
+						<div class="inline-flex items-center text-base font-semibold text-gray-900">
+							$320
 						</div>
 					</div>
-				  </div>
-				</div>
-			  </main>
+				</li>
+				<li class="py-3 sm:py-4">
+					<div class="flex items-center space-x-4">
+						<div class="flex-shrink-0">
+							<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/bonnie-green.png" alt="Neil image">
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium text-gray-900 truncate">
+								Bonnie Green
+							</p>
+							<p class="text-sm text-gray-500 truncate">
+								email@windster.com
+							</p>
+						</div>
+						<div class="inline-flex items-center text-base font-semibold text-gray-900">
+							$3467
+						</div>
+					</div>
+				</li>
+				<li class="py-3 sm:py-4">
+					<div class="flex items-center space-x-4">
+						<div class="flex-shrink-0">
+							<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/michael-gough.png" alt="Neil image">
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium text-gray-900 truncate">
+								Michael Gough
+							</p>
+							<p class="text-sm text-gray-500 truncate">
+								email@windster.com
+							</p>
+						</div>
+						<div class="inline-flex items-center text-base font-semibold text-gray-900">
+							$67
+						</div>
+					</div>
+				</li>
+				<li class="py-3 sm:py-4">
+					<div class="flex items-center space-x-4">
+						<div class="flex-shrink-0">
+							<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/thomas-lean.png" alt="Neil image">
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium text-gray-900 truncate">
+								Thomes Lean
+							</p>
+							<p class="text-sm text-gray-500 truncate">
+								email@windster.com
+							</p>
+						</div>
+						<div class="inline-flex items-center text-base font-semibold text-gray-900">
+							$2367
+						</div>
+					</div>
+				</li>
+				<li class="pt-3 sm:pt-4 pb-0">
+					<div class="flex items-center space-x-4">
+						<div class="flex-shrink-0">
+							<img class="h-8 w-8 rounded-full" src="https://demo.themesberg.com/windster/images/users/lana-byrd.png" alt="Neil image">
+						</div>
+						<div class="flex-1 min-w-0">
+							<p class="text-sm font-medium text-gray-900 truncate">
+								Lana Byrd
+							</p>
+							<p class="text-sm text-gray-500 truncate">
+								email@windster.com
+							</p>
+						</div>
+						<div class="inline-flex items-center text-base font-semibold text-gray-900">
+							$367
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+		<h3 class="text-xl leading-none font-bold text-gray-900 mb-10">Product Statistics</h3>
+		<div class="block w-full overflow-x-auto">
+			<table class="items-center w-full bg-transparent border-collapse">
+				<thead>
+					<tr>
+						<th class="px-4 bg-gray-500 text-gray-50 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap max-w-[1rem]">Top Products</th>
+						<th class="px-4 bg-gray-500 text-gray-50 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap max-w-[1rem]">Claimings</th>
+						<th class="px-4 bg-gray-500 text-gray-50 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap min-w-140-px"></th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-100">
+					<tr class="text-gray-500">
+						<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left max-w-[1rem] truncate">This is the largest product in the world!</th>
+						<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">5,649</td>
+						<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+							<div class="flex items-center">
+								<span class="mr-2 text-xs font-medium">30%</span>
+								<div class="relative w-full">
+									<div class="w-full bg-gray-200 rounded-sm h-2">
+										<div class="bg-cyan-600 h-2 rounded-sm" style="width: 30%"></div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr class="text-gray-500">
+						<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Referral</th>
+						<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">4,025</td>
+						<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+							<div class="flex items-center">
+								<span class="mr-2 text-xs font-medium">24%</span>
+								<div class="relative w-full">
+									<div class="w-full bg-gray-200 rounded-sm h-2">
+										<div class="bg-orange-300 h-2 rounded-sm" style="width: 24%"></div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr class="text-gray-500">
+						<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Direct</th>
+						<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">3,105</td>
+						<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+							<div class="flex items-center">
+								<span class="mr-2 text-xs font-medium">18%</span>
+								<div class="relative w-full">
+									<div class="w-full bg-gray-200 rounded-sm h-2">
+										<div class="bg-teal-400 h-2 rounded-sm" style="width: 18%"></div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr class="text-gray-500">
+						<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Social</th>
+						<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">1251</td>
+						<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+							<div class="flex items-center">
+								<span class="mr-2 text-xs font-medium">12%</span>
+								<div class="relative w-full">
+									<div class="w-full bg-gray-200 rounded-sm h-2">
+										<div class="bg-pink-600 h-2 rounded-sm" style="width: 12%"></div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr class="text-gray-500">
+						<th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Other</th>
+						<td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">734</td>
+						<td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+							<div class="flex items-center">
+								<span class="mr-2 text-xs font-medium">9%</span>
+								<div class="relative w-full">
+									<div class="w-full bg-gray-200 rounded-sm h-2">
+										<div class="bg-indigo-600 h-2 rounded-sm" style="width: 9%"></div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr class="text-gray-500">
+						<th class="border-t-0 align-middle text-sm font-normal whitespace-nowrap p-4 pb-0 text-left">Email</th>
+						<td class="border-t-0 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4 pb-0">456</td>
+						<td class="border-t-0 align-middle text-xs whitespace-nowrap p-4 pb-0">
+							<div class="flex items-center">
+								<span class="mr-2 text-xs font-medium">7%</span>
+								<div class="relative w-full">
+									<div class="w-full bg-gray-200 rounded-sm h-2">
+										<div class="bg-purple-500 h-2 rounded-sm" style="width: 7%"></div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
 
-			</div>
-		  </div>
-	</body>
-</html>
+{% block scripts %}
+	
+{% endblock %}
