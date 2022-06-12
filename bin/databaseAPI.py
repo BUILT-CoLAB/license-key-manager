@@ -52,11 +52,11 @@ def getProductByID(productID):
     """
     return Product.query.filter_by(id = productID).first()
         
-def createProduct(name, logo, privateK, publicK, apiK):
+def createProduct(name, category, image, details, privateK, publicK, apiK):
     """
         Creates a new Product and stores it in the database.
     """
-    newProduct = Product(name=name, logo=logo, privateK=privateK, publicK=publicK, apiK=apiK)
+    newProduct = Product(name=name, category=category, image=image, details=details, privateK=privateK, publicK=publicK, apiK=apiK)
     db.session.add(newProduct)
     db.session.commit()
 

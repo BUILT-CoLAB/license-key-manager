@@ -1,393 +1,192 @@
 {% extends "base.html" %}
-{% block title %}CPanel | Product Details{% endblock %}
-{% block head %}
-    {{ super() }}
-    
-{% endblock %}
-
-{% block topnav %}
-nav-link py-3 border-bottom border-top
-{% endblock %}
-
-{% block midnav %}
-nav-link active py-3 border-bottom
-{% endblock %}
+{% block title %}CPanel | Products{% endblock %}
 
 {% block content %}
-<div id="content-wrapper" class="d-flex flex-column">
-	<!-- Main Content -->
-	<div id="content">
-		<!-- Begin Page Content -->
-		<div class="container-fluid special-padding main-body-setting">
-			<!-- Page Heading -->
-			<div class="d-sm-flex align-items-center justify-content-between mb-4">
-				<h1 class="h3 mb-0 text-gray-800 dynamic-mode-t">Admin Panel - Product Overview</h1>
-				<a id="createProductCall" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-					<svg class="bi" width="16" height="16" role="img" aria-label="Home">
-						<use xlink:href="#addproduct"/>
-					</svg>
-					Generate new Key
-				</a>
+<main>
+    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5">
+       <div class="mb-1 w-full">
+			<div class="mb-4 pb-4 border-b border-gray-200">
+				<nav class="flex mb-5" aria-label="Breadcrumb">
+					<ol class="inline-flex items-center space-x-1 md:space-x-2">
+						<li class="inline-flex items-center">
+							<a href="#" class="text-gray-700 hover:text-gray-900 inline-flex items-center">
+								<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+									<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+								</svg>
+								Dashboard
+							</a>
+						</li>
+						<li>
+							<div class="flex items-center">
+								<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+								</svg>
+								<a href="#" class="text-gray-700 hover:text-gray-900 ml-1">Products</a>
+							</div>
+						</li>
+						<li>
+							<div class="flex items-center">
+								<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+								</svg>
+								<a href="#" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium">{{ product.name }}</a>
+							</div>
+						</li>
+					</ol>
+				</nav>
+				<h1 class="text-xl sm:text-2xl font-semibold text-gray-900">Product Display</h1>
 			</div>
-			<!-- Content Row -->
-			<div class="container-fluid p-0">
-				<div class="card mb-5">
-					<h5 class="card-header dynamic-mode-bg-l dynamic-mode-t dynamic-mode-border">Product Information</h5>
-					<div class="card-body dynamic-mode-bg dynamic-mode-t">
-						<p class="card-text">
-							<bold class="font-weight-bold">Product ID: </bold>
-							{{ prodID }}
-						</p>
-						<p class="card-text">
-							<bold class="font-weight-bold">Name: </bold>
-							{{ pcontent.name }}
-						</p>
-						<p class="card-text">
-							<bold class="font-weight-bold">API Key: </bold>
-							{{ pcontent.apiK }}
-						</p>
-						<button id="getPubK" type="button" class="btn btn-primary">Get Public Key</button>
+        
+		<div class="bg-white border-b border-gray-200">
+			<div class="pt-1 pb-6">
+			  <div class="mt-1 w-full">
+				<div class="flex">
+					<div style="width: 400px; height: 400px;">
+						<img src="https://images.unsplash.com/photo-1559583985-c80d8ad9b29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXwxMDY1OTc2fHxlbnwwfHx8fA%3D%3D&w=1000&q=80" style="height: 100%;">
+					</div>
+					<div class="ml-8 max-h-96">
+						<!-- Product details -->
+						<div>
+							<h1 class="text-xl font-bold text-gray-900">{{ product.name }}</h1>
+							<h2 class="text-m font-medium text-gray-600">{{ product.category }}</h2>
+							<h2 class="mt-6 text-sm font-medium text-gray-900">Description</h2>
+							<div class="mt-2 prose prose-sm text-gray-500 max-h-32 overflow-y-auto">
+								<p>{{ product.details }}</p>
+							</div>
+						</div>
+			
+						<!-- Policies -->
+						<section aria-labelledby="policies-heading" class="mt-10">
+						<dl class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+							<div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+							<dt>
+								<!-- Heroicon name: outline/globe -->
+								<svg class="mx-auto h-6 w-6 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="mt-4 text-sm font-medium text-gray-900"> Licenses </span>
+							</dt>
+							<dd class="mt-1 text-sm text-gray-500">452</dd>
+							</div>
+			
+							<div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+							<dt>
+								<!-- Heroicon name: outline/currency-dollar -->
+								<svg class="mx-auto h-6 w-6 flex-shrink-0 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="mt-4 text-sm font-medium text-gray-900"> Clients </span>
+							</dt>
+							<dd class="mt-1 text-sm text-gray-500">13</dd>
+							</div>
+						</dl>
+						</section>
+
 					</div>
 				</div>
-				<div class="table-responsive custom-table-responsive">
-					{% if keyList|length > 0 %}
-					<table class="table custom-table">
-						<thead>
-							<tr>
-								<th scope="col">---</th>
-								<th scope="col">Key ID</th>
-								<th scope="col">Customer's Name</th>
-								<th scope="col">Serial Number</th>
-								<th scope="col">Device Limit</th>
-								<th scope="col">Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							{%for key in keyList%}
-							<tr scope="row">
-								<th scope="row">
-									<label class="control control--checkbox">
-										<input type="checkbox" class="checkbox-selector-marker"/>
-										<div class="control__indicator"></div>
-									</label>
-								</th>
-								<td class="key-id-data">
-									{{ key.id }}
-								</td>
-								<td>{{ key.customername }}</td>
-								<td>{{ key.serialkey }}</td>
-								<td>
-									{{ key.maxdevices }}
-									<small class="d-block">
-										<bold>Currently active:</bold>
-										{{ key.devices }}
-									</small>
-								</td>
-								{% if key.status == 0 %}
-								<td class="status-inactive">Awaiting Activation</td>
-								{% elif key.status == 1 %}                  
-								<td class="status-active">Active</td>
-								{% elif key.status == 2 %}  
-								<td class="status-revoked">Revoked</td>
-								{% endif %}
-								<td>
-									<a href="{{ url_for('main.keyDataDisplay', keyid = key.id) }}">
-									<button type="button" class="btn btn-outline-info">></button>
-									</a>
-								</td>
-							</tr>
-							<tr class="spacer">
-								<td colspan="100"></td>
-							</tr>
-							{%endfor%}
-							</tr>
-						</tbody>
-					</table>
-					{% else %}
-					<h2 class="empty-header-text">Oh no ... There are no keys here :(</h2>
-					<p class="empty-paragraph-text">Click on "Generate new Key" to get started!</p>
-					{% endif %}
-				</div>
-				<div class="d-flex justify-content-center mb-5">
-					<button type="button" class="btn btn-lg btn-outline-danger ms-4 me-4 action-on-key disabled">Delete</button>
-					<button type="button" class="btn btn-lg btn-outline-dynamic ms-4 me-4 action-on-key disabled">Reset</button>
-				</div>
+			  </div>
 			</div>
-		</div>
-		<!-- /.container-fluid -->
-	</div>
-	<!-- End of Main Content -->
-	<!-- Footer -->
-	<footer class="sticky-footer dynamic-mode-bg dynamic-mode-t">
-		<div class="container my-auto">
-			<div class="copyright text-center my-auto">
-				<span>Copyright © Key License Manager Pro 2022</span>
-			</div>
-		</div>
-	</footer>
-	<!-- End of Footer -->
-	<div class="modal" id="modalCreation" tabindex="-1">
-		<div class="modal-dialog modal-dialog-centered modal-lg">
-			<div class="modal-content dynamic-mode-bg dynamic-mode-border-s dynamic-mode-t">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Publish new Key</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<div class="row g-3 align-items-center mb-4">
-						<div class="col-3">
-							<label for="inputPassword6" class="col-form-label">Customer's name</label>
-						</div>
-						<div class="col-4">
-							<input type="text" id="inputName" class="form-control dynamic-form" aria-describedby="passwordHelpInline">
-						</div>
-						<div class="col-auto">
-							<span id="nameHelpInline" class="form-text text-danger">
-							</span>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-4">
-						<div class="col-3">
-							<label for="inputPassword6" class="col-form-label">Customer's email</label>
-						</div>
-						<div class="col-4">
-							<input type="text" id="inputEmail" class="form-control dynamic-form" aria-describedby="passwordHelpInline">
-						</div>
-						<div class="col-auto">
-							<span id="emailHelpInline" class="form-text text-danger">
-							</span>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-4">
-						<div class="col-3">
-							<label for="inputPassword6" class="col-form-label">Customer's phone</label>
-						</div>
-						<div class="col-4">
-							<input type="text" id="inputPhone" class="form-control dynamic-form" aria-describedby="passwordHelpInline">
-						</div>
-						<div class="col-auto">
-							<span id="phoneHelpInline" class="form-text text-danger">
-							</span>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-4">
-						<div class="col-3">
-							<label for="inputPassword6" class="col-form-label">Max Devices</label>
-						</div>
-						<div class="col-4">
-							<input type="number" id="inputMaxDevices" class="form-control dynamic-form" aria-describedby="passwordHelpInline">
-						</div>
-						<div class="col-auto">
-							<span id="passwordHelpInline" class="form-text">
-							If empty, the default value will be 3.
-							</span>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-4">
-						<div class="col-3">
-							<label for="inputPassword6" class="col-form-label">Expiry Date:</label>
-						</div>
-						<div class="col-4">
-							<input class="dynamic-form dynamic-mode-border" type="date" id="expiryDate" name="expiry-date" style="padding: 0.375rem 0.75rem;">
-						</div>
-						<div class="col-auto">
-							<span id="dateHelpInline" class="form-text">
-							If empty, the license will be lifetime.
-							</span>
-						</div>
-					</div>
-					<hr>
-					<h6>Notes:</h6>
-					<span class="form-text">- The serial key will be automatically generated by the server.<br></span>
-					<span class="form-text">- The date will be stored relative to Posix time.<br></span>
-					<span class="form-text">- All fields are mandatory.</span>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button id="submitCreation" type="button" class="btn btn-primary">Create Product</button>
-				</div>
-			</div>
-		</div>
-	</div>
+		</div>	
+		
+
+       </div>
+    </div>
+
+    <ul role="list" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 ml-2 mr-2">
+      {% for product in products %}
+         <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow-lg divide-y divide-gray-200 border-grey-900 border-2">
+         <div class="flex-1 flex flex-col p-8">
+               <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="{{ product.image }}" alt="">
+               <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ product.name }}</h3>
+               <dl class="mt-1 flex-grow flex flex-col justify-between">
+                  <dd class="text-gray-500 text-sm">{{ product.category }}</dd>
+               </dl>
+         </div>
+         <div>
+            <div class="-mt-px flex divide-x divide-gray-200">
+               <div class="w-0 flex-1 flex">
+               <a href="mailto:janecooper@example.com" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                  <span class="ml-3">Edit</span>
+               </a>
+               </div>
+               <div class="-ml-px w-0 flex-1 flex">
+               <a href="tel:+1-202-555-0170" class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml-3">View</span>
+               </a>
+               </div>
+            </div>
+         </div>
+         </li>
+      {% endfor %}
+   </ul>
+   {% if products is defined and products|length <= 0 %}
+      <div class="min-h-full pt-16 pb-12 flex flex-col bg-white">
+         <main class="flex-grow flex flex-col justify-center max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="py-16">
+               <div class="text-center">
+                  <h1 class="mt-2 text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">Uhh, where did all the products go!?</h1>
+                  <p class="mt-2 text-base text-gray-500">Sorry, but the database does not have any products in it. Try creating one!</p>
+               </div>
+            </div>
+         </main>
+      </div>
+   {% endif %}
+ </main>
+ 
+ <div id="creation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center p-5 rounded-t border-b">
+                <h3 class="text-xl font-medium text-gray-900">
+                    Create Product
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="creation-modal">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6 space-y-6">
+                <form action="#">
+                    <div class="grid grid-cols-6 gap-6">
+                       <div class="col-span-6 sm:col-span-3">
+                          <label class="text-sm font-medium text-gray-900 block mb-2">Product Name</label>
+                          <input type="text" id="productName" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Sample Product">
+                       </div>
+                       <div class="col-span-6 sm:col-span-3">
+                          <label class="text-sm font-medium text-gray-900 block mb-2">Product Category</label>
+                          <input type="text" id="productCategory" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Software">
+                       </div>
+                       <div class="col-span-full">
+                           <label class="text-sm font-medium text-gray-900 block mb-2">Product Image</label>
+                           <input type="text" id="productImage" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Image URL">
+                        </div>
+                       <div class="col-span-full">
+                          <label class="text-sm font-medium text-gray-900 block mb-2">Product Details</label>
+                          <textarea id="productDetails" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" placeholder="This is a sample product. Fill out the fields to complete the product's creation process."></textarea>
+                       </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+               <button id="submitProduct" data-modal-toggle="creation-modal" type="button" class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 <script>
-    function applyClassChange(HTMLElement, className, isAdd){
-        if(isAdd)
-            HTMLElement.classList.add(className)
-        else
-            HTMLElement.classList.remove(className)
-    }
-
-	let override = false;
-    let modalCreation = new bootstrap.Modal( document.getElementById('modalCreation') )
-    document.getElementById("createProductCall").addEventListener("click", createProductProcess.bind(this))
-    document.getElementById("submitCreation").addEventListener("click", submitProductProcess.bind(this))
-    document.getElementById("getPubK").addEventListener("click", getPubKey.bind(this))
-
-    function createProductProcess(){
-        modalCreation.show();
-    }
-
-    async function getPubKey(){
-        await navigator.clipboard.writeText(`{{ pubKey }}`);
-        alert("Public Key has been copied to your clipboard.");
-    }
-
-    function submitProductProcess(){
-        let name = document.getElementById("inputName").value;
-        let email = document.getElementById("inputEmail").value;
-        let phoneNumber = document.getElementById("inputPhone").value;
-        let maxDevices = document.getElementById("inputMaxDevices").value;
-        let dateLimit = document.getElementById("expiryDate").value;
-
-        // Check State
-        if( !checkInputs(name, email, phoneNumber, maxDevices, dateLimit) )
-            return;
-
-        let dateObject = new Date(dateLimit);
-        let productData = {
-            'name' : name,
-            'maxDevices' : maxDevices.length === 0 ? 3 : maxDevices,
-            'email' : email,
-            'phoneNumber' : phoneNumber,
-            'expiryDate' : dateLimit.length === 0 ? 0 : Math.floor(dateObject.getTime() / 1000)
-        }
-
-        var httpRequest = new XMLHttpRequest();
-        httpRequest.open("POST", "/cpanel/product/id/" + "{{ prodID }}" + "/createkey", true);
-        httpRequest.setRequestHeader('Content-Type', 'application/json');
-        httpRequest.send(JSON.stringify(productData));
-
-        httpRequest.onreadystatechange = function() {
-                if (httpRequest.readyState === 4) {
-                    if (httpRequest.status === 200) {
-                        location.reload()
-                    } else {
-                        console.error("Something wrong happened!")
-                    }
-                }
-            }
-    }
-
-    function checkInputs(name, email, phoneNumber, maxDevices, expiryDate){
-        let mayContinue = true;
-        let validatorBuffer = false;
-
-        // Check Name
-        validatorBuffer = /\d/.test(name) || name.length === 0;
-        document.getElementById("nameHelpInline").innerText = validatorBuffer ? "You have entered an invalid name." : " ";
-        mayContinue = !mayContinue ? false : !validatorBuffer;
-
-        // Check Email
-        let emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        validatorBuffer = email.match(emailRegex);
-        document.getElementById("emailHelpInline").innerText = validatorBuffer ? " " : "You have entered an invalid email.";
-        mayContinue = !mayContinue ? false : validatorBuffer;
-
-        // Check PhoneNumber
-        validatorBuffer = /^\d+$/.test(phoneNumber);
-        document.getElementById("phoneHelpInline").innerText = validatorBuffer ? " " : "You have entered an invalid phone number.";
-        mayContinue = !mayContinue ? false : validatorBuffer;
-
-        // Check Expiry Date
-        if(expiryDate.length !== 0 && override === false){
-            let dateObject = new Date(expiryDate);
-            let HTMLObject = document.getElementById("dateHelpInline");
-            validatorBuffer = Math.floor(dateObject.getTime()/1000) > Math.floor(Date.now() / 1000)
-            HTMLObject.innerText = validatorBuffer ? " " : "The expiration must occurr after today.";
-            applyClassChange( HTMLObject, "text-danger", !validatorBuffer)
-            return !mayContinue ? false : validatorBuffer
-        }
-        return mayContinue
-    }
-</script>
-
-<!-- The following script handles all features related to 'Delete', 'Revoke', 'Reset', 'More Info' -->
-<script>
-    // Acquire Elements
-    let selectedList = [];
-    let selectableList = document.getElementsByClassName("checkbox-selector-marker");
-    let selectableIDs = document.getElementsByClassName("key-id-data");
-
-    ////////////////// Buttons
-    let actionButtons = document.getElementsByClassName("action-on-key");
-    //////////////////////////
-
-
-    // Assign Event Listeners
-    for(let i = 0; i < selectableList.length; i++)
-        selectableList[i].addEventListener("change", selectKey.bind(this, i))
-    
-    for(let i = 0; i < actionButtons.length; i++)
-        actionButtons[i].addEventListener("click", actionOnKeys.bind(this, i))
-    //////////////////////////
-
-    function selectKey(keyIndex){
-        addIfNotExists(selectedList, parseInt(selectableIDs[keyIndex].textContent) );
-        updateButtons();
-    }
-
-    function actionOnKeys(buttonNumber){
-        let action = "";
-        if(buttonNumber === 0)
-            action = "DELETE";
-        else
-            action = "RESET";
-        
-        let updateData = {
-            'keyList' : selectedList,
-            'action' : action
-        }
-
-        var httpRequest = new XMLHttpRequest();
-        httpRequest.open("POST", "/cpanel/editkeys", true);
-        httpRequest.setRequestHeader('Content-Type', 'application/json');
-        httpRequest.send(JSON.stringify(updateData));
-
-        httpRequest.onreadystatechange = function() {
-            if (httpRequest.readyState === 4) {
-                if (httpRequest.status === 200) {
-                    location.reload()
-                } else {
-                    console.error("Something wrong happened!")
-                }
-            }
-        }
-    }
-
-    /// BUTTONS SECTION
-    let buttonsOff = true;
-    function updateButtons(){
-        if(selectedList.length === 0 && buttonsOff)
-            return;
-        if(selectedList.length > 0 && !buttonsOff)
-            return;
-        if(selectedList.length === 0 && !buttonsOff)
-            setButtonState(false);
-        if(selectedList.length > 0 && buttonsOff)
-            setButtonState(true);
-    }
-
-    function setButtonState(enableButton){
-        for(let i = 0; i < actionButtons.length; i++)
-            if(enableButton)
-                actionButtons[i].classList.remove("disabled");
-            else
-                actionButtons[i].classList.add("disabled")
-        buttonsOff = !enableButton;
-    }
-
-    /// UTILITIES
-    function addIfNotExists(array, value){
-        let indexL = array.indexOf(value)
-        if(indexL === -1)
-            array.push(value);
-        else
-            array.splice(indexL, 1);
-    }
+	
 </script>
 {% endblock %}

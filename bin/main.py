@@ -25,11 +25,6 @@ def verify_token(token):
 def index():
     return render_template('index.html')
 
-@main.route('/products')
-@login_required
-def products():
-    return render_template('products.html')
-
 @main.route('/customers')
 @login_required
 def customers():
@@ -45,8 +40,6 @@ def changelog():
 def tutorial():
     return render_template('tutorial.html')
 
-###########################################################################
-
 @main.route('/cpanel')
 @login_required
 def cpanel():
@@ -58,6 +51,39 @@ def cpanel():
         ratio = ( activated / (activated + awaitingApproval) ) * 100
     return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, percentage = round(ratio) )
 
+###########################################################################
+########### PRODUCT HANDLING
+###########################################################################
+
+@main.route('/products')
+@login_required
+def products():
+    products = DBAPI.getProduct('_ALL_')
+    return render_template('products.html', products = products)
+
+@main.route('/products/id/<productid>')
+@login_required
+def productDisplay(productid):
+    keyList = DBAPI.getKeys(productid)
+    productContent = DBAPI.getProductByID(productid)
+    return render_template('product.html', keys = keyList, product = productContent, pubKey = productContent.publicK.decode('utf-8'))
+
+@main.route('/products/create', methods=['POST'])
+@login_required
+def createProduct():
+    dataInfo = request.get_json()
+
+    # ################# Storage Data ####################    
+    name = dataInfo.get('name')
+    category = dataInfo.get('category')
+    image = dataInfo.get('image')
+    details = dataInfo.get('details')
+    # ###################################################
+
+    product_keys = create_product_keys()
+    DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
+    return "SUCCESS"
+
 @main.route('/cpanel/getids', methods=['POST'])
 @login_required
 def queryProducts():
@@ -68,28 +94,7 @@ def queryProducts():
         responseList.append({ 'id':product.id, 'name':product.name, 'logo':product.logo })
     return json.dumps(responseList)
 
-@main.route('/cpanel/product/create', methods=['POST'])
-@login_required
-def createProduct():
-    dataInfo = request.get_json()
-
-    # ################# Storage Data ####################    
-    name = dataInfo.get('name')
-    logo = dataInfo.get('URL')
-    # ###################################################
-    product_keys = create_product_keys()
-    print(product_keys)
-    DBAPI.createProduct(name, logo, product_keys[0],product_keys[1], product_keys[2])
-    return "OKAY"
-
 ###########################################################################
-
-@main.route('/cpanel/product/id/<productid>')
-@login_required
-def productDisplay(productid):
-    keyList = DBAPI.getKeys(productid)
-    productContent = DBAPI.getProductByID(productid)
-    return render_template('product.html', prodID = productid, keyList = keyList, pcontent = productContent, pubKey = productContent.publicK.decode('utf-8'))
 
 @main.route('/cpanel/keydata/id/<keyid>')
 @login_required

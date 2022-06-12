@@ -1,5 +1,6 @@
 from pickle import TRUE
 from flask_login import UserMixin
+from flask import url_for
 from . import db
 
 # Declare the User Model for the Database (Admin, mostly)
@@ -16,7 +17,7 @@ class Product(db.Model):
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String(100), unique=True )
     category = db.Column( db.String(100), unique=True )
-    image = db.Column( db.String(150) )
+    image = db.Column( db.String(150) , nullable=False )
     details = db.Column( db.String(1000) )
     privateK = db.Column(db.String(1100), unique=True)
     publicK = db.Column(db.String(1100), unique=True)
