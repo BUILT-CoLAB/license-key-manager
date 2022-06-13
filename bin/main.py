@@ -51,6 +51,10 @@ def cpanel():
         ratio = ( activated / (activated + awaitingApproval) ) * 100
     return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, percentage = round(ratio) )
 
+
+
+
+
 ###########################################################################
 ########### PRODUCT HANDLING
 ###########################################################################
@@ -94,7 +98,32 @@ def queryProducts():
         responseList.append({ 'id':product.id, 'name':product.name, 'logo':product.logo })
     return json.dumps(responseList)
 
+
+
+
+
 ###########################################################################
+########### CUSTOMER HANDLING
+###########################################################################
+@main.route('/customers/create', methods=['POST'])
+@login_required
+def createProduct():
+    dataInfo = request.get_json()
+
+    # ################# Storage Data ####################    
+    name = dataInfo.get('name')
+    category = dataInfo.get('category')
+    image = dataInfo.get('image')
+    details = dataInfo.get('details')
+    # ###################################################
+
+    product_keys = create_product_keys()
+    DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
+    return "SUCCESS"
+
+
+
+
 
 @main.route('/cpanel/keydata/id/<keyid>')
 @login_required

@@ -30,6 +30,7 @@ class Client(db.Model):
     customeremail = db.Column( db.String(100) )
     customerphone = db.Column( db.String(20) )
     customercountry = db.Column( db.String(50) )
+    registrydate = db.Column( db.Integer, nullable=False)
 
 class Key(db.Model):
     __tablename__ = "key"
