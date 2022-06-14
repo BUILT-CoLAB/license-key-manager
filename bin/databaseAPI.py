@@ -1,4 +1,4 @@
-from .models import Product, Key, Changelog, Registration, User
+from .models import Product, Key, Changelog, Registration, User, Client, Generallog
 from werkzeug.security import generate_password_hash
 from . import db
 from time import time
@@ -13,15 +13,15 @@ def generateUser(username, password, email):
     """ 
         The following function creates a user account with the indicated data.
     """
-    print("Creating user (username='" + username + "', password='" + password + "') ", end="")
+    print("Creating user (username='" + username + "', password='" + password + "') ", end="", flush=True)
     if( len( User.query.filter_by(name = username).all() ) > 0):
-        print("USER ALREADY EXISTS! ... OK")
+        print("USER ALREADY EXISTS! ... OK", flush=True)
         return
-    print("USER DOES NOT EXIST --- ", end="")
+    print("USER DOES NOT EXIST --- ", end="", flush=True)
     newAccount = User(email = email, password = generate_password_hash(password), name = username)
     db.session.add(newAccount)
     db.session.commit()
-    print("CREATED! ... OK", end="")
+    print("CREATED! ... OK", flush=True)
 
 def obtainUser(username):
     """ 
@@ -179,3 +179,36 @@ def addRegistration(keyID, hardwareID, keyObject):
 
     # Log the changes
     submitLog(keyID, 'Activated')
+
+
+"""
+//////////////////////////////////////////////////////////////////////////////
+///////////  Registration Section ////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+"""
+
+def createCustomer(name, email, phone, country):
+    timestamp = int(time())
+    newClient = Client(name = name, email = email, phone = phone, country = country, registrydate = timestamp)
+    db.session.add(newClient)
+    db.session.commit()
+
+def modifyCustomer(clientid, name, email, phone, country):
+    clientObj = Client.query.filter_by(id = clientid).first()
+    clientObj.name = name
+    clientObj.email = email
+    clientObj.phone = phone
+    clientObj.country = country
+    db.session.commit()
+
+def deleteCustomer(clientid):
+    Client.query.filter_by(id = clientid).delete()
+
+def getCustomer(customerName):
+    """ 
+        The following function queries the database for a given customer. If you wish to extract ALL 
+        customers, the customerName should be '_ALL_'
+    """
+    if(customerName == '_ALL_'):
+        return Client.query.all()
+    return Client.query.filter(Client.name.contains(customerName)).all()

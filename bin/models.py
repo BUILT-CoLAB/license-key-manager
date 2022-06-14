@@ -25,11 +25,11 @@ class Product(db.Model):
 
 class Client(db.Model):
     __tablename__ = "client"
-    id = db.Column(db.Integer, primary_key=True)
-    customername = db.Column( db.String(100) )
-    customeremail = db.Column( db.String(100) )
-    customerphone = db.Column( db.String(20) )
-    customercountry = db.Column( db.String(50) )
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column( db.String(100) )
+    email = db.Column( db.String(100), unique = True)
+    phone = db.Column( db.String(20) )
+    country = db.Column( db.String(50) )
     registrydate = db.Column( db.Integer, nullable=False)
 
 class Key(db.Model):

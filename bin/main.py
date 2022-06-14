@@ -25,11 +25,6 @@ def verify_token(token):
 def index():
     return render_template('index.html')
 
-@main.route('/customers')
-@login_required
-def customers():
-    return render_template('customers.html')
-
 @main.route('/changelog')
 @login_required
 def changelog():
@@ -105,21 +100,45 @@ def queryProducts():
 ###########################################################################
 ########### CUSTOMER HANDLING
 ###########################################################################
+@main.route('/customers')
+@login_required
+def customers():
+    customers = DBAPI.getCustomer('_ALL_')
+    return render_template('customers.html', customers = customers)
+
 @main.route('/customers/create', methods=['POST'])
 @login_required
-def createProduct():
+def createCustomer():
     dataInfo = request.get_json()
-
     # ################# Storage Data ####################    
     name = dataInfo.get('name')
-    category = dataInfo.get('category')
-    image = dataInfo.get('image')
-    details = dataInfo.get('details')
+    email = dataInfo.get('email')
+    phone = dataInfo.get('phone')
+    country = dataInfo.get('country')
     # ###################################################
-
-    product_keys = create_product_keys()
-    DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
+    DBAPI.createCustomer(name, email, phone, country)
     return "SUCCESS"
+
+@main.route('/customers/edit/<keyid>', methods=['POST'])
+@login_required
+def modifyCustomer(keyid):
+    dataInfo = request.get_json()
+    # ################# Storage Data ####################    
+    name = dataInfo.get('name')
+    email = dataInfo.get('email')
+    phone = dataInfo.get('phone')
+    country = dataInfo.get('country')
+    # ###################################################
+    DBAPI.modifyCustomer(keyid, name, email, phone, country)
+    return "SUCCESS"
+
+@main.route('/customers/delete/<keyid>', methods=['POST'])
+@login_required
+def deleteCustomer(keyid):
+    DBAPI.deleteCustomer(keyid)
+    return "SUCCESS"
+
+
 
 
 
