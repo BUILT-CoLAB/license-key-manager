@@ -53,7 +53,6 @@ def cpanel():
 ###########################################################################
 ########### PRODUCT HANDLING
 ###########################################################################
-
 @main.route('/products')
 @login_required
 def products():
@@ -63,9 +62,10 @@ def products():
 @main.route('/products/id/<productid>')
 @login_required
 def productDisplay(productid):
-    keyList = DBAPI.getKeys(productid)
+    licenses = DBAPI.getKeys(productid)
     productContent = DBAPI.getProductByID(productid)
-    return render_template('product.html', keys = keyList, product = productContent, pubKey = productContent.publicK.decode('utf-8'))
+    customers = DBAPI.getCustomer('_ALL_')
+    return render_template('product.html', licenses = licenses, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers)
 
 @main.route('/products/create', methods=['POST'])
 @login_required
@@ -140,8 +140,25 @@ def deleteCustomer(keyid):
 
 
 
+###########################################################################
+########### LICENSE KEY HANDLING
+###########################################################################
+@main.route('/product/<productid>/createlicense', methods=['POST'])
+@login_required
+def createLicense(productid):
+    dataInfo = request.get_json()
+    serialKey = generateSerialKey(20)
+    keyId = DBAPI.createKey(productid, int( dataInfo.get('idclient') ), serialKey, int( dataInfo.get('maxdevices') ), int( dataInfo.get('expirydate') ) )
+    DBAPI.submitLog(keyId, 'Created')
+    return "OKAY"
 
-
+@main.route('/licenses/<licenseid>')
+@login_required
+def licenseDisplay(licenseid):
+    license = DBAPI.getKeyData(licenseid)
+    changelog = DBAPI.getKeyLogs(licenseid)
+    devices = DBAPI.getKeyHWIDs(licenseid)
+    return render_template('license.html', license = license, changelog = changelog, devices = devices)
 
 
 @main.route('/cpanel/keydata/id/<keyid>')
@@ -152,17 +169,6 @@ def keyDataDisplay(keyid):
     registrations = DBAPI.getKeyHWIDs(keyid)
     logData.reverse()
     return render_template('keydata.html', keyData = keyData, logData = logData, registrations = registrations)
-
-@main.route('/cpanel/product/id/<productid>/createkey', methods=['POST'])
-@login_required
-def createKey(productid):
-    dataInfo = request.get_json()
-    print(dataInfo)
-
-    serialKey = generateSerialKey(20)
-    keyId = DBAPI.createKey(productid, dataInfo.get('name'), dataInfo.get('email'), dataInfo.get('phoneNumber'), serialKey, dataInfo.get('maxDevices'), dataInfo.get('expiryDate'))
-    DBAPI.submitLog(keyId, 'Created')
-    return "OKAY"
 
 @main.route('/cpanel/editkeys', methods=['POST'])
 @login_required

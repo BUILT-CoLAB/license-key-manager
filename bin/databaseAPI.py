@@ -1,3 +1,4 @@
+from numpy import product
 from .models import Product, Key, Changelog, Registration, User, Client, Generallog
 from werkzeug.security import generate_password_hash
 from . import db
@@ -77,23 +78,26 @@ def getKeys(productID):
         The following function queries the database for all keys belonging to a product. The product
         is identified by an ID.
     """
-    return Key.query.filter_by(productid = productID).all()
+    if( not ( isinstance(productID, int) or productID.isnumeric() ) ):
+        raise Exception("Invalid input - Denying database querying!")
+    
+    return db.engine.execute("""
+    SELECT * FROM key JOIN (select id as cid, name from client) ON cid = KEY.clientid where Key.productid = """ + str(productID)
+    )
 
 def getKeysBySerialKey(serialKey, productID):
     print('ID-',productID)
     print('Serial-',serialKey)
     return Key.query.filter_by(serialkey = serialKey, productid=productID).first()
 
-def createKey(productid, customername, email, phonenumber, serialkey, maxdevices, expiryDate):
+def createKey(productid, clientid, serialkey, maxdevices, expiryDate):
     """
         Creates a new Product and stores it in the database.
         The function returns the id of the newly created product.
     """
-    newKey = Key(productid = productid, customername = customername, customeremail = email, customerphone = phonenumber, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0, expirydate = expiryDate)
-    
+    newKey = Key(productid = productid, clientid = clientid, serialkey = serialkey, maxdevices = maxdevices, devices = 0, status = 0, expirydate = expiryDate)
     db.session.add(newKey)
     db.session.commit()
-    print(newKey.id)
     return newKey.id
 
 def setKeyState(keyid, newState):
