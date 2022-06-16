@@ -575,9 +575,9 @@
     navigator.clipboard.writeText(content);
 
     if(index == 0)
-      alert("The API Key has been copied to your clipboard");
+      alert("The API Key has been copied to your clipboard\n\n" + "API Key: " + content);
     else
-      alert("The Public Key has been copied to your clipboard");
+      alert("The Public Key has been copied to your clipboard\n\n" + "Public Key:\n" + content);
   }
 </script>
 {% endblock %}

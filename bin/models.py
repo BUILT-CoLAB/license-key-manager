@@ -11,12 +11,13 @@ class User(UserMixin, db.Model):
     password = db.Column( db.String(150) )
     name = db.Column( db.String(100), unique=True )
     owner = db.Column( db.Boolean, default = False )
+    disabled = db.Column( db.Boolean, default = False )
 
 class Product(db.Model):
     __tablename__ = "product"
     id = db.Column( db.Integer, primary_key=True )
     name = db.Column( db.String(100), unique=True )
-    category = db.Column( db.String(100), unique=True )
+    category = db.Column( db.String(100) )
     image = db.Column( db.String(150) , nullable=False )
     details = db.Column( db.String(1000) )
     privateK = db.Column(db.String(1100), unique=True)
@@ -49,16 +50,11 @@ class Registration(db.Model):
     keyID = db.Column(db.Integer, db.ForeignKey('key.id', ondelete="cascade"), nullable=False)
     hardwareID = db.Column(db.String(200), nullable=False)
 
-class Generallog(db.Model):
-    __tablename__ = "generallog"
-    id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="cascade"), nullable=False)
-    timestamp = db.Column( db.Integer, nullable=False )
-    description = db.Column( db.String(100) )
-
 class Changelog(db.Model):
     __tablename__ = "changeLog"
     id = db.Column( db.Integer, primary_key=True )
-    keyID = db.Column( db.Integer, db.ForeignKey('key.id', ondelete="cascade"), nullable=False )
+    keyID = db.Column( db.Integer, db.ForeignKey('key.id', ondelete="cascade"), nullable=True )
+    userid = db.Column( db.Integer, db.ForeignKey('user.id', ondelete="cascade"), nullable=False )
     timestamp = db.Column( db.Integer, nullable=False )
     action = db.Column( db.String(25) )
+    description = db.Column( db.String(150), nullable=False, default='' )

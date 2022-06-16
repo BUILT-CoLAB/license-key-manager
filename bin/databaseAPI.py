@@ -1,5 +1,5 @@
 from numpy import product
-from .models import Product, Key, Changelog, Registration, User, Client, Generallog
+from .models import Product, Key, Changelog, Registration, User, Client
 from werkzeug.security import generate_password_hash
 from . import db
 from time import time
@@ -108,7 +108,6 @@ def setKeyState(keyid, newState):
 def deleteKey(keyid):
     Key.query.filter_by(id=keyid).delete()
     db.session.commit()
-    deleteLogs(keyid)
     deleteRegistrationsOfKey(keyid)
 
 def resetKey(keyid):
@@ -139,19 +138,20 @@ def getKeyAndClient(keyid):
 ///////////  ChangeLog Section ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 """
-
-def submitLog(keyid, action):
+def submitLog(keyid, userid, action, description):
     timestamp = int(time())
-    newLog = Changelog(keyID=keyid, timestamp=timestamp, action=action)
+    if(keyid == None):
+        newLog = Changelog(userid = userid, timestamp=timestamp, action = action, description = description)
+    else:
+        newLog = Changelog(keyID = keyid, userid = userid, timestamp=timestamp, action = action, description = description)
     db.session.add(newLog)
     db.session.commit()
 
 def getKeyLogs(keyid):
-    return Changelog.query.filter_by(keyID=keyid).all()
+    return Changelog.query.filter_by(keyID = keyid).all()
 
-def deleteLogs(keyid):
-    Changelog.query.filter_by(keyID=keyid).delete()
-    db.session.commit()
+def getUserLogs(userid):
+    return Changelog.query.filter_by(userid = userid).all()
 
 
 """

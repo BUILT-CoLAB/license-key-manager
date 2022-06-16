@@ -3,6 +3,7 @@ from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
 from .models import Product
 from . import databaseAPI as DBAPI
+from .auth import getCurrentUser
 from .keys import create_product_keys, decrypt_data, generateSerialKey
 import json
 import time
@@ -164,6 +165,7 @@ def licenseDisplay(licenseid):
 @login_required
 def updateKeyState():
     dataInfo = request.get_json()
+    adminAcc = getCurrentUser()
     print(dataInfo)
 
     # Handle "REVOKE" Request
@@ -172,21 +174,22 @@ def updateKeyState():
             keyData = DBAPI.getKeyData(keyID)
             if keyData.status != 2:
                 DBAPI.setKeyState(keyID, 2)
-                DBAPI.submitLog(keyID, 'Revoked')
+                DBAPI.submitLog(keyID, adminAcc.id, 'RevokedKey', '$$' + str(adminAcc.name) + '$$ revoked license #' + str(keyID))
             else:
                 DBAPI.setKeyState(keyID, getStatus(keyData.devices))
-                DBAPI.submitLog(keyID, 'Reactivated')
+                DBAPI.submitLog(keyID, adminAcc.id, 'ReactivatedKey', '$$' + str(adminAcc.name) + '$$ reactivated license #' + str(keyID))
             
     # Handle "DELETE" Request
     if(dataInfo.get('action') == 'DELETE'):
         for keyID in dataInfo.get('keyList'):
             DBAPI.deleteKey(keyID)
+            DBAPI.submitLog(None, adminAcc.id, 'DeletedKey', '$$' + str(adminAcc.name) + '$$ deleted the pre-existing license #' + str(keyID))
 
     # Handle "RESET" Request
     if(dataInfo.get('action') == 'RESET'):
         for keyID in dataInfo.get('keyList'):
             DBAPI.resetKey(keyID)
-            DBAPI.submitLog(keyID, 'Reset')
+            DBAPI.submitLog(keyID, adminAcc.id, 'ResetKey', '$$' + str(adminAcc.name) + '$$ reset license #' + str(keyID))
 
     return "OK"
 
