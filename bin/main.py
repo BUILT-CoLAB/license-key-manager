@@ -155,22 +155,12 @@ def createLicense(productid):
 @main.route('/licenses/<licenseid>')
 @login_required
 def licenseDisplay(licenseid):
-    license = DBAPI.getKeyData(licenseid)
+    license = DBAPI.getKeyAndClient(licenseid)
     changelog = DBAPI.getKeyLogs(licenseid)
     devices = DBAPI.getKeyHWIDs(licenseid)
     return render_template('license.html', license = license, changelog = changelog, devices = devices)
 
-
-@main.route('/cpanel/keydata/id/<keyid>')
-@login_required
-def keyDataDisplay(keyid):
-    keyData = DBAPI.getKeyData(keyid)
-    logData = DBAPI.getKeyLogs(keyid)
-    registrations = DBAPI.getKeyHWIDs(keyid)
-    logData.reverse()
-    return render_template('keydata.html', keyData = keyData, logData = logData, registrations = registrations)
-
-@main.route('/cpanel/editkeys', methods=['POST'])
+@main.route('/licenses/editkeys', methods=['POST'])
 @login_required
 def updateKeyState():
     dataInfo = request.get_json()
@@ -199,6 +189,20 @@ def updateKeyState():
             DBAPI.submitLog(keyID, 'Reset')
 
     return "OK"
+
+
+
+
+
+
+@main.route('/cpanel/keydata/id/<keyid>')
+@login_required
+def keyDataDisplay(keyid):
+    keyData = DBAPI.getKeyData(keyid)
+    logData = DBAPI.getKeyLogs(keyid)
+    registrations = DBAPI.getKeyHWIDs(keyid)
+    logData.reverse()
+    return render_template('keydata.html', keyData = keyData, logData = logData, registrations = registrations)
 
 @main.route('/cpanel/removehwid/<keyid>', methods=['POST'])
 @login_required

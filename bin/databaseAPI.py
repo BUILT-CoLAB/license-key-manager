@@ -83,7 +83,7 @@ def getKeys(productID):
     
     return db.engine.execute("""
     SELECT * FROM key JOIN (select id as cid, name from client) ON cid = KEY.clientid where Key.productid = """ + str(productID)
-    )
+    ).fetchall()
 
 def getKeysBySerialKey(serialKey, productID):
     print('ID-',productID)
@@ -125,6 +125,15 @@ def getKeyStatistics():
     activated = Key.query.filter_by(status=1).count()
     awaitingApproval = Key.query.filter_by(status=0).count()
     return activated, awaitingApproval
+
+def getKeyAndClient(keyid):
+    if( not ( isinstance(keyid, int) or keyid.isnumeric() ) ):
+        raise Exception("Invalid input - Denying database querying!")
+
+    return db.engine.execute("""
+    SELECT * FROM key JOIN (select id as cid, name from client) ON cid = key.clientid where Key.id = """ + str(keyid)
+    ).fetchone()
+
 """
 //////////////////////////////////////////////////////////////////////////////
 ///////////  ChangeLog Section ///////////////////////////////////////////////

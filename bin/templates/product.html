@@ -280,7 +280,13 @@
 						</li>
 					</ol>
 				</nav>
-				<h1 class="text-2xl font-semibold text-gray-900">Product Display</h1>
+        <div class="flex justify-between">
+          <h1 class="text-2xl font-semibold text-gray-900">Product Display</h1>
+          <div>
+            <button type="button" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" content="{{ product.apiK }}">API Key</button>
+            <button type="button" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" content="{{ pubKey }}">Public Key</button>
+          </div>
+        </div>
 			</div>
         
 		<div class="bg-white border-b border-gray-200">
@@ -303,7 +309,7 @@
 			
 						<!-- Policies -->
 						<section aria-labelledby="policies-heading" class="mt-10">
-						<dl class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+						<dl class="grid grid-cols-2 gap-6">
 							<div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
 							<dt>
 								<!-- Heroicon name: outline/globe -->
@@ -327,7 +333,6 @@
 							</div>
 						</dl>
 						</section>
-
 					</div>
 				</div>
 			  </div>
@@ -557,6 +562,22 @@
           }
       }
     }
+  }
+</script>
+
+<script>
+  const copyButtons = document.getElementsByClassName("copy-button");
+  for(let i = 0; i < copyButtons.length; i++)
+    copyButtons[i].addEventListener("click", copyContent.bind(this, i))
+
+  function copyContent(index){
+    let content = new String( copyButtons[index].getAttribute("content") );
+    navigator.clipboard.writeText(content);
+
+    if(index == 0)
+      alert("The API Key has been copied to your clipboard");
+    else
+      alert("The Public Key has been copied to your clipboard");
   }
 </script>
 {% endblock %}

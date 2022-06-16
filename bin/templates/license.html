@@ -31,36 +31,62 @@
 			 </div>
 			 <!-- Main -->
 			 <div class="divide-y divide-gray-200 border-b border-gray-200">
-			   <div class="pb-4">
-				 <div class="bg-green-400 h-2"></div>
-				 <div class="flow-root">
+			   	<div class="pb-4">
+				{% if license.status == 0 %}
+					<div class="bg-yellow-400 h-2"></div>
+				{% elif license.status == 1 %}
+					<div class="bg-green-400 h-2"></div>
+				{% else %}
+					<div class="bg-red-700 h-2"></div>
+				{% endif %}
+				<div class="flow-root">
 				   <div class="mt-6 ml-6 flex-1">
 					 <div>
 					   <div class="flex items-center">
 						 <h3 class="font-bold text-xl text-gray-900 sm:text-2xl">Product License</h3>
-						 <span class="ml-2 bg-green-400 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
-						   <span class="sr-only">Online</span>
-						 </span>
+						 {% if license.status == 0 %}
+							<span class="ml-2 bg-yellow-400 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
+								<span class="sr-only">Awaiting Activation</span>
+							</span>
+						 {% elif license.status == 1 %}
+							<span class="ml-2 bg-green-400 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
+								<span class="sr-only">Active</span>
+							</span>
+						 {% else %}
+							<span class="ml-2 bg-red-700 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
+								<span class="sr-only">Revoked</span>
+							</span>
+						 {% endif %}
 					   </div>
-					   <p class="text-sm text-gray-500">#{{license.id}} | Active</p>
+					   <p class="text-sm text-gray-500">#{{license.id}} | {% if license.status == 0 %} Awaiting Activation {% elif license.status == 1 %} Active {% else %} Revoked {% endif %}</p>
 					 </div>
 					 <div class="mt-6 flex flex-wrap justify-end space-y-3 sm:space-y-0 sm:space-x-3 w-80 float-right mr-4">
-						<button type="button" class="flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Revoke</button>
-						<button type="button" class="flex-1 w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Reset</button>
-						<button type="button" class="flex-1 w-full inline-flex items-center justify-center px-4 py-2 border border-rose-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-rose-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Delete</button>
+						{% if license.status != 2 %}
+							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Revoke</button>
+						{% else %}
+							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Reactivate</button>
+						{% endif %}
+						<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-1 w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Reset</button>
+						<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-1 w-full inline-flex items-center justify-center px-4 py-2 border border-rose-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-rose-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Delete</button>
 					 </div>
 				   </div>
 				 </div>
 			   </div>
 			   <div class="px-4 sm:px-0 sm:py-0">
 				 <dl class="sm:divide-y sm:divide-gray-200 sm:space-y-0">
-					 <div class="sm:flex sm:px-6 sm:py-5">
-						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Customer</dt>
+					<div class="sm:flex sm:px-6 sm:py-5">
+						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Product ID</dt>
 						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">
-						   <p>'John Garrett'</p>
+						   <p>{{license.productid}}</p>
 						</dd>
 					 </div>
 					 <div class="sm:flex sm:px-6 sm:py-5 bg-gray-100">
+						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Customer</dt>
+						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">
+						   <p>{{license.name}}</p>
+						</dd>
+					 </div>
+					 <div class="sm:flex sm:px-6 sm:py-5">
 						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Active Devices</dt>
 						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">
 						   <p>{{license.devices}}/{{license.maxdevices}}</p>
@@ -81,41 +107,32 @@
 			   </div>
 			</div>
 
-			 <div class="mt-10">
-			   <div class="mt-4 flex justify-between">
+			 <div class="mt-10 py-5">
+			   <div class="mt-4 flex justify-start divide-x-2">
 
-				  <div class="mx-6">
-					<h1 class="text-xl font-medium text-gray-900">Registered Devices:</h1>
-					 <div class="flow-root mt-6">
-					   <ul role="list" class="-my-5 divide-y divide-gray-200 w-80">
-						   <li class="py-2">
-							  <div class="flex items-center space-x-4">
-								 <div class="flex-1 min-w-0">
-									<p class="text-sm text-gray-500 truncate">HARDWAREID123</p>
-								 </div>
-								 <div>
-									<a href="#" class="inline-flex items-center justify-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 w-20">Confirm?</a>
-								 </div>
-							  </div>
-						   </li>
-				   
-						   <li class="py-2">
-							  <div class="flex items-center space-x-4">
-								 <div class="flex-1 min-w-0">
-									<p class="text-sm text-gray-500 truncate">HARDWAREID123</p>
-								 </div>
-								 <div>
-									<a href="#" class="inline-flex items-center justify-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 w-20">Remove</a>
-								 </div>
-							  </div>
-						   </li>
+				  <div class="ml-6 mr-20">
+					<h1 class="text-xl font-medium text-gray-900">Registered Devices</h1>
+					 <div class="flow-root mt-4">
+					   <ul role="list" class="divide-y divide-gray-200 w-80">
+							{% for device in devices %}
+								<li class="py-2">
+									<div class="flex items-center space-x-4">
+										<div class="flex-1 min-w-0">
+											<p class="text-sm text-gray-500 truncate">{{device.hardwareID}}</p>
+										</div>
+										<div>
+											<a href="#" class="inline-flex items-center justify-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 w-20">Remove</a>
+										</div>
+									</div>
+								</li>
+							{% endfor %}
 					   </ul>
 					 </div>
 				  </div>
 
-				  <div class="mx-6 flow-root">
+				  <div class="pl-20 flow-root">
 					<h1 class="text-xl font-medium text-gray-900">Changelog</h1>
-					<ul role="list" class="mt-2 mb-4">
+					<ul role="list" class="mt-6 mb-4">
 					   <li>
 						 <div class="relative pb-8">
 						   <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
@@ -130,7 +147,7 @@
 							 </div>
 							 <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
 							   <div>
-									<p class="text-sm text-gray-500 w-80"><a href="#" class="font-medium text-gray-900">SuperGodOfDeath</a> revoked this key.</p>
+									<p class="text-sm text-gray-500 w-96"><a href="#" class="font-medium text-gray-900">SuperGodOfDeath</a> revoked this key.</p>
 							   </div>
 							   <div class="text-right text-sm whitespace-nowrap text-gray-500">
 									<time datetime="2020-09-20">21 Sep, 2014</time>
@@ -245,45 +262,30 @@
 	</div>
 </main>
  
- <div id="creation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+ <div id="confirmation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
     <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow">
             <!-- Modal header -->
             <div class="flex justify-between items-center p-5 rounded-t border-b">
                 <h3 class="text-xl font-medium text-gray-900">
-                    Create Product
+					<svg xmlns="http://www.w3.org/2000/svg" class="inline text-yellow-500 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+					</svg>
+                    Confirm Action
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="creation-modal">
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="confirmation-modal">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
                 </button>
             </div>
             <!-- Modal body -->
             <div class="p-6 space-y-6">
-                <form action="#">
-                    <div class="grid grid-cols-6 gap-6">
-                       <div class="col-span-6 sm:col-span-3">
-                          <label class="text-sm font-medium text-gray-900 block mb-2">Product Name</label>
-                          <input type="text" id="productName" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Sample Product">
-                       </div>
-                       <div class="col-span-6 sm:col-span-3">
-                          <label class="text-sm font-medium text-gray-900 block mb-2">Product Category</label>
-                          <input type="text" id="productCategory" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Software">
-                       </div>
-                       <div class="col-span-full">
-                           <label class="text-sm font-medium text-gray-900 block mb-2">Product Image</label>
-                           <input type="text" id="productImage" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Image URL">
-                        </div>
-                       <div class="col-span-full">
-                          <label class="text-sm font-medium text-gray-900 block mb-2">Product Details</label>
-                          <textarea id="productDetails" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" placeholder="This is a sample product. Fill out the fields to complete the product's creation process."></textarea>
-                       </div>
-                    </div>
-                </form>
-            </div>
+				<p class="font-normal text-gray-600">You are about to <span id="keyAction" class="font-bold text-gray-900"></span> this key. This action will be registered in the global and local license log for security purposes and is irreversible.</p>
+				<p class="mt-1 font-normal text-gray-600">Do you wish to confirm this action?</p>
+			</div>
             <!-- Modal footer -->
             <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
-               <button id="submitProduct" data-modal-toggle="creation-modal" type="button" class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
+               <button id="executeAction" data-modal-toggle="confirmation-modal" type="button" class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Confirm</button>
             </div>
         </div>
     </div>
@@ -291,5 +293,49 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		const actionButtons = document.getElementsByClassName("action-button");
+		const licenseID = '{{license.id}}'
+		let pendingAction = "";
+		for(let i = 0; i < actionButtons.length; i++)
+			actionButtons[i].addEventListener("click", actionPrepare.bind(this, i))
+		document.getElementById("executeAction").addEventListener("click", actionExecute);
 
+		function actionPrepare(index){
+			if(index === 0)
+				pendingAction = "revoke"
+			else if(index === 1)
+				pendingAction = "reset"
+			else
+				pendingAction = "delete"
+			document.getElementById("keyAction").innerText = pendingAction;
+		}
+
+		function actionExecute(){
+			showLoader();
+			let data = {
+				'action' : pendingAction !== "revoke" ? pendingAction.toUpperCase() : 'SWITCHSTATE',
+				'keyList' : [licenseID]
+			}
+
+			let httpRequest = new XMLHttpRequest();
+			httpRequest.open("POST", "/licenses/editkeys", true);
+			httpRequest.setRequestHeader('Content-Type', 'application/json');
+			httpRequest.send( JSON.stringify(data) );
+			httpRequest.onreadystatechange = function() {
+				if (httpRequest.readyState === 4) {
+					if (httpRequest.status === 200){
+						if(pendingAction == "delete")
+							window.location.href = "{{ url_for('main.productDisplay', productid = license.productid) }}"
+						else
+							location.reload()
+					} else {
+						console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.");
+						hideLoader();
+						showAlert("The Server failed to accept your input.")
+					}
+				}
+			}
+		}
+	</script>
 {% endblock %}

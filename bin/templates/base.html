@@ -170,6 +170,11 @@
 			let timestamps = document.getElementsByClassName("timestamp");
 			for(let i = 0; i < timestamps.length; i++){
 				let timestamp = parseInt( timestamps[i].innerText ) * 1000;
+				console.log(timestamp)
+				if(timestamp === 0){
+					timestamps[i].parentElement.innerHTML = '<time class="timestamp">' + 'Perpetual License' + '</time>';
+					continue;
+				}
 				let dateObj = new Date(timestamp);
 				timestamps[i].innerText = dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + ", " + dateObj.getFullYear();
 			}
