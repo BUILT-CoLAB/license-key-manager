@@ -18,6 +18,9 @@ def login():
 
     if not userObject or not check_password_hash(userObject.password, passwordData):
         return "The account does not exist or the login data is incorrect."
+    
+    if userObject.disabled == True:
+        return "The account has been disabled."
 
     login_user(userObject)
     return "OK"

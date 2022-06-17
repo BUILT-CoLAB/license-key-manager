@@ -1,10 +1,8 @@
-from numpy import product
 from .models import Product, Key, Changelog, Registration, User, Client
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from werkzeug.security import generate_password_hash
 from . import db
 from time import time
-
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -20,7 +18,7 @@ def generateUser(username, password, email):
         print("USER ALREADY EXISTS! ... OK", flush=True)
         return
     print("USER DOES NOT EXIST --- ", end="", flush=True)
-    newAccount = User(email = email, password = generate_password_hash(password), name = username)
+    newAccount = User(email = email, password = generate_password_hash(password), name = username, timestamp = int(time()), owner = True)
     db.session.add(newAccount)
     db.session.commit()
     print("CREATED! ... OK", flush=True)
@@ -33,6 +31,23 @@ def obtainUser(username):
         return User.query.all()
     return User.query.filter_by(name = username).first()
 
+def createUser(email, username, password):
+    newAccount = User(email = email, password = generate_password_hash(password), name = username, timestamp = int(time()))
+    db.session.add(newAccount)
+    db.session.commit()
+
+def changeUserPassword(userid, password):
+    selectedUser = User.query.filter_by(id = userid).first()
+    selectedUser.password = generate_password_hash(password)
+    db.session.commit()
+
+def toggleUserStatus(userid):
+    selectedUser = User.query.filter_by(id = userid).first()
+    if(selectedUser.disabled == True):
+        selectedUser.disabled = False
+    else:
+        selectedUser.disabled = True
+    db.session.commit()
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -48,6 +63,9 @@ def getProduct(productName):
     if(productName == '_ALL_'):
         return Product.query.all()
     return Product.query.filter(Product.name.contains(productName)).all()
+
+def getProductsByPopularity():
+    return db.engine.execute("""SELECT * FROM product LEFT JOIN (SELECT productid as licenses FROM Key) on licenses = product.id GROUP BY licenses ORDER BY licenses DESC""").fetchall()
 
 def getProductByID(productID):
     """ 

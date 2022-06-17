@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     name = db.Column( db.String(100), unique=True )
     owner = db.Column( db.Boolean, default = False )
     disabled = db.Column( db.Boolean, default = False )
+    timestamp = db.Column( db.Integer, nullable = False )
 
 class Product(db.Model):
     __tablename__ = "product"

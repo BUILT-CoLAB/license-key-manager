@@ -26,18 +26,16 @@ def index():
 def tutorial():
     return render_template('tutorial.html')
 
-@main.route('/cpanel')
+@main.route('/dashboard')
 @login_required
 def cpanel():
-    productList = DBAPI.getProduct('_ALL_')
+    productList = DBAPI.getProductsByPopularity()
     activated, awaitingApproval = DBAPI.getKeyStatistics()
     if( activated == 0 and awaitingApproval == 0 ):
         ratio = 100
     else:
         ratio = ( activated / (activated + awaitingApproval) ) * 100
-    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, percentage = round(ratio) )
-
-
+    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio) )
 
 
 
@@ -226,11 +224,34 @@ def getlogs():
     return json.dumps(changelog)
 
 
+###########################################################################
+########### ADMINISTRATOR ACCOUNTS - HANDLING
+###########################################################################
+@main.route('/admins')
+@login_required
+def adminsDisplay():
+    userList = DBAPI.obtainUser('_ALL_')
+    return render_template('users.html', users = userList)
 
+@main.route('/admins/create',methods=['POST'])
+@login_required
+def adminCreate():
+    dataInfo = request.get_json()
+    DBAPI.createUser(dataInfo.get('email'), dataInfo.get('username'), dataInfo.get('password'))
+    return "SUCCESS"
 
+@main.route('/admins/<userid>/edit',methods=['POST'])
+@login_required
+def adminEdit(userid):
+    dataInfo = request.get_json()
+    DBAPI.changeUserPassword( userid, dataInfo.get('password') )
+    return "SUCCESS"
 
-
-
+@main.route('/admins/<userid>/togglestatus',methods=['POST'])
+@login_required
+def adminToggleStatus(userid):
+    DBAPI.toggleUserStatus(userid)
+    return "SUCCESS"
 
 
 
