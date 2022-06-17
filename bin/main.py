@@ -147,10 +147,11 @@ def deleteCustomer(keyid):
 @main.route('/product/<productid>/createlicense', methods=['POST'])
 @login_required
 def createLicense(productid):
+    adminAcc = getCurrentUser()
     dataInfo = request.get_json()
     serialKey = generateSerialKey(20)
     keyId = DBAPI.createKey(productid, int( dataInfo.get('idclient') ), serialKey, int( dataInfo.get('maxdevices') ), int( dataInfo.get('expirydate') ) )
-    DBAPI.submitLog(keyId, 'Created')
+    DBAPI.submitLog(keyId, adminAcc.id, 'CreatedKey', '$$' + str(adminAcc.name) + '$$ created license #' + str(keyId) + ' for product #' + str(productid))
     return "OKAY"
 
 @main.route('/licenses/<licenseid>')
@@ -193,27 +194,18 @@ def updateKeyState():
 
     return "OK"
 
-
-
-
-
-
-@main.route('/cpanel/keydata/id/<keyid>')
-@login_required
-def keyDataDisplay(keyid):
-    keyData = DBAPI.getKeyData(keyid)
-    logData = DBAPI.getKeyLogs(keyid)
-    registrations = DBAPI.getKeyHWIDs(keyid)
-    logData.reverse()
-    return render_template('keydata.html', keyData = keyData, logData = logData, registrations = registrations)
-
-@main.route('/cpanel/removehwid/<keyid>', methods=['POST'])
+@main.route('/licenses/<keyid>/removedevice', methods=['POST'])
 @login_required
 def hardwareIDRemove(keyid):
+    adminAcc = getCurrentUser()
     dataInfo = request.get_json()
     DBAPI.deleteRegistrationOfHWID(keyid, dataInfo.get('hardwareID'))
-    DBAPI.submitLog(keyid, "Unlinked Hardware ID: '" + dataInfo.get('hardwareID') + "'")
+    DBAPI.submitLog(keyid, adminAcc.id, 'UnlinkedHWID$$$' + dataInfo.get('hardwareID'), '$$' + str(adminAcc.name) + '$$ removed Hardware ' + str(dataInfo.get('hardwareID')) + ' from license #' + str(keyid))
     return "OK"
+
+
+
+
 
 @main.route('/validate',methods=['POST'])
 def validate_product():

@@ -140,7 +140,7 @@ def getKeyAndClient(keyid):
 """
 def submitLog(keyid, userid, action, description):
     timestamp = int(time())
-    if(keyid == None):
+    if (keyid == None):
         newLog = Changelog(userid = userid, timestamp=timestamp, action = action, description = description)
     else:
         newLog = Changelog(keyID = keyid, userid = userid, timestamp=timestamp, action = action, description = description)
@@ -148,7 +148,8 @@ def submitLog(keyid, userid, action, description):
     db.session.commit()
 
 def getKeyLogs(keyid):
-    return Changelog.query.filter_by(keyID = keyid).all()
+    return db.session.query(Changelog, User.name).join(User, User.id == Changelog.userid).filter(Changelog.keyID == keyid).all()
+    #return Changelog.query.filter_by(keyID = keyid).all()
 
 def getUserLogs(userid):
     return Changelog.query.filter_by(userid = userid).all()
@@ -189,10 +190,6 @@ def addRegistration(keyID, hardwareID, keyObject):
 
     # Submit all changes
     db.session.commit()
-
-    # Log the changes
-    submitLog(keyID, 'Activated')
-
 
 """
 //////////////////////////////////////////////////////////////////////////////

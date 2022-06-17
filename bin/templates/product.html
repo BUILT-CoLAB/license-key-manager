@@ -570,9 +570,9 @@
   for(let i = 0; i < copyButtons.length; i++)
     copyButtons[i].addEventListener("click", copyContent.bind(this, i))
 
-  function copyContent(index){
+  async function copyContent(index){
     let content = new String( copyButtons[index].getAttribute("content") );
-    navigator.clipboard.writeText(content);
+    await navigator.clipboard.writeText(content);
 
     if(index == 0)
       alert("The API Key has been copied to your clipboard\n\n" + "API Key: " + content);
