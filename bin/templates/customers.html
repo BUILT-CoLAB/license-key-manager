@@ -30,9 +30,9 @@
           </div>
           <div class="block sm:flex items-center">
              <form class="sm:pr-3 mb-4 sm:mb-0" action="#" method="GET">
-                <label for="products-search" class="sr-only">Search</label>
+                <label class="sr-only">Search</label>
                 <div class="mt-1 relative sm:w-64 xl:w-96">
-                   <input type="text" name="email" id="products-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search for customer ...">
+                   <input type="text" id="customers-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search for customer ...">
                 </div>
              </form>
              <div class="flex items-center sm:justify-end w-full">
@@ -317,6 +317,20 @@
     document.getElementById("confirmN1").innerHTML = dataFields[1 + index * 6].innerText;
     document.getElementById("confirmN2").innerHTML = dataFields[0 + index * 6].innerText;
     focusedID = parseInt( dataFields[0 + index * 6].innerText );
+  }
+</script>
+
+<script>
+  const customerSearch = document.getElementById("customers-search");
+  customerSearch.addEventListener("input", searchCustomers)
+
+  function searchCustomers(){
+    for(let i = 0; i < editButtons.length; i++){
+      if( dataFields[i * 6 + 1].innerText.includes(customerSearch.value) )
+        dataFields[i * 6 + 3].parentElement.classList.remove("hidden")
+      else
+        dataFields[i * 6 + 3].parentElement.classList.add("hidden")
+    }
   }
 </script>
 {% endblock %}

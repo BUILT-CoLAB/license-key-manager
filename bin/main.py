@@ -17,19 +17,9 @@ def verify_token(token):
     tokens = Product.query.filter_by(apiK=token).first()
     return tokens
 
-#
-# sql = text('SELECT * FROM product')
-# result = db.engine.execute(sql)
-#
-
 @main.route('/')
 def index():
     return render_template('index.html')
-
-@main.route('/changelog')
-@login_required
-def changelog():
-    return render_template('changelog.html')
 
 @main.route('/tutorial')
 @login_required
@@ -71,6 +61,7 @@ def productDisplay(productid):
 @main.route('/products/create', methods=['POST'])
 @login_required
 def createProduct():
+    adminAcc = getCurrentUser()
     dataInfo = request.get_json()
 
     # ################# Storage Data ####################    
@@ -82,17 +73,26 @@ def createProduct():
 
     product_keys = create_product_keys()
     DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
+    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ created product #' + str(id))
     return "SUCCESS"
 
-@main.route('/cpanel/getids', methods=['POST'])
+@main.route('/products/edit', methods=['POST'])
 @login_required
-def queryProducts():
+def editProduct():
+    adminAcc = getCurrentUser()
     dataInfo = request.get_json()
-    responseList = []
-    productList = DBAPI.getProduct(dataInfo.get('searchstring'))
-    for product in productList:
-        responseList.append({ 'id':product.id, 'name':product.name, 'logo':product.logo })
-    return json.dumps(responseList)
+
+    # ################# Storage Data ####################  
+    id = dataInfo.get('id')
+    name = dataInfo.get('name')
+    category = dataInfo.get('category')
+    image = dataInfo.get('image')
+    details = dataInfo.get('details')
+    # ###################################################
+
+    DBAPI.editProduct( int(id), name, category, image, details )
+    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ modified the data details of product #' + str(id))
+    return "SUCCESS"
 
 
 
@@ -159,6 +159,7 @@ def createLicense(productid):
 def licenseDisplay(licenseid):
     license = DBAPI.getKeyAndClient(licenseid)
     changelog = DBAPI.getKeyLogs(licenseid)
+    changelog.reverse()
     devices = DBAPI.getKeyHWIDs(licenseid)
     return render_template('license.html', license = license, changelog = changelog, devices = devices)
 
@@ -202,6 +203,33 @@ def hardwareIDRemove(keyid):
     DBAPI.deleteRegistrationOfHWID(keyid, dataInfo.get('hardwareID'))
     DBAPI.submitLog(keyid, adminAcc.id, 'UnlinkedHWID$$$' + dataInfo.get('hardwareID'), '$$' + str(adminAcc.name) + '$$ removed Hardware ' + str(dataInfo.get('hardwareID')) + ' from license #' + str(keyid))
     return "OK"
+
+
+
+###########################################################################
+########### CHANGELOG HANDLING
+###########################################################################
+@main.route('/changelog')
+@login_required
+def changelog():
+    userList = DBAPI.obtainUser('_ALL_')
+    return render_template('changelog.html', users = userList)
+
+@main.route('/changelog/query')
+@login_required
+def getlogs():
+    parameters = request.args.to_dict()
+    changelogs = DBAPI.queryLogs( int(parameters.get('adminid')), int(parameters.get('datestart')), int(parameters.get('dateend')) )
+    changelog = []
+    for log in changelogs:
+        changelog.append({'adminid' : log.userid, 'timestamp' : log.timestamp, 'description' : log.description})
+    return json.dumps(changelog)
+
+
+
+
+
+
 
 
 

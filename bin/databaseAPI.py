@@ -1,5 +1,6 @@
 from numpy import product
 from .models import Product, Key, Changelog, Registration, User, Client
+from sqlalchemy import desc
 from werkzeug.security import generate_password_hash
 from . import db
 from time import time
@@ -28,8 +29,9 @@ def obtainUser(username):
     """ 
         The following function simulates a SELECT statement to obtain the account that has the same username.
     """
+    if(username == '_ALL_'):
+        return User.query.all()
     return User.query.filter_by(name = username).first()
-
 
 
 """
@@ -59,6 +61,17 @@ def createProduct(name, category, image, details, privateK, publicK, apiK):
     """
     newProduct = Product(name=name, category=category, image=image, details=details, privateK=privateK, publicK=publicK, apiK=apiK)
     db.session.add(newProduct)
+    db.session.commit()
+
+def editProduct(productid, name, category, image, details):
+    """
+        Edits an existing Product and saves the modifications in the database.
+    """
+    product = Product.query.filter_by(id = productid).first()
+    product.name = name
+    product.category = category
+    product.image = image
+    product.details = details
     db.session.commit()
 
 
@@ -154,6 +167,17 @@ def getKeyLogs(keyid):
 def getUserLogs(userid):
     return Changelog.query.filter_by(userid = userid).all()
 
+def queryLogs(userid, startdate, enddate):
+    # db.session.query(Changelog, User.name).join(User, User.id == Changelog.userid).filter(Changelog.userid == userid).all()
+    if( userid != -1 and startdate == -1 and enddate == -1 ):
+        return db.session.query(Changelog).filter(Changelog.userid == userid).order_by(desc(Changelog.timestamp)).all()
+    if( userid != -1 and startdate != -1 and enddate != -1 ):
+        return db.session.query(Changelog).filter(Changelog.userid == userid and Changelog.timestamp >= startdate and Changelog.timestamp <= enddate).order_by(desc(Changelog.timestamp)).all()
+    if( userid == -1 and startdate != -1 and enddate != -1 ):
+        return db.session.query(Changelog).filter(Changelog.timestamp >= startdate and Changelog.timestamp <= enddate).order_by(desc(Changelog.timestamp)).all()
+    if( userid == -1 and startdate == -1 and enddate == -1 ):
+        return db.session.query(Changelog).order_by(desc(Changelog.timestamp)).all()
+    return None
 
 """
 //////////////////////////////////////////////////////////////////////////////

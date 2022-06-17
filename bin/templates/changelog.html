@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}CPanel | Customers{% endblock %}
+
+{% block content %}
+<nav class="flex mb-5" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2">
+       <li class="inline-flex items-center">
+          <a href="#" class="text-gray-700 hover:text-gray-900 inline-flex items-center">
+             <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+             </svg>
+             Dashboard
+          </a>
+       </li>
+       <li>
+          <div class="flex items-center">
+             <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+             </svg>
+             <a href="#" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium">Changelog</a>
+          </div>
+       </li>
+    </ol>
+ </nav>
+
+<div class="relative rounded-lg">
+    <div class="absolute inset-0 -z-10 rounded-lg">
+        <img class="w-full h-full object-cover" src="{{ url_for('static', filename='wallpaperchangelog.jpg') }}" alt="">
+        <div class="absolute inset-0 bg-indigo-800 mix-blend-multiply" aria-hidden="true"></div>
+    </div>
+    <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 lg:flex lg:justify-between">
+      <div class="max-w-xl">
+        <h2 class="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">Changelog</h2>
+        <p class="mt-5 text-xl text-gray-200">Fill out the search options on the right and then click on 'Search' to get the results</p>
+      </div>
+      <div class="mt-5 mb-5 w-full max-w-xs">
+        <label for="currency" class="block text-base font-medium text-gray-200">Admin User</label>
+        <div class="mt-2 mb-2 relative">
+            <div class="mt-1 relative">
+                <button id="adminSelector" type="button" class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
+                    <span class="w-full inline-flex truncate">
+                        <span id="adminNameS" class="truncate">None selected</span>
+                        <span id="adminIDS" class="ml-2 truncate text-gray-500"></span>
+                    </span>
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </span>
+                </button>
+            
+                <ul id="adminList" class="absolute hidden z-10 mt-1 w-full bg-white shadow-lg max-h-32 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm" tabindex="-1" role="listbox" aria-labelledby="listbox-label" aria-activedescendant="listbox-option-3">
+                        <li class="selectable text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 client-list-option hover:bg-gray-100" role="option">
+                            <div class="flex">
+                                <span class="font-normal truncate">None selected</span>
+                                <span class="text-gray-500 ml-2 truncate"></span>
+                            </div>
+                        </li>
+                    {% for user in users %}
+                        <li class="selectable text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 client-list-option hover:bg-gray-100" role="option">
+                            <div class="flex">
+                            <span class="font-normal truncate">{{user.name}}</span>
+                            <span class="text-gray-500 ml-2 truncate">#{{user.id}}</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="relative flex justify-between">
+        <div>
+            <label for="currency" class="mt-2 block text-base font-medium text-gray-200">From:</label>
+            <div class="mt-2 relative">
+                <input type="date" id="searchDateStart" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Software">
+            </div>
+        </div>
+        <div>
+            <label for="currency" class="mt-2 block text-base font-medium text-gray-200">To: </label>
+            <div class="mt-2 relative">
+                <input type="date" id="searchDateEnd" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Software">
+            </div>
+        </div>
+        </div>
+        <div class="mt-3 relative">
+            <button id="getChangeLog" class="block w-full bg-gray-500 border border-gray-500 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-gray-900 w-24 float-right">Search</a>
+        </div>
+      </div>
+    </div>
+</div>
+
+<table class="mt-10 table-fixed min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-100">
+        <tr>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-4"> # </th>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-32"> Admin </th>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase"> Description </th>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-40"> Date </th>
+        </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200" id="logTable">
+        <!-- Handled by the script -->
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const adminList = document.getElementById("adminList");
+    const adminNameS = document.getElementById("adminNameS");
+    const adminIDS = document.getElementById("adminIDS");
+    const adminSelector = document.getElementById("adminSelector");
+    const selectables = document.getElementsByClassName("selectable");
+    const searchDateStart = document.getElementById("searchDateStart");
+    const searchDateEnd = document.getElementById("searchDateEnd");
+
+    // Event Listeners
+    document.getElementById("getChangeLog").addEventListener("click", submitRequest);
+    adminSelector.addEventListener("focus", function(){ adminList.classList.remove("hidden") });
+    for(let i = 0; i < selectables.length; i++)
+        selectables[i].addEventListener("click", selectAdmin.bind(this, i))
+    // /////////////////////////////////////////////////////////////////////////////////////////
+    
+    function selectAdmin(index){
+        adminNameS.innerText = selectables[index].children[0].children[0].innerText;
+        adminIDS.innerText = selectables[index].children[0].children[1].innerText;
+        adminList.classList.add("hidden");
+    }
+
+    function submitRequest(){
+        let params = {
+            'adminid' : adminIDS.innerText == '' ? '-1' : adminIDS.innerText.replace('#', ''),
+            'datestart' : searchDateStart.value == '' ? '-1' : ((new Date(searchDateStart.value)).getTime() / 1000),
+            'dateend' : searchDateStart.value == '' ? '-1' : ((new Date(searchDateEnd.value)).getTime() / 1000) + 86399
+        }
+
+        let http = new XMLHttpRequest();
+        http.open("GET", "/changelog/query" + formatParams(params), true);
+        http.onreadystatechange = function(){
+            if(http.readyState == 4 && http.status == 200) {
+                displayTemplate( JSON.parse(http.responseText) );
+            }
+        }
+        http.send(null);
+    }
+
+    function formatParams( params ){
+        return "?" + Object
+                .keys(params)
+                .map(function(key){
+                return key+"="+encodeURIComponent(params[key])
+                })
+                .join("&")
+    }
+
+    function displayTemplate(jsonResponse){
+        let logTable = document.getElementById("logTable");
+        logTable.innerHTML = "";
+        for(let i = 0; i < jsonResponse.length; i++){
+            let parsedDesc = parseDescription(jsonResponse[i]['description'])
+            logTable.innerHTML += `
+            <tr class="hover:bg-gray-100">
+            <td class="p-4 w-4 text-sm text-gray-500">` + (i + 1) + `</td>
+            <td class="p-4 w-32 font-medium text-gray-900">` + parsedDesc[0] + `</td>
+            <td class="p-4 whitespace-nowrap text-base text-sm text-gray-500">` + parsedDesc[1] + `</td>
+            <td class="p-4 w-40 whitespace-nowrap text-sm text-gray-500 timestamp">` + jsonResponse[i]['timestamp'] + `</td>
+            </tr>
+            `
+        }
+    }
+    
+    function parseDescription(description){
+        let username = description.match(/(?<=\$)(?<=\$)[a-zA-Z0-9]+(?=\$)(?=\$)/)
+        let newDescription = description.replace(/\$\$[a-zA-Z0-9]+\$\$/, '<span class="font-medium text-gray-900">' + username + '</span>' );
+        newDescription = newDescription.replace(/#[0-9]+/, '<span class="font-medium text-gray-900">' + newDescription.match(/#[0-9]+/) + '</span>')
+        return [username == null ? '-------' : username, newDescription]
+    }
+</script>
+{% endblock %}
