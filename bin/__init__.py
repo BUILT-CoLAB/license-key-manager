@@ -6,7 +6,9 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 _KEY_LENGTH_ = 64
 
+
 def create_app():
+
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
@@ -23,7 +25,7 @@ def create_app():
 
     from .models import User
 
-    @login_manager.user_loader
+    @ login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
@@ -42,8 +44,9 @@ def create_app():
         from . import databaseAPI as DBAPI
 
         load_dotenv()
-        if( not exists('./bin/sqlite.db') ):
+        if(not exists('./bin/sqlite.db')):
             db.create_all(app=app)
-        DBAPI.generateUser(os.getenv("ADMINUSERNAME"), os.getenv("ADMINPASSWORD"), os.getenv("ADMINEMAIL"))
+        DBAPI.generateUser(os.getenv("ADMINUSERNAME"), os.getenv(
+            "ADMINPASSWORD"), os.getenv("ADMINEMAIL"))
 
     return app

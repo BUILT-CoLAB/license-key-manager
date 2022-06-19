@@ -1,0 +1,8 @@
+.dockerignore
+.git
+.cache
+venv/
+docs/
+client/
+bin/sqlite.db
+*.pyc
