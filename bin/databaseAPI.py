@@ -80,6 +80,7 @@ def createProduct(name, category, image, details, privateK, publicK, apiK):
     newProduct = Product(name=name, category=category, image=image, details=details, privateK=privateK, publicK=publicK, apiK=apiK)
     db.session.add(newProduct)
     db.session.commit()
+    return newProduct
 
 def editProduct(productid, name, category, image, details):
     """
@@ -138,8 +139,14 @@ def setKeyState(keyid, newState):
 
 def deleteKey(keyid):
     Key.query.filter_by(id=keyid).delete()
-    db.session.commit()
     deleteRegistrationsOfKey(keyid)
+    db.session.commit()
+
+def deleteKeysOfClient(clientid):
+    keys = Key.query.filter_by(clientid = clientid).all()
+    for key in keys:
+        db.session.delete(key)
+    db.session.commit()
 
 def resetKey(keyid):
     specificKey = Key.query.filter_by(id=keyid).first()
@@ -255,6 +262,8 @@ def modifyCustomer(clientid, name, email, phone, country):
 
 def deleteCustomer(clientid):
     Client.query.filter_by(id = clientid).delete()
+    deleteKeysOfClient(clientid)
+    db.session.commit()
 
 def getCustomer(customerName):
     """ 

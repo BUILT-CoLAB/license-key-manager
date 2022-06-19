@@ -70,8 +70,8 @@ def createProduct():
     # ###################################################
 
     product_keys = create_product_keys()
-    DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
-    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ created product #' + str(id))
+    newProduct = DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
+    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ created product #' + str(newProduct.id))
     return "SUCCESS"
 
 @main.route('/products/edit', methods=['POST'])
@@ -131,10 +131,11 @@ def modifyCustomer(keyid):
     DBAPI.modifyCustomer(keyid, name, email, phone, country)
     return "SUCCESS"
 
-@main.route('/customers/delete/<keyid>', methods=['POST'])
+@main.route('/customers/delete/<customerid>', methods=['POST'])
 @login_required
-def deleteCustomer(keyid):
-    DBAPI.deleteCustomer(keyid)
+def deleteCustomer(customerid):
+    print(customerid)
+    DBAPI.deleteCustomer(customerid)
     return "SUCCESS"
 
 
