@@ -10,4 +10,4 @@ COPY ./bin /license-manager/bin
 COPY .env /license-manager/bin
 
 
-CMD ["gunicorn", "-w 1", "-b 0.0.0.0", "bin:create_app()"]
+CMD ["gunicorn", "-w 1", "-b 0.0.0.0", "--preload", "bin:create_app()"]
