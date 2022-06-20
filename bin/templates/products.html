@@ -209,7 +209,7 @@
       let productData = {
          'name' : document.getElementById("productName").value,
          'category' : document.getElementById("productCategory").value,
-         'image' : document.getElementById("productImage").value,
+         'image' : document.getElementById("productImage").value == '' ? "{{ url_for('static', filename='default.jpg') }}" : document.getElementById("productImage").value,
          'details' : document.getElementById("productDetails").value
       }
       submitRequest(productData, '/products/create')
