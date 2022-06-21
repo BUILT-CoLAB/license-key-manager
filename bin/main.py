@@ -3,6 +3,7 @@ from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
 from .models import Product
 from . import databaseAPI as DBAPI
+from .auth import getCurrentUser
 from .keys import create_product_keys, decrypt_data, generateSerialKey
 import json
 import time
@@ -16,90 +17,156 @@ def verify_token(token):
     tokens = Product.query.filter_by(apiK=token).first()
     return tokens
 
-#
-# sql = text('SELECT * FROM product')
-# result = db.engine.execute(sql)
-#
-
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', mode = request.cookies.get('mode'))
 
-@main.route('/profile')
+@main.route('/tutorial')
 @login_required
-def profile():
-    return render_template('profile.html')
+def tutorial():
+    return render_template('tutorial.html', mode = request.cookies.get('mode'))
 
-###########################################################################
-
-@main.route('/cpanel')
+@main.route('/dashboard')
 @login_required
 def cpanel():
-    productList = DBAPI.getProduct('_ALL_')
+    productList = DBAPI.getProductsByPopularity()
     activated, awaitingApproval = DBAPI.getKeyStatistics()
     if( activated == 0 and awaitingApproval == 0 ):
         ratio = 100
     else:
         ratio = ( activated / (activated + awaitingApproval) ) * 100
-    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, percentage = round(ratio) )
+    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio), mode = request.cookies.get('mode'))
 
-@main.route('/cpanel/getids', methods=['POST'])
+
+
+###########################################################################
+########### PRODUCT HANDLING
+###########################################################################
+@main.route('/products')
 @login_required
-def queryProducts():
-    dataInfo = request.get_json()
-    responseList = []
-    productList = DBAPI.getProduct(dataInfo.get('searchstring'))
-    for product in productList:
-        responseList.append({ 'id':product.id, 'name':product.name, 'logo':product.logo })
-    return json.dumps(responseList)
+def products():
+    products = DBAPI.getProduct('_ALL_')
+    return render_template('products.html', products = products, mode = request.cookies.get('mode'))
 
-@main.route('/cpanel/product/create', methods=['POST'])
+@main.route('/products/id/<productid>')
+@login_required
+def productDisplay(productid):
+    licenses = DBAPI.getKeys(productid)
+    productContent = DBAPI.getProductByID(productid)
+    customers = DBAPI.getCustomer('_ALL_')
+    return render_template('product.html', licenses = licenses, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers, mode = request.cookies.get('mode'))
+
+@main.route('/products/create', methods=['POST'])
 @login_required
 def createProduct():
+    adminAcc = getCurrentUser()
     dataInfo = request.get_json()
 
     # ################# Storage Data ####################    
     name = dataInfo.get('name')
-    logo = dataInfo.get('URL')
+    category = dataInfo.get('category')
+    image = dataInfo.get('image')
+    details = dataInfo.get('details')
     # ###################################################
+
     product_keys = create_product_keys()
-    print(product_keys)
-    DBAPI.createProduct(name, logo, product_keys[0],product_keys[1], product_keys[2])
-    return "OKAY"
+    newProduct = DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
+    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ created product #' + str(newProduct.id))
+    return "SUCCESS"
+
+@main.route('/products/edit', methods=['POST'])
+@login_required
+def editProduct():
+    adminAcc = getCurrentUser()
+    dataInfo = request.get_json()
+
+    # ################# Storage Data ####################  
+    id = dataInfo.get('id')
+    name = dataInfo.get('name')
+    category = dataInfo.get('category')
+    image = dataInfo.get('image')
+    details = dataInfo.get('details')
+    # ###################################################
+
+    DBAPI.editProduct( int(id), name, category, image, details )
+    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ modified the data details of product #' + str(id))
+    return "SUCCESS"
+
+
+
+
 
 ###########################################################################
-
-@main.route('/cpanel/product/id/<productid>')
+########### CUSTOMER HANDLING
+###########################################################################
+@main.route('/customers')
 @login_required
-def productDisplay(productid):
-    keyList = DBAPI.getKeys(productid)
-    productContent = DBAPI.getProductByID(productid)
-    return render_template('product.html', prodID = productid, keyList = keyList, pcontent = productContent, pubKey = productContent.publicK.decode('utf-8'))
+def customers():
+    customers = DBAPI.getCustomer('_ALL_')
+    return render_template('customers.html', customers = customers, mode = request.cookies.get('mode'))
 
-@main.route('/cpanel/keydata/id/<keyid>')
+@main.route('/customers/create', methods=['POST'])
 @login_required
-def keyDataDisplay(keyid):
-    keyData = DBAPI.getKeyData(keyid)
-    logData = DBAPI.getKeyLogs(keyid)
-    registrations = DBAPI.getKeyHWIDs(keyid)
-    logData.reverse()
-    return render_template('keydata.html', keyData = keyData, logData = logData, registrations = registrations)
-
-@main.route('/cpanel/product/id/<productid>/createkey', methods=['POST'])
-@login_required
-def createKey(productid):
+def createCustomer():
     dataInfo = request.get_json()
-    print(dataInfo)
+    # ################# Storage Data ####################    
+    name = dataInfo.get('name')
+    email = dataInfo.get('email')
+    phone = dataInfo.get('phone')
+    country = dataInfo.get('country')
+    # ###################################################
+    DBAPI.createCustomer(name, email, phone, country)
+    return "SUCCESS"
 
+@main.route('/customers/edit/<keyid>', methods=['POST'])
+@login_required
+def modifyCustomer(keyid):
+    dataInfo = request.get_json()
+    # ################# Storage Data ####################    
+    name = dataInfo.get('name')
+    email = dataInfo.get('email')
+    phone = dataInfo.get('phone')
+    country = dataInfo.get('country')
+    # ###################################################
+    DBAPI.modifyCustomer(keyid, name, email, phone, country)
+    return "SUCCESS"
+
+@main.route('/customers/delete/<customerid>', methods=['POST'])
+@login_required
+def deleteCustomer(customerid):
+    print(customerid)
+    DBAPI.deleteCustomer(customerid)
+    return "SUCCESS"
+
+
+
+###########################################################################
+########### LICENSE KEY HANDLING
+###########################################################################
+@main.route('/product/<productid>/createlicense', methods=['POST'])
+@login_required
+def createLicense(productid):
+    adminAcc = getCurrentUser()
+    dataInfo = request.get_json()
     serialKey = generateSerialKey(20)
-    keyId = DBAPI.createKey(productid, dataInfo.get('name'), dataInfo.get('email'), dataInfo.get('phoneNumber'), serialKey, dataInfo.get('maxDevices'), dataInfo.get('expiryDate'))
-    DBAPI.submitLog(keyId, 'Created')
+    keyId = DBAPI.createKey(productid, int( dataInfo.get('idclient') ), serialKey, int( dataInfo.get('maxdevices') ), int( dataInfo.get('expirydate') ) )
+    DBAPI.submitLog(keyId, adminAcc.id, 'CreatedKey', '$$' + str(adminAcc.name) + '$$ created license #' + str(keyId) + ' for product #' + str(productid))
     return "OKAY"
 
-@main.route('/cpanel/editkeys', methods=['POST'])
+@main.route('/licenses/<licenseid>')
+@login_required
+def licenseDisplay(licenseid):
+    license = DBAPI.getKeyAndClient(licenseid)
+    changelog = DBAPI.getKeyLogs(licenseid)
+    changelog.reverse()
+    devices = DBAPI.getKeyHWIDs(licenseid)
+    return render_template('license.html', license = license, changelog = changelog, devices = devices, mode = request.cookies.get('mode'))
+
+@main.route('/licenses/editkeys', methods=['POST'])
 @login_required
 def updateKeyState():
     dataInfo = request.get_json()
+    adminAcc = getCurrentUser()
     print(dataInfo)
 
     # Handle "REVOKE" Request
@@ -108,31 +175,87 @@ def updateKeyState():
             keyData = DBAPI.getKeyData(keyID)
             if keyData.status != 2:
                 DBAPI.setKeyState(keyID, 2)
-                DBAPI.submitLog(keyID, 'Revoked')
+                DBAPI.submitLog(keyID, adminAcc.id, 'RevokedKey', '$$' + str(adminAcc.name) + '$$ revoked license #' + str(keyID))
             else:
                 DBAPI.setKeyState(keyID, getStatus(keyData.devices))
-                DBAPI.submitLog(keyID, 'Reactivated')
+                DBAPI.submitLog(keyID, adminAcc.id, 'ReactivatedKey', '$$' + str(adminAcc.name) + '$$ reactivated license #' + str(keyID))
             
     # Handle "DELETE" Request
     if(dataInfo.get('action') == 'DELETE'):
         for keyID in dataInfo.get('keyList'):
             DBAPI.deleteKey(keyID)
+            DBAPI.submitLog(None, adminAcc.id, 'DeletedKey', '$$' + str(adminAcc.name) + '$$ deleted the pre-existing license #' + str(keyID))
 
     # Handle "RESET" Request
     if(dataInfo.get('action') == 'RESET'):
         for keyID in dataInfo.get('keyList'):
             DBAPI.resetKey(keyID)
-            DBAPI.submitLog(keyID, 'Reset')
+            DBAPI.submitLog(keyID, adminAcc.id, 'ResetKey', '$$' + str(adminAcc.name) + '$$ reset license #' + str(keyID))
 
     return "OK"
 
-@main.route('/cpanel/removehwid/<keyid>', methods=['POST'])
+@main.route('/licenses/<keyid>/removedevice', methods=['POST'])
 @login_required
 def hardwareIDRemove(keyid):
+    adminAcc = getCurrentUser()
     dataInfo = request.get_json()
     DBAPI.deleteRegistrationOfHWID(keyid, dataInfo.get('hardwareID'))
-    DBAPI.submitLog(keyid, "Unlinked Hardware ID: '" + dataInfo.get('hardwareID') + "'")
+    DBAPI.submitLog(keyid, adminAcc.id, 'UnlinkedHWID$$$' + dataInfo.get('hardwareID'), '$$' + str(adminAcc.name) + '$$ removed Hardware ' + str(dataInfo.get('hardwareID')) + ' from license #' + str(keyid))
     return "OK"
+
+
+
+###########################################################################
+########### CHANGELOG HANDLING
+###########################################################################
+@main.route('/changelog')
+@login_required
+def changelog():
+    userList = DBAPI.obtainUser('_ALL_')
+    return render_template('changelog.html', users = userList, mode = request.cookies.get('mode'))
+
+@main.route('/changelog/query')
+@login_required
+def getlogs():
+    parameters = request.args.to_dict()
+    changelogs = DBAPI.queryLogs( int(parameters.get('adminid')), int(parameters.get('datestart')), int(parameters.get('dateend')) )
+    changelog = []
+    for log in changelogs:
+        changelog.append({'adminid' : log.userid, 'timestamp' : log.timestamp, 'description' : log.description})
+    return json.dumps(changelog)
+
+
+###########################################################################
+########### ADMINISTRATOR ACCOUNTS - HANDLING
+###########################################################################
+@main.route('/admins')
+@login_required
+def adminsDisplay():
+    userList = DBAPI.obtainUser('_ALL_')
+    return render_template('users.html', users = userList, mode = request.cookies.get('mode'))
+
+@main.route('/admins/create',methods=['POST'])
+@login_required
+def adminCreate():
+    dataInfo = request.get_json()
+    DBAPI.createUser(dataInfo.get('email'), dataInfo.get('username'), dataInfo.get('password'))
+    return "SUCCESS"
+
+@main.route('/admins/<userid>/edit',methods=['POST'])
+@login_required
+def adminEdit(userid):
+    dataInfo = request.get_json()
+    DBAPI.changeUserPassword( userid, dataInfo.get('password') )
+    return "SUCCESS"
+
+@main.route('/admins/<userid>/togglestatus',methods=['POST'])
+@login_required
+def adminToggleStatus(userid):
+    DBAPI.toggleUserStatus(userid)
+    return "SUCCESS"
+
+
+
 
 @main.route('/validate',methods=['POST'])
 def validate_product():
@@ -225,4 +348,3 @@ def isDateWithin(limitDate):
     if( math.floor( time.time() ) > int(limitDate) ):
         return False
     return True
-    

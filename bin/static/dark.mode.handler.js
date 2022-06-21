@@ -15,36 +15,26 @@ const moon = `
 const cookieValue = acquireCookie();
 let currentState = cookieValue;
 
-function triggerState(){
-    if(currentState == "DAY" || currentState == undefined)
-        applyBright();
-    else
-        applyDark();
-}
-
 function toggleDark(){
-    if(currentState == "DAY")
-        currentState = "NIGHT"
-    else
-        currentState = "DAY"
-    triggerState();
+    console.log(currentState)
+    switch(currentState){
+        case "DAY":
+            currentState = "NIGHT"
+            applyDark();
+            break;
+        case "NIGHT":
+            currentState = "DAY"
+            applyBright();
+    }
     setCookie();
 }
 
 function applyDark(){
-    document.documentElement.style.setProperty('--dynamic-mode-color', '#1a1a1b');
-    document.documentElement.style.setProperty('--dynamic-mode-text-color', '#ffffff');
-    document.documentElement.style.setProperty('--dynamic-mode-border-color', 'rgba(255,255,255,0.125)');
-    document.documentElement.style.setProperty('--dynamic-mode-border-color-s', 'rgba(255,255,255,1)');
-    document.documentElement.style.setProperty('--dynamic-mode-color-light', '#303032');
+    document.documentElement.classList.add("dark");
 }
 
 function applyBright(){
-    document.documentElement.style.setProperty('--dynamic-mode-color', '#ffffff');
-    document.documentElement.style.setProperty('--dynamic-mode-text-color', '#000000');
-    document.documentElement.style.setProperty('--dynamic-mode-border-color', 'rgba(0,0,0,.125)');
-    document.documentElement.style.setProperty('--dynamic-mode-border-color-s', 'none');
-    document.documentElement.style.setProperty('--dynamic-mode-color-light', 'none');
+    document.documentElement.classList.remove("dark");
 }
 
 function acquireCookie(){
@@ -59,6 +49,5 @@ function setCookie(){
     document.cookie = "mode=" + currentState + ";path=/";
 }
 
-triggerState();
 if( document.getElementById("themeApplier") != null )
     document.getElementById("themeApplier").addEventListener("click", function(){ toggleDark(); })

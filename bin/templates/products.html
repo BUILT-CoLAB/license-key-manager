@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block title %}CPanel | Products{% endblock %}
+
+{% block content %}
+<main>
+    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-slate-900 dark:border-slate-700">
+       <div class="mb-1 w-full">
+          <div class="mb-4">
+             <nav class="flex mb-5" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                   <li class="inline-flex items-center">
+                      <a href="#" class="text-gray-700 hover:text-gray-900 inline-flex items-center dark:text-slate-300 dark:hover:text-slate-500">
+                         <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                         </svg>
+                         Dashboard
+                      </a>
+                   </li>
+                   <li>
+                      <div class="flex items-center">
+                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                         </svg>
+                         <a href="#" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium dark:text-slate-300 dark:hover:text-slate-500">Products</a>
+                      </div>
+                   </li>
+                </ol>
+             </nav>
+             <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100">Product Display</h1>
+          </div>
+          <div class="block sm:flex items-center">
+             <form class="sm:pr-3 mb-4 sm:mb-0" action="#" method="GET">
+                <label class="sr-only">Search</label>
+                <div class="mt-1 relative sm:w-64 xl:w-96">
+                   <input type="text" id="products-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for products">
+                </div>
+             </form>
+             <div class="flex items-center sm:justify-end w-full">
+                <button type="button" data-modal-toggle="creation-modal" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center rounded-lg text-sm px-3 py-2 text-center sm:ml-auto dark:bg-sky-500 dark:hover:bg-sky-400 transition-all duration-300">
+                   <svg class="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                   </svg>
+                   Add product
+                </button>
+             </div>
+          </div>
+       </div>
+    </div>
+
+    <ul role="list" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 ml-2 mr-2">
+      {% for product in products %}
+         <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow-lg divide-y divide-gray-200 border-grey-900 border-2 dark:bg-slate-800 dark:border-slate-600 dark:divide-slate-600">
+         <div class="flex-1 flex flex-col p-8">
+               <img class="product-data w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="{{ product.image }}" alt="">
+               <h3 class="product-data mt-6 text-gray-900 text-sm font-medium dark:text-gray-100">{{ product.name }}</h3>
+               <dl class="mt-1 flex-grow flex flex-col justify-between">
+                  <dd class="product-data text-gray-500 text-sm dark:text-gray-400">{{ product.category }}</dd>
+               </dl>
+               <span class="product-data hidden">{{ product.details }}</span>
+               <span class="product-data hidden">{{ product.id }}</span>
+         </div>
+         <div>
+            <div class="-mt-px flex divide-x divide-gray-200 dark:divide-slate-600">
+               <div class="w-0 flex-1 flex">
+               <button data-modal-toggle="edit-modal" class="product-edit relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 dark:text-gray-100 dark:hover:text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                  <span class="ml-3">Edit</span>
+               </button>
+               </div>
+               <div class="-ml-px w-0 flex-1 flex">
+               <a href="{{ url_for('main.productDisplay', productid = product.id) }}" class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500 dark:text-gray-100 dark:hover:text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml-3">View</span>
+               </a>
+               </div>
+            </div>
+         </div>
+         </li>
+      {% endfor %}
+   </ul>
+   {% if products is defined and products|length <= 0 %}
+      <div class="min-h-full pt-16 pb-12 flex flex-col bg-white">
+         <main class="flex-grow flex flex-col justify-center max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="py-16">
+               <div class="text-center">
+                  <h1 class="mt-2 text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">Uhh, where did all the products go!?</h1>
+                  <p class="mt-2 text-base text-gray-500">Sorry, but the database does not have any products in it. Try creating one!</p>
+               </div>
+            </div>
+         </main>
+      </div>
+   {% endif %}
+ </main>
+ 
+<div id="creation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-slate-800">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center p-5 rounded-t border-b dark:border-slate-600">
+                <h3 class="text-xl font-medium text-gray-900 dark:text-gray-100">
+                    Create Product
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="creation-modal">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6 space-y-6">
+                <form action="#">
+                    <div class="grid grid-cols-6 gap-6">
+                       <div class="col-span-6 sm:col-span-3">
+                          <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Name</label>
+                          <input type="text" id="productName" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sample Product">
+                       </div>
+                       <div class="col-span-6 sm:col-span-3">
+                          <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Category</label>
+                          <input type="text" id="productCategory" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Software">
+                       </div>
+                       <div class="col-span-full">
+                           <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Image (400x400)</label>
+                           <input type="text" id="productImage" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Image URL">
+                        </div>
+                       <div class="col-span-full">
+                          <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Details</label>
+                          <textarea id="productDetails" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="This is a sample product. Fill out the fields to complete the product's creation process."></textarea>
+                       </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-slate-600">
+               <button id="submitProduct" data-modal-toggle="creation-modal" type="button" class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+   <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+       <!-- Modal content -->
+       <div class="relative bg-white rounded-lg shadow dark:bg-slate-800">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center p-5 rounded-t border-b dark:border-slate-600">
+               <h3 class="text-xl font-medium text-gray-900 dark:text-gray-100">
+                  Edit Product
+               </h3>
+               <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="edit-modal">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+               </button>
+            </div>
+           <!-- Modal body -->
+           <div class="p-6 space-y-6">
+               <form action="#">
+                   <div class="grid grid-cols-6 gap-6">
+                     <div class="col-span-6 sm:col-span-3">
+                        <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Name</label>
+                        <input type="text" id="productNameE" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sample Product">
+                     </div>
+                     <div class="col-span-6 sm:col-span-3">
+                        <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Category</label>
+                        <input type="text" id="productCategoryE" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Software">
+                     </div>
+                     <div class="col-span-full">
+                        <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Image (400x400)</label>
+                        <input type="text" id="productImageE" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Image URL">
+                     </div>
+                     <div class="col-span-full">
+                        <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Product Details</label>
+                        <textarea id="productDetailsE" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="This is a sample product. Fill out the fields to complete the product's creation process."></textarea>
+                     </div>
+                   </div>
+               </form>
+           </div>
+           <!-- Modal footer -->
+           <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-slate-600">
+              <button id="editProduct" data-modal-toggle="edit-modal" type="button" class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
+           </div>
+       </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+   let pendingEditID = 0;
+   document.getElementById("submitProduct").addEventListener("click", createProduct)
+   document.getElementById("editProduct").addEventListener("click", editProduct)
+
+   function editProduct(){
+      showLoader();
+      let productData = {
+         'id' : pendingEditID,
+         'name' : document.getElementById("productNameE").value,
+         'category' : document.getElementById("productCategoryE").value,
+         'image' : document.getElementById("productImageE").value,
+         'details' : document.getElementById("productDetailsE").value
+      }
+      submitRequest(productData, '/products/edit')
+   }
+
+   function createProduct(){
+      showLoader();
+      let productData = {
+         'name' : document.getElementById("productName").value,
+         'category' : document.getElementById("productCategory").value,
+         'image' : document.getElementById("productImage").value == '' ? "{{ url_for('static', filename='default.jpg') }}" : document.getElementById("productImage").value,
+         'details' : document.getElementById("productDetails").value
+      }
+      submitRequest(productData, '/products/create')
+   }
+
+   function submitRequest(data, endpoint){
+      let httpRequest = new XMLHttpRequest();
+      httpRequest.open("POST", endpoint, true);
+      httpRequest.setRequestHeader('Content-Type', 'application/json');
+      httpRequest.send( JSON.stringify(data) );
+      httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === 4) {
+               if (httpRequest.status === 200) {
+                  location.reload()
+               } else {
+                  console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.")
+                  hideLoader();
+                  showAlert("The Server failed to accept your input.")
+               }
+            }
+      }
+   }
+</script>
+
+<script>
+   const productData = document.getElementsByClassName("product-data");
+   const productEdit = document.getElementsByClassName("product-edit");
+   for(let i = 0; i < productEdit.length; i++)
+      productEdit[i].addEventListener("click", prepareEdit.bind(this, i))
+
+   function prepareEdit(index){
+      document.getElementById("productImageE").value = productData[index * 5 + 0].src;
+      document.getElementById("productNameE").value = productData[index * 5 + 1].innerText;
+      document.getElementById("productCategoryE").value = productData[index * 5 + 2].innerText;
+      document.getElementById("productDetailsE").value = productData[index * 5 + 3].innerText;
+      pendingEditID = productData[index * 5 + 4].innerText;
+   }
+</script>
+
+<script>
+   const productSearch = document.getElementById("products-search")
+   productSearch.addEventListener("input", searchProducts);
+
+   function searchProducts(){
+      for(let i = 0; i < productEdit.length; i++){
+         if( productData[i * 5 + 1].innerText.includes(productSearch.value) )
+            productData[i * 5 + 1].parentElement.parentElement.classList.remove("hidden")
+         else
+            productData[i * 5 + 1].parentElement.parentElement.classList.add("hidden")
+      }
+   }
+</script>
+{% endblock %}

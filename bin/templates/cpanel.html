@@ -1,302 +1,126 @@
 {% extends "base.html" %}
-{% block title %}CPanel | Home{% endblock %}
-{% block head %}
-    {{ super() }}
-    
-{% endblock %}
-
-{% block topnav %}
-nav-link active py-3 border-bottom
-{% endblock %}
-
-{% block midnav %}
-nav-link py-3 border-bottom disabled
-{% endblock %}
+{% block title %}CPanel | Dashboard{% endblock %}
 
 {% block content %}
-<div id="content-wrapper" class="d-flex flex-column">
-	<!-- Main Content -->
-	<div id="content">
-		<!-- Topbar -->
-		<nav class="navbar navbar-expand dynamic-mode-bg navbar-light topbar mb-4 static-top top-bar">
-			<!-- Topbar Search -->
-			<div class="search-bar-top mx-auto">
-				<input class="search-bar dynamic-mode-bg dynamic-mode-t" type="text" placeholder="Search for products ..." aria-label="Search for products ..." id="productSearcher">
+<dl class="grid grid-cols-4 gap-5">
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
+				</svg>
 			</div>
-		</nav>
-		<!-- End of Topbar -->
-		<!-- Begin Page Content -->
-		<div class="container-fluid special-padding">
-			<!-- Page Heading -->
-			<div class="d-sm-flex align-items-center justify-content-between mb-4">
-				<h1 class="h3 mb-0 text-gray-800 dynamic-mode-t">Admin Panel - Overview</h1>
-				<a id="createProductCall" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-					<svg class="bi" width="16" height="16" role="img" aria-label="Home">
-						<use xlink:href="#addproduct"/>
-					</svg>
-					Publish new Product
-				</a>
-			</div>
-			<!-- Content Row -->
-			<div class="row">
-				<!-- Earnings (Monthly) Card Example -->
-				<div class="col-xl-3 col-md-6 mb-4">
-					<div class="card border-left-blue shadow h-100 py-2 dynamic-mode-bg dynamic-mode-border dynamic-mode-t">
-						<div class="card-body">
-							<div class="row no-gutters align-items-center">
-								<div class="col mr-2">
-									<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-										Number of products
-									</div>
-									<div class="h5 mb-0 font-weight-bold text-gray-800">{{ productList|length }}</div>
-								</div>
-								<div class="col-auto">
-									<i class="fas fa-calendar fa-2x text-gray-300"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Earnings (Monthly) Card Example -->
-				<div class="col-xl-3 col-md-6 mb-4">
-					<div class="card border-left-green shadow h-100 py-2 dynamic-mode-bg dynamic-mode-border dynamic-mode-t">
-						<div class="card-body">
-							<div class="row no-gutters align-items-center">
-								<div class="col mr-2">
-									<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-										Claimed keys
-									</div>
-									<div class="h5 mb-0 font-weight-bold text-gray-800">{{ activated }}</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Earnings (Monthly) Card Example -->
-				<div class="col-xl-3 col-md-6 mb-4">
-					<div class="card border-left-blue shadow h-100 py-2 dynamic-mode-bg dynamic-mode-border dynamic-mode-t">
-						<div class="card-body">
-							<div class="row no-gutters align-items-center">
-								<div class="col mr-2">
-									<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Claimed proportion
-									</div>
-									<div class="row no-gutters align-items-center">
-										<div class="col-auto">
-											<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ percentage }}%</div>
-										</div>
-										<div class="col">
-											<div class="progress progress-sm mr-2 dynamic-mode-bg-l">
-												<div class="progress-bar bg-primary" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-auto">
-									<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Pending Requests Card Example -->
-				<div class="col-xl-3 col-md-6 mb-4">
-					<div class="card border-left-yellow shadow h-100 py-2 dynamic-mode-bg dynamic-mode-border dynamic-mode-t">
-						<div class="card-body">
-							<div class="row no-gutters align-items-center">
-								<div class="col mr-2">
-									<div class="text-xs font-weight-bold text-uppercase mb-1" style="color: rgb(200, 150, 0) !important;">
-										Keys awaiting activation
-									</div>
-									<div class="h5 mb-0 font-weight-bold text-gray-800">{{ awaitingApproval }}</div>
-								</div>
-								<div class="col-auto">
-									<i class="fas fa-comments fa-2x text-gray-300"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Content Row -->
-			<div class="row">
-				<div class="col-lg-12 mb-4">
-					<!-- Approach -->
-					<div class="card shadow mb-4">
-						<div class="card-header py-3 dynamic-mode-border-bottom dynamic-mode-bg-l">
-							<div class="d-flex flex-row d-flex justify-content-between">
-								<h6 class="fs-5 m-0 font-weight-bold text-primary">Tutorial</h6>
-								<button type="button" class="btn-close" aria-label="Close"></button>
-							</div>
-						</div>
-						<div class="card-body dynamic-mode-bg dynamic-mode-t">
-							<p>The main page displays each product available and all its respective keys. You can use the search bar at the top to simplify your workflow and find your product right away.</p>
-							<p>Inside each product you will find an organized list of all its existing keys, allowing you to see which ones are available, which ones are already claimed and which ones you have revoked. You may also choose to delete these keys. To create a new one simply click on the "Publish new Product" button at the top right corner of this page.</p>
-							<p class="mb-0">Feel free to close this tutorial by clicking on the "X" at the top-right corner of this box.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--Profile Card 3-->
-			<div id="productGallery" class="row row-cols-1 row-cols-md-6">
-				{%for product in productList%}
-				<div class="col mb-4">
-					<div class="weather-card one">
-						<div class="top">
-							<div class="wrapper">
-								<!-- Nothing here -->
-							</div>
-						</div>
-						<div class="bottom dynamic-mode-bg dynamic-mode-t">
-							<div class="d-flex flex-column justify-content-between text-center card-structure">
-								<span class="ctext-bold">{{ product.name }}</span>
-								<a href="{{ url_for('main.productDisplay', productid = product.id) }}"><button type="button" class="btn btn-primary btn-sm card-button-st">Manage</button></a>
-								<span class="ctext-light mt-auto">&nbsp;&nbsp;</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				{%endfor%}
-			</div>
-		</div>
-		<!-- /.container-fluid -->
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Products</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{productList|length}}</p>	
+		</dd>
 	</div>
-	<!-- End of Main Content -->
-	<!-- Footer -->
-	<footer class="sticky-footer dynamic-mode-bg dynamic-mode-t">
-		<div class="container my-auto">
-			<div class="copyright text-center my-auto">
-				<span>Copyright © Key License Manager Pro 2022</span>
+
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path>
+				</svg>
 			</div>
-		</div>
-	</footer>
-	<!-- End of Footer -->
-	<div class="modal" id="modalCreation" tabindex="-1">
-		<div class="modal-dialog modal-dialog-centered modal-lg">
-			<div class="modal-content dynamic-mode-bg dynamic-mode-border-s dynamic-mode-t">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Publish new Product</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<div class="row g-3 align-items-center mb-4">
-						<div class="col-auto">
-							<label for="inputPassword6" class="col-form-label">Product name</label>
-						</div>
-						<div class="col-auto">
-							<input type="text" id="inputName" class="form-control dynamic-form" aria-describedby="passwordHelpInline">
-						</div>
-						<div class="col-auto" style="display: none;">
-							<span id="nameHelpInline" class="form-text">
-							Must be 8-20 characters long.
-							</span>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-4">
-						<div class="col-auto">
-							<label for="inputPassword6" class="col-form-label">Product image</label>
-						</div>
-						<div class="col-auto">
-							<input type="text" id="inputURL" class="form-control dynamic-form" aria-describedby="passwordHelpInline">
-						</div>
-						<div class="col-auto">
-							<span id="passwordHelpInline" class="form-text">
-							If empty, a default image will be used.
-							</span>
-						</div>
-					</div>
-					<span class="form-text">A product key, private key and API key will be generated after you create the product.</span>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button id="submitCreation" type="button" class="btn btn-primary">Create Product</button>
-				</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Claimed Licenses</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{activated}}</p>	
+		</dd>
+	</div>
+
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+				</svg>
 			</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Claimed Proportion</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ratio}}%</p>	
+		</dd>
+	</div>
+
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+				</svg>
+			</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Licenses Awaiting Activation</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{awaitingApproval}}</p>	
+		</dd>
+	</div>
+</dl>		
+							
+<div class="relative mt-6 mb-6 border border-gray-100 dark:border-slate-900">
+	<div aria-hidden="true" class="hidden absolute w-1/2 h-full lg:block"></div>
+	<div class="relative bg-transparent dark:bg-slate-900">
+	  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:grid lg:grid-cols-2">
+		<div class="max-w-2xl mx-auto py-24 lg:py-64 lg:max-w-none">
+		  <div class="lg:pr-16">
+			<h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl xl:text-6xl dark:text-gray-200">Multi-purpose License Manager</h1>
+			<p class="mt-4 text-xl text-gray-600 dark:text-gray-500">As an administrator, you are offered multiple ways to create, remove and monitor licenses for your products. </p>
+			<div class="mt-6">
+			  <a href="{{ url_for('main.tutorial') }}" class="inline-block bg-indigo-600 border border-transparent py-2 px-8 rounded-md font-medium text-white hover:bg-indigo-700">View more</a>
+			</div>
+		  </div>
 		</div>
+	  </div>
+	</div>
+	<div class="w-full h-48 sm:h-64 lg:absolute lg:top-0 lg:right-0 lg:w-1/2 lg:h-full">
+	  	<img src="{{ url_for('static', filename='dashboardImage.jpg') }}" alt="" class="w-full h-full object-center object-cover">
 	</div>
 </div>
+
+<section aria-labelledby="trending-heading" class="bg-white dark:bg-slate-900">
+	<div class="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
+	  <div class="px-4 flex items-center justify-between sm:px-6 lg:px-0">
+		<h2 id="trending-heading" class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-300">Trending products</h2>
+		<a href="#" class="hidden sm:block text-sm font-semibold text-blue-600 hover:text-blue-500">See all products<span aria-hidden="true"> &rarr;</span></a>
+	  </div>
+
+	  <div class="mt-8 relative">
+		<div class="relative w-full overflow-x-auto">
+		  <ul role="list" class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8">
+			{% for product in productList %}
+				{% if product.licenses != None %}
+					<li class="w-64 inline-flex flex-col text-center lg:w-auto">
+						<div class="group relative">
+							<div class="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
+								<img src="{{product.image}}" class="w-full h-full object-center object-cover group-hover:opacity-75">
+							</div>
+							<div class="mt-6">
+								<p class="text-sm text-gray-500">{{product.licenses}} licenses</p>
+								<h3 class="mt-1 font-semibold text-gray-900">
+									<a href="#">
+										<span class="absolute inset-0"></span>
+										{{product.name}}
+									</a>
+								</h3>
+							</div>
+						</div>
+					</li>
+				{% endif %}
+			{% endfor %}
+		  </ul>
+		</div>
+	  </div>
+
+	  <div class="mt-12 px-4 sm:hidden">
+		<a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">See everything<span aria-hidden="true"> &rarr;</span></a>
+	  </div>
+	</div>
+</section>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
-
-<script>
-    let modalCreation = new bootstrap.Modal( document.getElementById('modalCreation') )
-    document.getElementById("createProductCall").addEventListener("click", createProductProcess.bind(this))
-    document.getElementById("submitCreation").addEventListener("click", submitProductProcess.bind(this))
-
-    function createProductProcess(){
-        modalCreation.show();
-    }
-
-    function submitProductProcess(){
-        let name = document.getElementById("inputName").value;
-        let urlimg = document.getElementById("inputURL").value;
-
-        let loginData = {
-            'name' : name,
-            'URL' : urlimg
-        }
-
-        let httpRequest = new XMLHttpRequest();
-        httpRequest.open("POST", "/cpanel/product/create", true);
-        httpRequest.setRequestHeader('Content-Type', 'application/json');
-        httpRequest.send(JSON.stringify(loginData));
-
-        httpRequest.onreadystatechange = function() {
-                if (httpRequest.readyState === 4) {
-                    if (httpRequest.status === 200) {
-                        location.reload()
-                    } else {
-                        console.error("Something wrong happened!")
-                    }
-                }
-            }
-        }
-</script>
-
-<script>
-    const searchBox = document.getElementById("productSearcher");
-    const productGallery = document.getElementById("productGallery");
-    searchBox.addEventListener("input", acquireProducts)
-
-    function acquireProducts(){
-        queryData = {
-            'searchstring' : searchBox.value == "" ? '_ALL_' : searchBox.value
-        }
-
-        let httpRequest = new XMLHttpRequest();
-        httpRequest.open("POST", "/cpanel/getids", true);
-        httpRequest.setRequestHeader('Content-Type', 'application/json');
-        httpRequest.send(JSON.stringify(queryData));
-
-        httpRequest.onreadystatechange = function() {
-            if (httpRequest.readyState === 4) {
-                if (httpRequest.status === 200) {
-                    responseJSON = JSON.parse(httpRequest.responseText)
-                    productGallery.innerHTML = "";
-                    for(let i = 0; i < responseJSON.length; i++){
-                        productGallery.innerHTML += `<div class="col mb-4">
-                            <div class="weather-card one">
-                                <div class="top">
-                                    <div class="wrapper">
-                                        <!-- Nothing here -->
-                                    </div>
-                                </div>
-                                <div class="bottom">
-                                    <div class="d-flex flex-column justify-content-between text-center card-structure">
-                                        <span class="ctext-bold">` + responseJSON[i].name + `</span>
-                                        <a href="#"><button type="button" class="btn btn-primary btn-sm card-button-st">Manage</button></a>
-                                        <span class="ctext-light mt-auto">25th Abril, 2022</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`
-                    }
-                } else {
-                    console.error("Something wrong happened!")
-                }
-            }
-        }
-    }
-</script>
+	
 {% endblock %}

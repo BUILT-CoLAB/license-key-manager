@@ -5,4 +5,3 @@ Flask_Login==0.6.0
 Flask_SQLAlchemy==2.5.1
 python-dotenv==0.20.0
 Werkzeug==2.1.2
-waitress==2.1.2

@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% block title %}Tutorial{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='typography.min.css') }}" />
+<div class="relative py-16 bg-white overflow-hidden">
+    <div class="relative px-1">
+        <div class="text-lg max-w-5xl mx-auto">
+            <h1>
+                <span class="block text-base text-center text-indigo-600 font-semibold tracking-wide uppercase">TUTORIAL</span>
+                <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Multi-purpose License Manager</span>
+            </h1>
+        </div>
+        <div class="mt-12 prose prose-lg text-gray-500 mx-auto max-w-5xl">
+            <p>The essence of a fully-functional Multi-Purpose License Key Manager relies in the ability of administrators to correctly use and manage the structure of the service they are providing.</p>
+            <p>With that in mind, the goal of the present tutorial page is to sharpen such abilities and to explain the core features of the system we have at hand. Despite complex and somewhat intimidating, the interface is friendly enough to guide you through the required steps. As such, by the end of this tutorial, you should have a clear understanding of how to:</p>
+            <ul role="list">
+            <li>create, delete and edit <strong>Customers</strong> and <strong>Licenses</strong> from the web application</li>
+            <li>navegate through the interface and recognize the functionalities in each tab</li>
+            <li>understand the constraints we have in place</li>
+            </ul>
+            <p>This tutorial is divided into multiple segments where each one is dedicated to the different pages the web application is designed to serve. <strong>Take note that the images available in this tutorial will not offer a full view of the page, so you are expected to make a transition from the text written here to the page being discussed.</strong></p>
+            <h2>1. The Dashboard</h2>
+            <p>This is the front-page of our interface and the one that displays a simplified overview of the statistics. Users who manage to go through the authentication process are automatically redirected to this page.</p>
+            <figure>
+                <img class="w-full rounded-lg" src="{{ url_for('static', filename='prints/PRINTdashboard.png') }}" alt="" width="1310" height="873">
+                <figcaption>The Dashboard interface</figcaption>
+            </figure>
+            <p>No matter the current state of the web application, the dashboard will always give four statistical results:</p>
+            <ul role="list">
+                <li><strong>Products</strong> - Indicates how many products we have registered in the database.</li>
+                <li><strong>Claimed Licenses</strong> - Indicates how many Licenses have been claimed (validated) at least once.</li>
+                <li><strong>Claimed Proportion</strong> - Measures the proportion of licenses that were claimed against non-claimed ones.</li>
+                <li><strong>Licenses Awaiting Activation</strong> - In contrast to <strong>Claimed Licenses</strong>, it indicates the licenses whose customers haven't validated.</li>
+            </ul>
+            <p>Administrators cannot do much to manipulate most of these statistics. The utility of the content in this page is to merely showcase the current status of the web application, its popularity and to display a quick study of the application's traction based on the available <strong>Customers</strong>, <strong>Licenses</strong> and <strong>Products</strong>. At the end of the page, the four most popular products (or less, if there are less than four existing products) are showcased from left to right based on popularity. The popularity criteria is measured based on the amount of <a>distinct</a> clients who have licenses associated to this Product.</p>
+            <blockquote>
+            <p>Statistical thinking will one day be as necessary for efficient citizenship as the ability to read and write.</p>
+            </blockquote>
+            <p>Although not entirely necessary, this criteria can be changed by modifying the API Database method that handles the querying of these results. Nonetheless, in any case, the purpose of this tutorial isn't to elaborate on the implementation details.</p>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white overflow-hidden">
+    <div class="relative max-w-5xl mx-auto py-16">
+      <div class="mx-auto text-base max-w-prose lg:grid lg:grid-cols-2 lg:gap-8 lg:max-w-none">
+        <div>
+          <h3 class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">2. Product List</h3>
+        </div>
+      </div>
+      <div class="mt-8 lg:grid lg:grid-cols-2 lg:gap-8">
+        <div class="relative lg:row-start-1 lg:col-start-2">
+          <svg class="hidden lg:block absolute top-0 right-0 -mt-20 -mr-20" width="404" height="384" fill="none" viewBox="0 0 404 384" aria-hidden="true">
+            <defs>
+              <pattern id="de316486-4a29-4312-bdfc-fbce2132a2c1" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor" />
+              </pattern>
+            </defs>
+            <rect width="404" height="384" fill="url(#de316486-4a29-4312-bdfc-fbce2132a2c1)" />
+          </svg>
+          <div class="relative text-base mx-auto max-w-prose lg:max-w-none">
+            <figure>
+              <div class="w-[26rem] lg:aspect-none">
+                <img class="rounded-lg shadow-lg object-cover object-center" src="{{ url_for('static', filename='prints/PRINTproducts.png') }}" alt="Whitney leaning against a railing on a downtown street" width="1184" height="1376">
+              </div>
+              <figcaption class="mt-3 flex text-sm text-gray-500">
+                <span class="ml-2">Product Listing example</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="mt-8 lg:mt-0">
+          <div class="mt-5 prose prose-indigo text-gray-500 mx-auto lg:max-w-none lg:row-start-1 lg:col-start-1">
+            <p>The <strong>Products</strong> tab allows administrators to create, edit or even view detailed information about existing products. When it comes to these functionalities, administrators don't have any restrictions compared to the Owner. The web application will, however, keep a log for every single action committed and it will be available in the <strong>Changelog</strong> page for every other administrator to see. This is done as a security measure but also to help keeping track of the application's history.</p>
+            <p>On the picture on the right you can see a card-like box containing the details of a product example. Every single product will be represented in this format, with its image, its name and the category we defined. At the bottom of each card, we have two options: <strong>Edit</strong> or <strong>View</strong>. Clicking on <strong>Edit</strong> will bring up a modal where we will be able to edit the parameters of the Product whose card we clicked on. On the other hand, if we click on <strong>View</strong> we will be redirected to the individual page of the specified Product.</p>
+            <p>On the top-right corner of the webpage, we also have an <strong>Add Product</strong> button which will open a modal similar to the <strong>Edit</strong> feature and where we can fill out the parameters before creating a product.</p>
+          </div>
+        </div>
+        <div class="mt-16 relative lg:col-start-1 lg:row-start-2">
+            <svg class="hidden lg:block absolute top-10 left-0 -mt-10 -ml-10" width="404" height="384" fill="none" viewBox="0 0 404 384" aria-hidden="true">
+              <defs>
+                <pattern id="de316486-4a29-4312-bdfc-fbce2132a2c1" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor" />
+                </pattern>
+              </defs>
+              <rect width="404" height="384" fill="url(#de316486-4a29-4312-bdfc-fbce2132a2c1)" />
+            </svg>
+            <div class="relative text-base mx-auto max-w-prose lg:max-w-none mt-10">
+              <figure>
+                <div class="aspect-w-12 aspect-h-7 lg:aspect-none">
+                  <img class="rounded-lg shadow-lg object-cover object-center" src="{{ url_for('static', filename='prints/PRINTcreateproduct.png') }}" alt="Whitney leaning against a railing on a downtown street" width="1184" height="1600">
+                </div>
+                <figcaption class="mt-3 flex text-sm text-gray-500">
+                  <span class="ml-2">Product Listing example</span>
+                </figcaption>
+              </figure>
+            </div>
+        </div>
+        <div class="mt-8 lg:mt-0">
+            <div class="mt-5 prose prose-indigo text-gray-500 mx-auto lg:max-w-none lg:row-start-2 lg:col-start-2">
+              <p>For instance, whenever we click on the <strong>Edit</strong> or <strong>Create</strong> buttons, a modal similar to the one on the left image will be shown to us. If the feature is <strong>Edit</strong>, then the fields on the left will already be filled with the details of the currently existing product, otherwise, we will only have placeholders.</p>
+              <p>You can notice that the API Key and Product Key are not visible in the modal. This is intentional as the server will be the one generating the API Key and Public Key for us when we ask it to create a product (editing won't modify the API Key or Public Key). You will only need to register the following parameters:</p>
+              <ul role="list">
+                <li><strong>Product Name</strong> - The name of the product (must be unique).</li>
+                <li><strong>Product Category</strong> - The category is discretionary and merely informative.</li>
+                <li><strong>Product Image</strong> - The image used to represent the product. 400x400 resolution is recommended, if not, the browser will scale it down, which can create a blur effect.</li>
+                <li><strong>Product Details</strong> - It's another informative field, but helps pinpointing the information of the product.</li>
+                </ul>
+              <p>After pressing 'Create', the page will be reloaded and a new card will be visible in the Product List.</p>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="py-16 overflow-hidden">
+  <div class="max-w-5xl mx-auto space-y-8">
+    <div class="text-base max-w-prose mx-auto lg:max-w-none">
+      <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">3. Product Display</p>
+    </div>
+    <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
+      <div class="relative z-10">
+        <div class="prose prose-indigo text-gray-500 mx-auto lg:max-w-none">
+          <p>When clicking on the <strong>View</strong> option of a product card (from the previous section) we are redirected to a page that will contain the descriptive elements of our Product. These are the Title, the Category, the Description and the logo we defined. Two additional statistical inferences are available for us.</p>
+          <ul role="list">
+            <li><strong>Licenses</strong> - Indicates how many licenses are linked to this product.</li>
+            <li><strong>Clients</strong> - Indicates the number of distinct clients who have a license from this product.</li>
+          </ul>
+          <p>On the top right corner of the page, there are two buttons available: <strong>API Key</strong> and <strong>Public Key</strong>. Clicking on any one of these will copy the chosen information to your clipboard. A modal will also be displayed, containing the information of the selected key if you wish to copy the contents manually.</p>
+        </div>
+      </div>
+      <div class="relative lg:row-start-1 lg:col-start-2">
+        <svg class="hidden lg:block absolute top-0 right-0 -mt-20 -mr-20" width="404" height="384" fill="none" viewBox="0 0 404 384" aria-hidden="true">
+          <defs>
+            <pattern id="de316486-4a29-4312-bdfc-fbce2132a2c1" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="404" height="384" fill="url(#de316486-4a29-4312-bdfc-fbce2132a2c1)" />
+        </svg>
+        <div class="relative text-base mx-auto max-w-prose lg:max-w-none">
+          <figure>
+            <div class="w-[36rem]">
+              <img class="rounded-lg shadow-lg object-cover object-center" src="{{ url_for('static', filename='prints/PRINTproduct.png') }}">
+            </div>
+            <figcaption class="mt-3 flex text-sm text-gray-500">
+              <span class="ml-2">Product Display Page</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 prose text-gray-500 mx-auto max-w-5xl">
+      <h3>3.1 Licenses</h3>
+      <p><strong>The management of licenses is done within the page of each product.</strong> For instance, if we wish to check for a license that belongs to a product whose ID is 745, then we need to be on the Product Display page of that same product to check all licenses assigned to it.</p>
+      <p>The display of the licenses is situated right bellow the descriptive elements of the Product (title, category, image and description). Depending on the state of the web application, you may see an <strong>error</strong> that blocks the creation of licenses. <strong>This happens if there are no registered customers in the web application</strong>. Another strange component may be an orange warning. It doesn't stop you from creating licenses, but it will tell you that the product does not have any licenses and therefore you need to create one.</p>
+      <p>To achieve this, you can click on the <strong>Create License</strong> button. When you do it, a modal will appear, asking you to fill out some inputs.</p>
+      <figure class="flex flex-col justify-center items-center">
+        <img class="w-[500px] rounded-lg border border-gray-200" src="{{ url_for('static', filename='prints/PRINTlicensecreate.png') }}" alt="" width="1310" height="873">
+        <figcaption>License Creation - Modal</figcaption>
+      </figure>
+      <p>The <strong>Maximum Devices</strong> field will define the limit of concurrent devices that may be registered to this key. Likewise, the expiry date will define how long this License will remain valid. If you do not touch this field and leave it empty, the server will make this license perpetual (that is, no expiry date). You <strong>must</strong> assign a client to every single license you create. To do so, simply select the client from the dropdown and then click on <strong>'Create'</strong>.</p>
+      <p>If the input is valid, the page will reload with a new License Key in it. There won't be any warnings, and the registered license will show in a format like this:</p>
+      <figure class="flex flex-col justify-center items-center">
+        <img class="w-full rounded-lg border border-gray-200" src="{{ url_for('static', filename='prints/PRINTlicenselist.png') }}" alt="" width="1310" height="873">
+        <figcaption>License listing</figcaption>
+      </figure>
+      <p>On the top left corner you will see License followed by its ID (right after the hash sign '#'). Bellow, there's the Serial Key of the product (this is the component used by the Customer to validate their own product). You will also see the name of the Client, along with the status of the devices (along with its limit). On the right, you can see the expiration date of the license (or 'Perptual License' if it has no expiration date) and then the state of the key. Normally, the key can only be in three states: <strong>Awaiting Activation</strong>, <strong>Active</strong> or <strong>Revoked</strong>. These states will be described in the next section. If you click on the box, you will be redirected to the <strong>License Page</strong>.</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="relative py-16 bg-white overflow-hidden">
+  <div class="relative px-1">
+      <div class="text-lg max-w-5xl mx-auto">
+          <h1>
+              <span class="mt-2 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">4. License Details</span>
+          </h1>
+      </div>
+      <div class="mt-12 prose prose-lg text-gray-500 mx-auto max-w-5xl">
+          <p>To manage and check the details of any given License, we can check the <strong>License Details</strong> page. When entering it, the colored stripe and circle next to the page's title may be displayed in one of three colors, each with their particular meaning.</p>
+          <ul role="list">
+          <li>A <strong>yellow</strong> color indicates the license has not been validated yet. A device still needs to be registered.</li>
+          <li>A <strong>green</strong> color indicates the license has at least one registered device and everything is fine.</li>
+          <li>A <strong>red</strong> color tells us that the license has been revoked or has expired.</li>
+          </ul>
+          <figure>
+            <img class="w-full border border-gray-200 rounded-lg" src="{{ url_for('static', filename='prints/PRINTlicensekey.png') }}" alt="" width="1310" height="873">
+            <figcaption>The License Details page - Awaiting Validation (yellow stripe)</figcaption>
+          </figure>
+          <p>By default, the server does not automatically delete expired licenses from the database. We leave that responsibility to local administrators, which can be manually done by clicking on the <strong>Delete</strong> button on the top-right corner. You also have two more buttons: <strong>Revoke</strong> and <strong>Reset</strong> which will allow you to change some aspects of the license.</p>
+          <p>If you click on any of those buttons, a confirmation modal will pop-up describing the action you are planning on taking and the consequences that come with it. The action will also be logged into the database, which will then be publicly available in the <strong>Changelog</strong> page and on the Changelog section of the License Details page (which you currently are in). If you don't know what you are doing and the text manages to intimidate you, don't forget that you can always go back on your decision by closing the modal (the 'X' on its top-right corner will do just that).</p>
+          <p>The actions you can take by using these buttons are:</p>
+          <ul role="list">
+              <li><strong>Revoking/Reactivating</strong> - This allows you to disable or enable a license. If you choose to do this, then the client won't be able to validate this license anymore.</li>
+              <li><strong>Resetting</strong> - This action will remove all linked devices from the license. It is great for situations where the client wishes to change departments and a large amount of devices need to be removed.</li>
+              <li><strong>Deleting</strong> - This is the harshest action, and will completely erase all data from the license key. For security purposes, this action is logged into the database and is marked as a red-colored (important) registry.</li>
+          </ul>
+          <p>Bellow those buttons, you will see all the information that is already available in the Product Details page, but in a less condensed format, and you will be able to select and copy the Serial Key.</p>
+          <p>Finally, at the bottom, you will see the Registered Devices on the left and the Changelog on the right. Take note that you can remove any registered device by clicking on the 'Remove' button, this will, of course, be logged into the database too and the changelog on the right will be updated with that information.</p>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+	
+{% endblock %}

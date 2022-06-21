@@ -1,5 +1,5 @@
 from flask import Blueprint, request, flash, redirect, url_for
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from werkzeug.security import check_password_hash
 from . import db
 from . import databaseAPI as DBAPI
@@ -18,6 +18,9 @@ def login():
 
     if not userObject or not check_password_hash(userObject.password, passwordData):
         return "The account does not exist or the login data is incorrect."
+    
+    if userObject.disabled == True:
+        return "The account has been disabled."
 
     login_user(userObject)
     return "OK"
@@ -27,3 +30,6 @@ def logout():
     logout_user()
     flash('You have been logged out')
     return redirect(url_for('main.index'))
+
+def getCurrentUser():
+    return current_user

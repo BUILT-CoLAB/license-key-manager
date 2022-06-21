@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+{% block title %}CPanel | Customers{% endblock %}
+
+{% block content %}
+<main>
+    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-slate-900 dark:border-slate-700">
+        <div class="mb-1 w-full">
+           <div class="mb-4">
+              <nav class="flex mb-5" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                    <li class="inline-flex items-center">
+                      <a href="#" class="text-gray-700 hover:text-gray-900 inline-flex items-center dark:text-slate-300 dark:hover:text-slate-500">
+                          <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                          </svg>
+                          Dashboard
+                      </a>
+                    </li>
+                    <li>
+                      <div class="flex items-center">
+                          <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                          <a href="#" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium dark:text-slate-300 dark:hover:text-slate-500">Customers</a>
+                      </div>
+                    </li>
+                </ol>
+              </nav>
+              <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100">Account Management</h1>
+              <h4 class="w-1/2 text-sm mt-2 dark:text-gray-400">You can add, edit or even disable user accounts in this section. Take note that all these accounts have full administrative power in every subject except account management.</h4>
+           </div>
+           <div class="block sm:flex items-center">
+              <form class="sm:pr-3 mb-4 sm:mb-0" action="#" method="GET">
+                 <label class="sr-only">Search</label>
+                 <div class="mt-1 relative sm:w-64 xl:w-96">
+                    <input type="text" id="admins-search" class="dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search for admin">
+                 </div>
+              </form>
+              <div class="flex items-center sm:justify-end w-full">
+                <button type="button" data-modal-toggle="creation-modal" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center rounded-lg text-sm px-3 py-2 text-center sm:ml-auto dark:bg-sky-500 dark:hover:bg-sky-400 transition-all duration-300">
+                    <svg class="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    Add Admin
+                </button>
+              </div>
+           </div>
+        </div>
+    </div>
+
+
+    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+            <thead>
+                <tr>
+                    <th class="px-5 py-3 bg-gray-100 dark:bg-slate-800 dark:text-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
+                        Username
+                    </th>
+                    <th class="px-5 py-3 bg-gray-100 dark:bg-slate-800 dark:text-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
+                        Privileges
+                    </th>
+                    <th class="px-5 py-3 bg-gray-100 dark:bg-slate-800 dark:text-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
+                        Created at
+                    </th>
+                    <th class="px-5 py-3 bg-gray-100 dark:bg-slate-800 dark:text-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center">
+                        Status
+                    </th>
+                    <th class="px-5 py-3 bg-gray-100 dark:bg-slate-800 dark:text-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center w-96">
+                        Administrative Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white dark:bg-slate-700 dark:border-slate-500 text-sm text-center">
+                            <p class="admin-name text-gray-900 whitespace-no-wrap font-bold dark:text-gray-300">{{user.name}}</p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-l border-gray-200 bg-white dark:bg-slate-700 dark:border-slate-500 text-sm text-center">
+                            {% if user.owner %}
+                                <p class="text-gray-900 whitespace-no-wrap dark:text-gray-300">Owner</p>
+                            {% else %}
+                                <p class="text-gray-900 whitespace-no-wrap dark:text-gray-300">Admin</p>
+                            {% endif %}
+                        </td>
+                        <td class="px-5 py-5 border-b border-l border-gray-200 bg-white dark:bg-slate-700 dark:border-slate-500 text-sm text-center">
+                            <p class="text-gray-900 whitespace-no-wrap dark:text-gray-300">
+                                Jan 21, 2020
+                            </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-l border-gray-200 bg-white dark:bg-slate-700 dark:border-slate-500 text-sm text-center">
+                            {% if user.disabled %}
+                                <span class="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
+                                    <span aria-hidden="" class="absolute inset-0 bg-orange-200 opacity-50 rounded-full dark:opacity-100"></span>
+                                    <span class="relative">Disabled</span>
+                                </span>
+                            {% else %}
+                                <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                    <span aria-hidden="" class="absolute inset-0 bg-green-200 opacity-50 rounded-full dark:opacity-100"></span>
+                                    <span class="relative">Active</span>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-5 py-5 border-b border-l border-gray-200 bg-white dark:bg-slate-700 dark:border-slate-500 text-sm text-center w-100">
+                            {% if not user.owner %}
+                                <div userid="{{user.id}}" username="{{user.name}}" deactivated="{{user.disabled}}">
+                                    {% if user.disabled %}
+                                        <button class="action-apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center mx-4" data-modal-toggle="confirmation-modal">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                                            <span>Enable</span>
+                                        </button>
+                                    {% else %}
+                                        <button class="action-apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center mx-4" data-modal-toggle="confirmation-modal">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                                            <span>Disable</span>
+                                        </button>
+                                    {% endif %}
+                                    <button class="action-apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center mx-4" data-modal-toggle="confirmation-modal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        <span>New Password</span>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div id="creation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center p-5 rounded-t border-b">
+                <h3 class="text-xl font-medium text-gray-900">
+                    Create Admin Account
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="creation-modal">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>  
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6 space-y-6">
+              <div class="grid grid-cols-6 gap-6">
+                    <div class="col-span-3">
+                        <label class="text-sm font-medium text-gray-900 block mb-2">Account Username</label>
+                        <input type="text" id="accountName" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Unique username" required="">
+                    </div>
+                    <div class="col-span-3">
+                        <label class="text-sm font-medium text-gray-900 block mb-2">Account Password</label>
+                        <input type="text" id="accountPassword" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Secure Password" required="">
+                    </div>
+                    <div class="col-span-3">
+                        <label class="text-sm font-medium text-gray-900 block mb-2">Account Email</label>
+                        <input type="text" id="accountEmail" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="exampleemail@domain.com" required="">
+                    </div>
+                    <div class="col-span-3">
+                        <button id="generator" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1.5 px-2 rounded inline-flex items-center">
+                            <span>Generate Password</span>
+                        </button>
+                    </div>
+              </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center justify-end p-6 space-x-2 rounded-b border-t border-gray-200">
+                <button id="createCommand" data-modal-toggle="creation-modal" type="button" class="text-white bg-gray-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center p-5 rounded-t border-b">
+                <h3 class="text-xl font-medium text-gray-900">
+                    Confirm Deletion
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="confirmation-modal">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>  
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6 space-y-6">
+                <p id="confirmationMessage" class="font-normal text-gray-600"></p>
+                <p class="mt-1 font-normal text-gray-600">Do you wish to confirm this action?</p>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
+                <button id="confirmCommand" data-modal-toggle="confirmation-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const accountName = document.getElementById("accountName");
+        const accountPassword = document.getElementById("accountPassword");
+        const accountEmail = document.getElementById("accountEmail");
+        document.getElementById("createCommand").addEventListener("click", submitCreation)
+        document.getElementById("generator").addEventListener("click", generatePassword)
+
+        function submitCreation(){
+            showLoader();
+
+            let accountData = {
+                'username' : accountName.value,
+                'password' : accountPassword.value,
+                'email' : accountEmail.value
+            };
+
+            path = "/admins/create";
+            let httpRequest = new XMLHttpRequest();
+            httpRequest.open("POST", path, true);
+            httpRequest.setRequestHeader('Content-Type', 'application/json');
+            httpRequest.send( JSON.stringify(accountData) );
+            httpRequest.onreadystatechange = function() {
+                if (httpRequest.readyState === 4) {
+                    if (httpRequest.status === 200) {
+                        location.reload()
+                    } else {
+                        console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.");
+                        hideLoader();
+                        showAlert("The Server failed to accept your input.")
+                    }
+                }
+            }
+        }
+
+        async function generatePassword(returnValue = false){
+            let characters = "0123456789abcdefghijklmnopqrstuvwxyz!$%.ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let password = "";
+            for (var i = 0; i <= 12; i++) {
+                var randomNumber = Math.floor(Math.random() * characters.length);
+                password += characters.substring(randomNumber, randomNumber +1);
+            }
+            if(returnValue)
+                return password;
+            accountPassword.value = password;
+            await navigator.clipboard.writeText(password);
+            alert("The generated password has been copied to your clipboard.")
+        }
+    </script>
+
+    <script>
+        let action = ""; 
+        let chosenID = 0;
+        const confirmationMessage = document.getElementById("confirmationMessage");
+        const actionButtons = document.getElementsByClassName("action-apply");
+        for(let i = 0; i < actionButtons.length; i++)
+            actionButtons[i].addEventListener("click", confirmAction.bind(this, i))
+        document.getElementById("confirmCommand").addEventListener("click", confirmCommand)
+
+        function confirmAction(index){
+            if(index % 2 == 0 && actionButtons[index].parentElement.getAttribute("deactivated") == "False")
+                confirmationMessage.innerHTML = "You are about to disable the user account named " + '<span class="font-bold">' + actionButtons[index].parentElement.getAttribute("username") + "</span>. Doing so will prevent the user from logging in until the account is reactivated again."
+            if(index % 2 == 0 && actionButtons[index].parentElement.getAttribute("deactivated") == "True")
+                confirmationMessage.innerHTML = "You are about to reactivate the user account named " + '<span class="font-bold">' + actionButtons[index].parentElement.getAttribute("username") + "</span>. Doing so will allow the user to log in again and execute modifications as any normal administrator."
+            if(index % 2 == 1)
+                confirmationMessage.innerHTML = "You are about to automatically regenerate a new password for the account " + '<span class="font-bold">' + actionButtons[index].parentElement.getAttribute("username") + "</span>. Fill out the box bellow to set-up a customized password. If you leave it empty, a password will be generated instead. In either case, the password will be copied to your clipboard." + '<input type="text" id="passwordInput" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5 mt-5 w-1/2" placeholder="The new password">'
+            action = index % 2 == 0 ? "TOGGLESTATUS" : "REGENERATE";
+            chosenID = parseInt( actionButtons[index].parentElement.getAttribute("userid") )
+        }
+
+        async function confirmCommand(){
+            let data = {}
+            let path = ""
+            let newPassword = ""
+            if(action == 'TOGGLESTATUS'){
+                path = "/admins/" + chosenID + "/togglestatus";
+            }
+            else{
+                let customizedPassword = document.getElementById("passwordInput").value;
+                newPassword = customizedPassword.value == '' ? generatePassword(true) : customizedPassword;
+                data = {'password' : newPassword};
+                path = "/admins/" + chosenID + "/edit";
+            }
+            
+            let httpRequest = new XMLHttpRequest();
+            httpRequest.open("POST", path, true);
+            httpRequest.setRequestHeader('Content-Type', 'application/json');
+            httpRequest.send( JSON.stringify(data) );
+            httpRequest.onreadystatechange = async function() {
+                if (httpRequest.readyState === 4) {
+                    if (httpRequest.status === 200) {
+                        if(action != 'TOGGLESTATUS'){
+                            await navigator.clipboard.writeText(newPassword);
+                            alert("The generated password has been copied to your clipboard.")
+                        }
+                        location.reload()
+                    } else {
+                        console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.");
+                        hideLoader();
+                        showAlert("The Server failed to accept your input.")
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script>
+        const adminSearch = document.getElementById("admins-search");
+        const adminNames = document.getElementsByClassName("admin-name");
+        adminSearch.addEventListener("input", searchAdmins);
+
+        function searchAdmins(){
+            for(let i = 0; i < adminNames.length; i++){
+                if( adminNames[i].innerText.includes(adminSearch.value) )
+                    adminNames[i].parentElement.parentElement.classList.remove("hidden");
+                else
+                    adminNames[i].parentElement.parentElement.classList.add("hidden");
+            }
+        }
+    </script>
+{% endblock %}
