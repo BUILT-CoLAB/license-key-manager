@@ -3,13 +3,13 @@
 
 {% block content %}
 <main>
-    <div class="bg-white block sm:flex items-center justify-between lg:mt-1.5 border border-neutral-100">
-		<div class="w-full flex flex-col bg-white shadow-xl">
+    <div class="bg-white block sm:flex items-center justify-between lg:mt-1.5 border border-neutral-100 dark:bg-slate-900 dark:border-slate-700">
+		<div class="w-full flex flex-col bg-white shadow-xl dark:bg-slate-900">
 			<div class="px-6 py-6">
 			   <div class="flex items-start justify-between">
 					<div>
 						<a href="{{ url_for('main.productDisplay', productid = license.productid) }}">
-							<button type="button" class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500">
+							<button type="button" class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-sky-500 dark:bg-slate-900 dark:text-gray-300">
 								<h3>
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -20,7 +20,7 @@
 						</a>
 					</div>
 				  	<div class="ml-3 h-7 flex items-center">
-					 	<button type="button" class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500">
+					 	<button type="button" class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-sky-500 dark:bg-slate-900 dark:text-gray-300">
 							<span class="sr-only">Close panel</span>
 							<svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
 						   		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -43,7 +43,7 @@
 				   <div class="mt-6 ml-6 flex-1">
 					 <div>
 					   <div class="flex items-center">
-						 <h3 class="font-bold text-xl text-gray-900 sm:text-2xl">Product License</h3>
+						 <h3 class="font-bold text-xl text-gray-900 sm:text-2xl dark:text-gray-100">Product License</h3>
 						 {% if license.status == 0 %}
 							<span class="ml-2 bg-yellow-400 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
 								<span class="sr-only">Awaiting Activation</span>
@@ -73,55 +73,54 @@
 				 </div>
 			   </div>
 			   <div class="px-4 sm:px-0 sm:py-0">
-				 <dl class="sm:divide-y sm:divide-gray-200 sm:space-y-0">
+				 <dl class="sm:divide-y sm:divide-gray-200 sm:space-y-0 dark:divide-slate-700">
 					<div class="sm:flex sm:px-6 sm:py-5">
 						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Product ID</dt>
-						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">
+						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 dark:text-gray-300">
 						   <p>{{license.productid}}</p>
 						</dd>
 					 </div>
-					 <div class="sm:flex sm:px-6 sm:py-5 bg-gray-100">
+					 <div class="sm:flex sm:px-6 sm:py-5 bg-gray-100 dark:bg-slate-800">
 						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Customer</dt>
-						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">
+						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 dark:text-gray-300">
 						   <p>{{license.name}}</p>
 						</dd>
 					 </div>
 					 <div class="sm:flex sm:px-6 sm:py-5">
 						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Active Devices</dt>
-						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">
+						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 dark:text-gray-300">
 						   <p>{{license.devices}}/{{license.maxdevices}}</p>
 						</dd>
 					 </div>
-					 <div class="sm:flex sm:px-6 sm:py-5 bg-gray-100">
+					 <div class="sm:flex sm:px-6 sm:py-5 bg-gray-100 dark:bg-slate-800">
 						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Expiration Date</dt>
-						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">
+						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 dark:text-gray-300">
 						   <p>{{license.expirydate}}</p>
 						</dd>
 					 </div>
 					 <div class="flex px-6 py-5">
 						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Serial Key</dt>
-						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 w-80">{{license.serialkey}}</dd>
-						<a class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2">Copy</a>
+						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 w-80 dark:text-gray-300">{{license.serialkey}}</dd>
 					 </div>
 				  </dl>
 			   </div>
 			</div>
 
 			 <div class="mt-10 py-5">
-			   <div class="mt-4 flex justify-start divide-x-2">
+			   <div class="mt-4 flex justify-start divide-x-2 dark:divide-slate-600">
 
 				  <div class="ml-6 mr-20">
-					<h1 class="text-xl font-medium text-gray-900">Registered Devices</h1>
+					<h1 class="text-xl font-medium text-gray-900 dark:text-gray-200">Registered Devices</h1>
 					 <div class="flow-root mt-4">
 					   <ul role="list" class="divide-y divide-gray-200 w-80">
 							{% for device in devices %}
 								<li class="py-2">
 									<div class="flex items-center space-x-4">
 										<div class="flex-1 min-w-0">
-											<p class="hardware-list text-sm text-gray-500 truncate">{{device.hardwareID}}</p>
+											<p class="hardware-list text-sm text-gray-500 truncate dark:text-gray-400">{{device.hardwareID}}</p>
 										</div>
 										<div>
-											<a class="remove-button inline-flex items-center justify-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 w-20 cursor-pointer">Remove</a>
+											<a class="remove-button inline-flex items-center justify-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 w-20 cursor-pointer dark:bg-slate-700 dark:hover:bg-slate-800 dark:text-gray-200 dark:border-slate-600">Remove</a>
 										</div>
 									</div>
 								</li>
@@ -131,40 +130,40 @@
 				  </div>
 
 				  <div class="pl-20 flow-root">
-					<h1 class="text-xl font-medium text-gray-900">Changelog</h1>
+					<h1 class="text-xl font-medium text-gray-900 dark:text-gray-200">Changelog</h1>
 					<ul role="list" class="mt-6 mb-4">
 						{% for log, username in changelog %}
 					   		<li>
 								<div class="relative pb-8">
-								<span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+								<span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-slate-600" aria-hidden="true"></span>
 								<div class="relative flex space-x-3">
 									<div>
 										{% if log.action == 'CreatedKey' %}
-											<span class="h-8 w-8 rounded-full bg-green-400 flex items-center justify-center ring-8 ring-white">
+											<span class="h-8 w-8 rounded-full bg-green-400 flex items-center justify-center ring-8 ring-white dark:ring-slate-600">
 												<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
 													<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
 												</svg>
 											</span>
 										{% elif log.action == 'RevokedKey' %}
-											<span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white">
+											<span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white dark:ring-slate-600">
 												<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
 													<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
 											  	</svg>
 											</span>
 										{% elif log.action == 'ReactivatedKey' %}
-											<span class="h-8 w-8 rounded-full bg-yellow-500 flex items-center justify-center ring-8 ring-white">
+											<span class="h-8 w-8 rounded-full bg-yellow-500 flex items-center justify-center ring-8 ring-white dark:ring-slate-600">
 												<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
 													<path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
 												</svg>
 											</span>
 										{% elif log.action == 'ResetKey' %}
-											<span class="h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white">
+											<span class="h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white dark:ring-slate-600">
 												<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
 													<path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
 												</svg>
 											</span>
 										{% elif log.action.startswith('UnlinkedHWID') %}
-											<span class="h-8 w-8 rounded-full bg-amber-700 flex items-center justify-center ring-8 ring-white">
+											<span class="h-8 w-8 rounded-full bg-amber-700 flex items-center justify-center ring-8 ring-white dark:ring-slate-600">
 												<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
 													<path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
 												</svg>

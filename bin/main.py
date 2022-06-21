@@ -19,12 +19,12 @@ def verify_token(token):
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', mode = request.cookies.get('mode'))
 
 @main.route('/tutorial')
 @login_required
 def tutorial():
-    return render_template('tutorial.html')
+    return render_template('tutorial.html', mode = request.cookies.get('mode'))
 
 @main.route('/dashboard')
 @login_required
@@ -35,7 +35,7 @@ def cpanel():
         ratio = 100
     else:
         ratio = ( activated / (activated + awaitingApproval) ) * 100
-    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio) )
+    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio), mode = request.cookies.get('mode'))
 
 
 
@@ -46,7 +46,7 @@ def cpanel():
 @login_required
 def products():
     products = DBAPI.getProduct('_ALL_')
-    return render_template('products.html', products = products)
+    return render_template('products.html', products = products, mode = request.cookies.get('mode'))
 
 @main.route('/products/id/<productid>')
 @login_required
@@ -54,7 +54,7 @@ def productDisplay(productid):
     licenses = DBAPI.getKeys(productid)
     productContent = DBAPI.getProductByID(productid)
     customers = DBAPI.getCustomer('_ALL_')
-    return render_template('product.html', licenses = licenses, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers)
+    return render_template('product.html', licenses = licenses, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers, mode = request.cookies.get('mode'))
 
 @main.route('/products/create', methods=['POST'])
 @login_required
@@ -103,7 +103,7 @@ def editProduct():
 @login_required
 def customers():
     customers = DBAPI.getCustomer('_ALL_')
-    return render_template('customers.html', customers = customers)
+    return render_template('customers.html', customers = customers, mode = request.cookies.get('mode'))
 
 @main.route('/customers/create', methods=['POST'])
 @login_required
@@ -160,7 +160,7 @@ def licenseDisplay(licenseid):
     changelog = DBAPI.getKeyLogs(licenseid)
     changelog.reverse()
     devices = DBAPI.getKeyHWIDs(licenseid)
-    return render_template('license.html', license = license, changelog = changelog, devices = devices)
+    return render_template('license.html', license = license, changelog = changelog, devices = devices, mode = request.cookies.get('mode'))
 
 @main.route('/licenses/editkeys', methods=['POST'])
 @login_required
@@ -212,7 +212,7 @@ def hardwareIDRemove(keyid):
 @login_required
 def changelog():
     userList = DBAPI.obtainUser('_ALL_')
-    return render_template('changelog.html', users = userList)
+    return render_template('changelog.html', users = userList, mode = request.cookies.get('mode'))
 
 @main.route('/changelog/query')
 @login_required
@@ -232,7 +232,7 @@ def getlogs():
 @login_required
 def adminsDisplay():
     userList = DBAPI.obtainUser('_ALL_')
-    return render_template('users.html', users = userList)
+    return render_template('users.html', users = userList, mode = request.cookies.get('mode'))
 
 @main.route('/admins/create',methods=['POST'])
 @login_required
@@ -348,4 +348,3 @@ def isDateWithin(limitDate):
     if( math.floor( time.time() ) > int(limitDate) ):
         return False
     return True
-    

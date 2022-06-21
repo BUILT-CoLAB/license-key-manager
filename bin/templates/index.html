@@ -1,5 +1,9 @@
 <!DOCTYPE html>
+{% if mode is defined and mode == 'NIGHT' %}
+<html lang="en" class="h-full dark">
+{% else %}
 <html lang="en" class="h-full">
+{% endif %}
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,24 +31,24 @@
       <div class="flex-1 flex flex-col justify-center py-12 px-40 lg:flex-none">
         <div class="mx-auto w-full max-w-4xl w-fit">
           <div>
-            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Multi-Purpose License Manager</h2>
-            <p class="mt-2 text-sm text-gray-600">Before starting, let's log into your account.</p>
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-slate-100">Multi-Purpose License Manager</h2>
+            <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">Before starting, let's log into your account.</p>
           </div>
     
           <div class="mt-8">
             <div class="mt-6">
               <div class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700"> Username </label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-slate-300"> Username </label>
                   <div class="mt-1">
-                    <input type="text" autocomplete="off" class="form-content-data appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="text" autocomplete="off" class="form-content-data appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                   </div>
                 </div>
     
                 <div class="space-y-1">
-                  <label class="block text-sm font-medium text-gray-700"> Password </label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-slate-300"> Password </label>
                   <div class="mt-1">
-                    <input type="password" autocomplete="off" required class="form-content-data appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="password" autocomplete="off" required class="form-content-data appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                   </div>
                 </div>
     

@@ -4,31 +4,31 @@
 {% block content %}
 <nav class="flex mb-5" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-2">
-       <li class="inline-flex items-center">
-          <a href="#" class="text-gray-700 hover:text-gray-900 inline-flex items-center">
-             <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <li class="inline-flex items-center">
+          <a href="#" class="text-gray-700 hover:text-gray-900 inline-flex items-center dark:text-slate-300 dark:hover:text-slate-500">
+              <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-             </svg>
-             Dashboard
+              </svg>
+              Dashboard
           </a>
-       </li>
-       <li>
+        </li>
+        <li>
           <div class="flex items-center">
-             <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-             </svg>
-             <a href="#" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium">Changelog</a>
+              </svg>
+              <a href="#" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium dark:text-slate-300 dark:hover:text-slate-500">Changelog</a>
           </div>
-       </li>
+        </li>
     </ol>
  </nav>
 
 <div class="relative rounded-lg">
-    <div class="absolute inset-0 -z-10 rounded-lg">
+    <div class="absolute inset-0 z-10 rounded-lg">
         <img class="w-full h-full object-cover" src="{{ url_for('static', filename='wallpaperchangelog.jpg') }}" alt="">
         <div class="absolute inset-0 bg-indigo-800 mix-blend-multiply" aria-hidden="true"></div>
     </div>
-    <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 lg:flex lg:justify-between">
+    <div class="relative max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 lg:flex lg:justify-between z-20">
       <div class="max-w-xl">
         <h2 class="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">Changelog</h2>
         <p class="mt-5 text-xl text-gray-200">Fill out the search options on the right and then click on 'Search' to get the results</p>
@@ -88,16 +88,16 @@
     </div>
 </div>
 
-<table class="mt-10 table-fixed min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-100">
+<table class="mt-10 table-fixed min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+    <thead class="bg-gray-100 dark:bg-slate-800">
         <tr>
-            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-4"> # </th>
-            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-32"> Admin </th>
-            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase"> Description </th>
-            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-40"> Date </th>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-4 dark:text-gray-100"> # </th>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-32 dark:text-gray-100"> Admin </th>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-100"> Description </th>
+            <th scope="col" class="p-4 text-left text-xs font-medium text-gray-500 uppercase w-40 dark:text-gray-100"> Date </th>
         </tr>
     </thead>
-    <tbody class="bg-white divide-y divide-gray-200" id="logTable">
+    <tbody class="bg-white divide-y divide-gray-200 dark:divide-slate-800" id="logTable">
         <!-- Handled by the script -->
     </tbody>
 </table>
@@ -158,11 +158,11 @@
         for(let i = 0; i < jsonResponse.length; i++){
             let parsedDesc = parseDescription(jsonResponse[i]['description'])
             logTable.innerHTML += `
-            <tr class="hover:bg-gray-100">
-            <td class="p-4 w-4 text-sm text-gray-500">` + (i + 1) + `</td>
-            <td class="p-4 w-32 font-medium text-gray-900">` + parsedDesc[0] + `</td>
-            <td class="p-4 whitespace-nowrap text-base text-sm text-gray-500">` + parsedDesc[1] + `</td>
-            <td class="p-4 w-40 whitespace-nowrap text-sm text-gray-500 timestamp">` + jsonResponse[i]['timestamp'] + `</td>
+            <tr class="bg-white hover:bg-gray-100 dark:bg-slate-700 dark:hover:bg-slate-800">
+            <td class="p-4 w-4 text-sm text-gray-500 dark:text-gray-100">` + (i + 1) + `</td>
+            <td class="p-4 w-32 font-medium text-gray-900 dark:text-sky-300">` + parsedDesc[0] + `</td>
+            <td class="p-4 whitespace-nowrap text-base text-sm text-gray-500 dark:text-gray-100">` + parsedDesc[1] + `</td>
+            <td class="p-4 w-40 whitespace-nowrap text-sm text-gray-500 timestamp dark:text-gray-100">` + jsonResponse[i]['timestamp'] + `</td>
             </tr>
             `
         }
@@ -170,8 +170,8 @@
     
     function parseDescription(description){
         let username = description.match(/(?<=\$)(?<=\$)[a-zA-Z0-9]+(?=\$)(?=\$)/)
-        let newDescription = description.replace(/\$\$[a-zA-Z0-9]+\$\$/, '<span class="font-medium text-gray-900">' + username + '</span>' );
-        newDescription = newDescription.replace(/#[0-9]+/, '<span class="font-medium text-gray-900">' + newDescription.match(/#[0-9]+/) + '</span>')
+        let newDescription = description.replace(/\$\$[a-zA-Z0-9]+\$\$/, '<span class="font-medium text-gray-900 dark:text-sky-300">' + username + '</span>' );
+        newDescription = newDescription.replace(/#[0-9]+/, '<span class="font-medium text-gray-900 dark:text-sky-300">' + newDescription.match(/#[0-9]+/) + '</span>')
         return [username == null ? '-------' : username, newDescription]
     }
 </script>
