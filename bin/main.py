@@ -54,7 +54,8 @@ def productDisplay(productid):
     licenses = DBAPI.getKeys(productid)
     productContent = DBAPI.getProductByID(productid)
     customers = DBAPI.getCustomer('_ALL_')
-    return render_template('product.html', licenses = licenses, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers, mode = request.cookies.get('mode'))
+    clientcount = DBAPI.getDistinctClients(productid)
+    return render_template('product.html', licenses = licenses, clients = clientcount, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers, mode = request.cookies.get('mode'))
 
 @main.route('/products/create', methods=['POST'])
 @login_required

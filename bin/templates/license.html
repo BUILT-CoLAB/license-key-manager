@@ -33,7 +33,7 @@
 			 <div class="divide-y divide-gray-200 border-b border-gray-200">
 			   	<div class="pb-4">
 				{% if license.status == 0 %}
-					<div class="bg-yellow-400 h-2"></div>
+					<div class="bg-amber-400 h-2"></div>
 				{% elif license.status == 1 %}
 					<div class="bg-green-400 h-2"></div>
 				{% else %}
@@ -45,7 +45,7 @@
 					   <div class="flex items-center">
 						 <h3 class="font-bold text-xl text-gray-900 sm:text-2xl dark:text-gray-100">Product License</h3>
 						 {% if license.status == 0 %}
-							<span class="ml-2 bg-yellow-400 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
+							<span class="ml-2 bg-amber-400 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
 								<span class="sr-only">Awaiting Activation</span>
 							</span>
 						 {% elif license.status == 1 %}
@@ -62,7 +62,7 @@
 					 </div>
 					 <div class="mt-6 flex flex-wrap justify-end space-y-3 sm:space-y-0 sm:space-x-3 w-80 float-right mr-4">
 						{% if license.status != 2 %}
-							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Revoke</button>
+							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Revoke</button>
 						{% else %}
 							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Reactivate</button>
 						{% endif %}
@@ -151,7 +151,7 @@
 											  	</svg>
 											</span>
 										{% elif log.action == 'ReactivatedKey' %}
-											<span class="h-8 w-8 rounded-full bg-yellow-500 flex items-center justify-center ring-8 ring-white dark:ring-slate-600">
+											<span class="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center ring-8 ring-white dark:ring-slate-600">
 												<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
 													<path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
 												</svg>
@@ -204,31 +204,28 @@
 </main>
  
  <div id="confirmation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+    <div class="relative p-4 w-full max-w-xl h-full md:h-auto">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow">
-            <!-- Modal header -->
-            <div class="flex justify-between items-center p-5 rounded-t border-b">
-                <h3 class="text-xl font-medium text-gray-900">
-					<svg xmlns="http://www.w3.org/2000/svg" class="inline text-yellow-500 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-					</svg>
-                    Confirm Action
-                </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="confirmation-modal">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-6 space-y-6">
-				<p class="font-normal text-gray-600">You are about to <span id="keyAction" class="font-bold text-gray-900"></span> this key. This action will be registered in the global and local license log for security purposes and is irreversible.</p>
-				<p class="mt-1 font-normal text-gray-600">Do you wish to confirm this action?</p>
+        <div class="inline-block align-bottom bg-white rounded-lg px-6 py-6 text-left overflow-hidden shadow-xl w-full dark:bg-slate-700">
+			<div class="sm:flex sm:items-start">
+			  <div id="iconCircle" class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+				<!-- Heroicon name: outline/exclamation -->
+				<svg id="iconSymbol" class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+				  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+				</svg>
+			  </div>
+			  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+				<h3 class="confirmation-c text-lg leading-6 font-medium text-gray-900 dark:text-slate-300" id="confirmationTitle">Deactivate account</h3>
+				<div class="mt-2">
+					<p class="confirmation-c text-sm text-gray-500 dark:text-slate-400">Are you sure you want to deactivate your account? All of your data will be permanently removed from our servers forever. This action cannot be undone.</p>
+				</div>
+			  </div>
 			</div>
-            <!-- Modal footer -->
-            <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200">
-               <button id="executeAction" data-modal-toggle="confirmation-modal" type="button" class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Confirm</button>
-            </div>
-        </div>
+			<div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+			  <button id="executeAction" data-modal-toggle="confirmation-modal" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black sm:ml-3 sm:w-auto sm:text-sm">Confirm</button>
+			  <button type="button" data-modal-toggle="confirmation-modal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">Cancel</button>
+			</div>
+		</div>
     </div>
 </div>
 {% endblock %}
@@ -237,19 +234,67 @@
 	<script>
 		const actionButtons = document.getElementsByClassName("action-button");
 		const licenseID = '{{license.id}}'
+		const confirmationComp = document.getElementsByClassName("confirmation-c")
 		let pendingAction = "";
 		for(let i = 0; i < actionButtons.length; i++)
 			actionButtons[i].addEventListener("click", actionPrepare.bind(this, i))
 		document.getElementById("executeAction").addEventListener("click", actionExecute);
 
 		function actionPrepare(index){
-			if(index === 0)
-				pendingAction = "revoke"
-			else if(index === 1)
-				pendingAction = "reset"
-			else
-				pendingAction = "delete"
-			document.getElementById("keyAction").innerText = pendingAction;
+			applyTheme(index)
+			switch(index){
+				case 0:
+					pendingAction = "revoke"
+					if( actionButtons[index].innerText.includes("Reactivate") ){
+						confirmationComp[0].innerHTML = "Reactivate License"
+						confirmationComp[1].innerHTML = "You are about to reactivate this license. Doing so will allow anyone with the serial key to assign a device to this license and, consequently, enjoy the Product software. For security purposes, this action will be logged.<br><br>Do you confirm this action?"
+					}
+					else{
+						confirmationComp[0].innerHTML = "Revoke License"
+						confirmationComp[1].innerHTML = "You are about to revoke this license. Doing so will block anyone from assigning a device to this license and prohibit them from using it to enjoy the Product software. For security purposes, this action will be logged.<br><br>Do you confirm this action?"
+					}
+					break;
+				case 1:
+					pendingAction = "reset"
+					confirmationComp[0].innerHTML = "Reset License"
+					confirmationComp[1].innerHTML = "You are about to reset this license. Doing so will remove all active devices from this license. For security purposes, this action will be logged.<br><br>Do you confirm this action?"
+					break;
+				case 2:
+					pendingAction = "delete"
+					confirmationComp[0].innerHTML = "Delete License"
+					confirmationComp[1].innerHTML = "You are about to delete this license. Doing so will erase all existing data about this license, along with the registered devices. For security purposes, this action will be logged.<br><br>Do you confirm this action?"
+			}
+		}
+
+		function applyTheme(index){
+			document.getElementById("iconCircle").classList.remove("bg-green-100", "bg-amber-100", "bg-gray-100", "bg-red-100");
+			document.getElementById("iconSymbol").classList.remove("text-green-600", "text-amber-600", "text-gray-600", "text-red-600");
+			document.getElementById("executeAction").classList.remove("bg-green-600", "bg-amber-600", "bg-gray-600", "bg-red-600");
+
+			switch(index){
+				case 0:
+					if( actionButtons[index].innerText.includes("Reactivate") ){
+						document.getElementById("iconCircle").classList.add("bg-green-100");
+						document.getElementById("iconSymbol").classList.add("text-green-600");
+						document.getElementById("executeAction").classList.add("bg-green-600");
+					}
+					else{
+						document.getElementById("iconCircle").classList.add("bg-amber-100");
+						document.getElementById("iconSymbol").classList.add("text-amber-600");
+						document.getElementById("executeAction").classList.add("bg-amber-600");
+					}
+					break;
+				case 1:
+					document.getElementById("iconCircle").classList.add("bg-gray-100");
+					document.getElementById("iconSymbol").classList.add("text-gray-600");
+					document.getElementById("executeAction").classList.add("bg-gray-600");
+					break;
+				case 2:
+					document.getElementById("iconCircle").classList.add("bg-red-100");
+					document.getElementById("iconSymbol").classList.add("text-red-600");
+					document.getElementById("executeAction").classList.add("bg-red-600");
+					break;
+			}
 		}
 
 		function actionExecute(){

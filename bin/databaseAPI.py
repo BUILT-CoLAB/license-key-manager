@@ -64,6 +64,9 @@ def getProduct(productName):
         return Product.query.all()
     return Product.query.filter(Product.name.contains(productName)).all()
 
+def getDistinctClients(productID):
+    return db.session.query(Key.clientid).distinct().count()
+
 def getProductsByPopularity():
     return db.engine.execute("""SELECT * FROM product LEFT JOIN (SELECT productid as licenses FROM Key) on licenses = product.id GROUP BY licenses ORDER BY licenses DESC""").fetchall()
 
@@ -138,8 +141,8 @@ def setKeyState(keyid, newState):
     db.session.commit()
 
 def deleteKey(keyid):
-    Key.query.filter_by(id=keyid).delete()
-    deleteRegistrationsOfKey(keyid)
+    keyS = Key.query.filter_by(id=keyid).first()
+    db.session.delete(keyS)
     db.session.commit()
 
 def deleteKeysOfClient(clientid):
@@ -261,8 +264,8 @@ def modifyCustomer(clientid, name, email, phone, country):
     db.session.commit()
 
 def deleteCustomer(clientid):
-    Client.query.filter_by(id = clientid).delete()
-    deleteKeysOfClient(clientid)
+    clientS = Client.query.filter_by(id = clientid).first()
+    db.session.delete(clientS)
     db.session.commit()
 
 def getCustomer(customerName):

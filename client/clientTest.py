@@ -6,18 +6,18 @@ import requests
 import base64
 
 publicKey = """-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC07vQZz1vK2s9fyi8YTqu/RUYd
-wkzlNrWXLdNx3aQpAzzprwoMe/f0bMm7o1pO6MM3apPmGmCL+EcKt7dqzF3iTFO9
-9kRV5Rsw9dFqfYcljLjZ3BuBM0UGO+kZxN1hFvxNpdcyzypbNKXVbLtwtcMYfAg2
-ELSRzXOS7hl8Xyg3xwIDAQAB
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk8AytZwwmVaBfIpdQsOsCnrhp
+HLe3ecYuwsu+xSLJINaSoP68hNLmYpFd4k5f4eLMu81CPcZZwHOc5xkweoN5mHbj
+D2CXCb2CYbKvpSSLNObfkUwCotPmdEXrY7jW7N1cHucTql/myTbS/cTGzjHZa/sz
+2xnA6wJ7f+Qi9VJNVQIDAQAB
 -----END PUBLIC KEY-----
 """
 
 public_key = serialization.load_pem_public_key( str.encode(publicKey) )
 
-api_key = 'f751fa4a-d4df-4519-815d-92cc3019709b'
-serial = 'XBHTI-I9QGF-AV2LY-IPYUL'
-hwid= 'TestingHWID_N3' # Deterministic UID
+api_key = '6b67afa9-358f-44fe-8d92-c86a2e6c1e89'
+serial = 'Q2ERJ-V8DBY-AEWAI-VH1TJ'
+hwid= 'TestingHWID_N2' # Deterministic UID
 
 plaintexts = bytes(serial + ':' + hwid[:23],'utf-8')
 

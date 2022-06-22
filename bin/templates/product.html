@@ -37,8 +37,8 @@
         <div class="flex justify-between">
           <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Product Display</h1>
           <div>
-            <button type="button" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" content="{{ product.apiK }}">API Key</button>
-            <button type="button" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" content="{{ pubKey }}">Public Key</button>
+            <button type="button" data-modal-toggle="copy-modal" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" content="{{ product.apiK }}">API Key</button>
+            <button type="button" data-modal-toggle="copy-modal" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" content="{{ pubKey }}">Public Key</button>
           </div>
         </div>
 			</div>
@@ -72,7 +72,7 @@
 								</svg>
 								<span class="mt-4 text-sm font-medium text-gray-900 dark:text-slate-100"> Licenses </span>
 							</dt>
-							<dd class="mt-1 text-sm text-gray-500 dark:text-slate-400">452</dd>
+							<dd class="mt-1 text-sm text-gray-500 dark:text-slate-400">{{licenses|length}}</dd>
 							</div>
 			
 							<div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center dark:bg-slate-700 dark:border-slate-500">
@@ -83,7 +83,7 @@
 								</svg>
 								<span class="mt-4 text-sm font-medium text-gray-900 dark:text-slate-100"> Clients </span>
 							</dt>
-							<dd class="mt-1 text-sm text-gray-500 dark:text-slate-400">13</dd>
+							<dd class="mt-1 text-sm text-gray-500 dark:text-slate-400">{{clients}}</dd>
 							</div>
 						</dl>
 						</section>
@@ -96,7 +96,7 @@
     {% if customers|length > 0 %}
       <div class="flex justify-between items-center">
         <h1 class="mt-5 mb-2 font-semibold text-gray-900 text-2xl dark:text-gray-100">Product Licenses</h1>
-        <button type="button" class="w-fit px-4 py-2 mt-5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" data-modal-toggle="creation-modal">Create License</button>
+        <button type="button" class="w-fit px-4 py-2 mt-5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" data-modal-toggle="creation-modal">Create License</button>
       </div>
       
       {% if licenses|length > 0 %}
@@ -174,7 +174,7 @@
 
         </ul>
       {% else %}
-        <div class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+        <div class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8 dark:bg-transparent">
           <div class="max-w-max mx-auto">
             <main class="sm:flex">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-yellow-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -183,7 +183,7 @@
               <div class="sm:ml-6">
                 <div class="sm:border-l sm:border-gray-200 sm:pl-6">
                   <h1 class="text-4xl font-extrabold text-yellow-700 tracking-tight sm:text-5xl">No Product Licenses ...</h1>
-                  <p class="mt-1 text-base text-gray-500">Currently, this product doesn't have any licenses attached to it. You can fix that by creating one first!</p>
+                  <p class="mt-1 text-base text-gray-500 dark:text-slate-400">Currently, this product doesn't have any licenses attached to it. You can fix that by creating one first!</p>
                 </div>
               </div>
             </main>
@@ -191,7 +191,7 @@
         </div>
       {% endif %}
     {% else %}
-      <div class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+      <div class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8 dark:bg-transparent">
         <div class="max-w-max mx-auto">
           <main class="sm:flex">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-red-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -199,8 +199,8 @@
             </svg>
             <div class="sm:ml-6">
               <div class="sm:border-l sm:border-gray-200 sm:pl-6">
-                <h1 class="text-4xl font-extrabold text-red-900 tracking-tight sm:text-5xl">License creation disabled</h1>
-                <p class="mt-1 text-base text-gray-500">There must be at least one registered customer in the web application to create a product license.</p>
+                <h1 class="text-4xl font-extrabold text-red-900 tracking-tight sm:text-5xl dark:text-red-800">License creation disabled</h1>
+                <p class="mt-1 text-base text-gray-500 dark:text-slate-400">There must be at least one registered customer in the web application to create a product license.</p>
               </div>
               <div class="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
                 <a href="{{ url_for('main.customers') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-rose-800 hover:bg-rose-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"> Check Customers </a>
@@ -279,6 +279,32 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="copy-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+    <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle max-w-md w-full p-6 dark:bg-slate-700">
+      <div>
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+          <!-- Heroicon name: outline/check -->
+          <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div class="mt-3 text-center sm:mt-5">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-slate-100" id="copy-title"></h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-500 break-words dark:text-slate-400" id="copy-contents"></p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 sm:mt-6 w-full">
+        <div class="w-1/3 mx-auto">
+          <button type="button" data-modal-toggle="copy-modal" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">Alright</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
@@ -372,10 +398,14 @@
     let content = new String( copyButtons[index].getAttribute("content") );
     await navigator.clipboard.writeText(content);
 
-    if(index == 0)
-      alert("The API Key has been copied to your clipboard\n\n" + "API Key: " + content);
-    else
-      alert("The Public Key has been copied to your clipboard\n\n" + "Public Key:\n" + content);
+    if(index == 0){
+      document.getElementById("copy-title").innerHTML = "API Key copied to clipboard";
+      document.getElementById("copy-contents").innerHTML = content;
+    }
+    else{
+      document.getElementById("copy-title").innerHTML = "Public Key copied to clipboard"
+      document.getElementById("copy-contents").innerHTML = content;
+    }
   }
 </script>
 {% endblock %}

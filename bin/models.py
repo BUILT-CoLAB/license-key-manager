@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     owner = db.Column( db.Boolean, default = False )
     disabled = db.Column( db.Boolean, default = False )
     timestamp = db.Column( db.Integer, nullable = False )
+    changelogs = db.relationship('Changelog', cascade='all,delete', backref='user')
 
 class Product(db.Model):
     __tablename__ = "product"
@@ -24,6 +25,7 @@ class Product(db.Model):
     privateK = db.Column(db.String(1100), unique=True)
     publicK = db.Column(db.String(1100), unique=True)
     apiK = db.Column( db.String(100), unique=True )
+    keys = db.relationship('Key', cascade='all,delete', backref='product')
 
 class Client(db.Model):
     __tablename__ = "client"
@@ -33,6 +35,7 @@ class Client(db.Model):
     phone = db.Column( db.String(20) )
     country = db.Column( db.String(50) )
     registrydate = db.Column( db.Integer, nullable=False)
+    keys = db.relationship('Key', cascade='all,delete', backref='client')
 
 class Key(db.Model):
     __tablename__ = "key"
@@ -44,6 +47,8 @@ class Key(db.Model):
     devices = db.Column( db.Integer )
     status = db.Column( db.Integer )
     expirydate = db.Column( db.Integer, nullable=False)
+    registrations = db.relationship('Registration', cascade='all,delete', backref='key')
+    changelogs = db.relationship('Changelog', cascade='all,delete', backref='key')
 
 class Registration(db.Model):
     __tablename__ = "registration"
@@ -55,7 +60,7 @@ class Changelog(db.Model):
     __tablename__ = "changeLog"
     id = db.Column( db.Integer, primary_key=True )
     keyID = db.Column( db.Integer, db.ForeignKey('key.id', ondelete="cascade"), nullable=True )
-    userid = db.Column( db.Integer, db.ForeignKey('user.id', ondelete="cascade"), nullable=True )
+    userid = db.Column( db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True )
     timestamp = db.Column( db.Integer, nullable=False )
     action = db.Column( db.String(25) )
     description = db.Column( db.String(150), nullable=False, default='' )
