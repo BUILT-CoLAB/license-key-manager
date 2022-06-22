@@ -9,6 +9,8 @@ import json
 import time
 import math
 
+from .handlers import admins as AdminHandler, changelogs as ChangelogHandler, customers as CustomerHandler, products as ProductHandler
+
 main = Blueprint('main', __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
 
@@ -45,53 +47,22 @@ def cpanel():
 @main.route('/products')
 @login_required
 def products():
-    products = DBAPI.getProduct('_ALL_')
-    return render_template('products.html', products = products, mode = request.cookies.get('mode'))
+    return ProductHandler.displayProductList()
 
 @main.route('/products/id/<productid>')
 @login_required
 def productDisplay(productid):
-    licenses = DBAPI.getKeys(productid)
-    productContent = DBAPI.getProductByID(productid)
-    customers = DBAPI.getCustomer('_ALL_')
-    clientcount = DBAPI.getDistinctClients(productid)
-    return render_template('product.html', licenses = licenses, clients = clientcount, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers, mode = request.cookies.get('mode'))
+    return ProductHandler.displayProduct( productid )
 
 @main.route('/products/create', methods=['POST'])
 @login_required
 def createProduct():
-    adminAcc = getCurrentUser()
-    dataInfo = request.get_json()
-
-    # ################# Storage Data ####################    
-    name = dataInfo.get('name')
-    category = dataInfo.get('category')
-    image = dataInfo.get('image')
-    details = dataInfo.get('details')
-    # ###################################################
-
-    product_keys = create_product_keys()
-    newProduct = DBAPI.createProduct(name, category, image, details, product_keys[0], product_keys[1], product_keys[2])
-    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ created product #' + str(newProduct.id))
-    return "SUCCESS"
+    return ProductHandler.createProduct( request.get_json() )
 
 @main.route('/products/edit', methods=['POST'])
 @login_required
 def editProduct():
-    adminAcc = getCurrentUser()
-    dataInfo = request.get_json()
-
-    # ################# Storage Data ####################  
-    id = dataInfo.get('id')
-    name = dataInfo.get('name')
-    category = dataInfo.get('category')
-    image = dataInfo.get('image')
-    details = dataInfo.get('details')
-    # ###################################################
-
-    DBAPI.editProduct( int(id), name, category, image, details )
-    DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ modified the data details of product #' + str(id))
-    return "SUCCESS"
+    return ProductHandler.editProduct( request.get_json() )
 
 
 
@@ -103,41 +74,22 @@ def editProduct():
 @main.route('/customers')
 @login_required
 def customers():
-    customers = DBAPI.getCustomer('_ALL_')
-    return render_template('customers.html', customers = customers, mode = request.cookies.get('mode'))
+    return CustomerHandler.displayCustomers()
 
 @main.route('/customers/create', methods=['POST'])
 @login_required
 def createCustomer():
-    dataInfo = request.get_json()
-    # ################# Storage Data ####################    
-    name = dataInfo.get('name')
-    email = dataInfo.get('email')
-    phone = dataInfo.get('phone')
-    country = dataInfo.get('country')
-    # ###################################################
-    DBAPI.createCustomer(name, email, phone, country)
-    return "SUCCESS"
+    return CustomerHandler.createCustomer( request.get_json() )
 
-@main.route('/customers/edit/<keyid>', methods=['POST'])
+@main.route('/customers/edit/<customerid>', methods=['POST'])
 @login_required
-def modifyCustomer(keyid):
-    dataInfo = request.get_json()
-    # ################# Storage Data ####################    
-    name = dataInfo.get('name')
-    email = dataInfo.get('email')
-    phone = dataInfo.get('phone')
-    country = dataInfo.get('country')
-    # ###################################################
-    DBAPI.modifyCustomer(keyid, name, email, phone, country)
-    return "SUCCESS"
+def modifyCustomer(customerid):
+    return CustomerHandler.editCustomer(customerid, request.get_json() )
 
 @main.route('/customers/delete/<customerid>', methods=['POST'])
 @login_required
 def deleteCustomer(customerid):
-    print(customerid)
-    DBAPI.deleteCustomer(customerid)
-    return "SUCCESS"
+    return CustomerHandler.deleteCustomer(customerid)
 
 
 
@@ -212,18 +164,12 @@ def hardwareIDRemove(keyid):
 @main.route('/changelog')
 @login_required
 def changelog():
-    userList = DBAPI.obtainUser('_ALL_')
-    return render_template('changelog.html', users = userList, mode = request.cookies.get('mode'))
+    return ChangelogHandler.displayChangelog()
 
 @main.route('/changelog/query')
 @login_required
 def getlogs():
-    parameters = request.args.to_dict()
-    changelogs = DBAPI.queryLogs( int(parameters.get('adminid')), int(parameters.get('datestart')), int(parameters.get('dateend')) )
-    changelog = []
-    for log in changelogs:
-        changelog.append({'adminid' : log.userid, 'timestamp' : log.timestamp, 'description' : log.description})
-    return json.dumps(changelog)
+    return ChangelogHandler.queryLogs( request.args.to_dict() )
 
 
 ###########################################################################
@@ -232,28 +178,22 @@ def getlogs():
 @main.route('/admins')
 @login_required
 def adminsDisplay():
-    userList = DBAPI.obtainUser('_ALL_')
-    return render_template('users.html', users = userList, mode = request.cookies.get('mode'))
+    return AdminHandler.displayAdminPage()
 
 @main.route('/admins/create',methods=['POST'])
 @login_required
 def adminCreate():
-    dataInfo = request.get_json()
-    DBAPI.createUser(dataInfo.get('email'), dataInfo.get('username'), dataInfo.get('password'))
-    return "SUCCESS"
+    return AdminHandler.createAdmin( request.get_json() )
 
 @main.route('/admins/<userid>/edit',methods=['POST'])
 @login_required
 def adminEdit(userid):
-    dataInfo = request.get_json()
-    DBAPI.changeUserPassword( userid, dataInfo.get('password') )
-    return "SUCCESS"
+    return AdminHandler.editAdmin(userid, request.get_json() )
 
 @main.route('/admins/<userid>/togglestatus',methods=['POST'])
 @login_required
 def adminToggleStatus(userid):
-    DBAPI.toggleUserStatus(userid)
-    return "SUCCESS"
+    return AdminHandler.toggleAdminStatus(userid)
 
 
 
