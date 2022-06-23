@@ -302,7 +302,7 @@
 			showLoader();
 			let data = {
 				'action' : pendingAction !== "revoke" ? pendingAction.toUpperCase() : 'SWITCHSTATE',
-				'keyList' : [licenseID]
+				'licenseID' : licenseID
 			}
 
 			let httpRequest = new XMLHttpRequest();

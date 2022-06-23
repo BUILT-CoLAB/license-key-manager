@@ -109,43 +109,12 @@ def licenseDisplay(licenseid):
 @main.route('/licenses/editkeys', methods=['POST'])
 @login_required
 def updateKeyState():
-    dataInfo = request.get_json()
-    adminAcc = getCurrentUser()
-    print(dataInfo)
-
-    # Handle "REVOKE" Request
-    if(dataInfo.get('action') == 'SWITCHSTATE'):
-        for keyID in dataInfo.get('keyList'):       # For this operation only 1 key is given
-            keyData = DBAPI.getKeyData(keyID)
-            if keyData.status != 2:
-                DBAPI.setKeyState(keyID, 2)
-                DBAPI.submitLog(keyID, adminAcc.id, 'RevokedKey', '$$' + str(adminAcc.name) + '$$ revoked license #' + str(keyID))
-            else:
-                DBAPI.setKeyState(keyID, getStatus(keyData.devices))
-                DBAPI.submitLog(keyID, adminAcc.id, 'ReactivatedKey', '$$' + str(adminAcc.name) + '$$ reactivated license #' + str(keyID))
-            
-    # Handle "DELETE" Request
-    if(dataInfo.get('action') == 'DELETE'):
-        for keyID in dataInfo.get('keyList'):
-            DBAPI.deleteKey(keyID)
-            DBAPI.submitLog(None, adminAcc.id, 'DeletedKey', '$$' + str(adminAcc.name) + '$$ deleted the pre-existing license #' + str(keyID))
-
-    # Handle "RESET" Request
-    if(dataInfo.get('action') == 'RESET'):
-        for keyID in dataInfo.get('keyList'):
-            DBAPI.resetKey(keyID)
-            DBAPI.submitLog(keyID, adminAcc.id, 'ResetKey', '$$' + str(adminAcc.name) + '$$ reset license #' + str(keyID))
-
-    return "OK"
+    return LicenseHandler.changeLicenseState( request.get_json() )
 
 @main.route('/licenses/<keyid>/removedevice', methods=['POST'])
 @login_required
 def hardwareIDRemove(keyid):
-    adminAcc = getCurrentUser()
-    dataInfo = request.get_json()
-    DBAPI.deleteRegistrationOfHWID(keyid, dataInfo.get('hardwareID'))
-    DBAPI.submitLog(keyid, adminAcc.id, 'UnlinkedHWID$$$' + dataInfo.get('hardwareID'), '$$' + str(adminAcc.name) + '$$ removed Hardware ' + str(dataInfo.get('hardwareID')) + ' from license #' + str(keyid))
-    return "OK"
+    return LicenseHandler.unlinkHardwareDevice(keyid, request.get_json().get('hardwareID') )
 
 
 
@@ -267,12 +236,6 @@ def validate_product():
                 'KeyStatus' : keyObject.id,
                 'Code' : 'OKAY'
             }
-
-# Auxiliary Methods
-def getStatus(activeDevices):
-    if(activeDevices > 0):
-        return 1
-    return 0
 
 def isDateWithin(limitDate):
     if( limitDate == 0 ):   # Life-time license
