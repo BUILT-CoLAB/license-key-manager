@@ -7,10 +7,10 @@
         <div class="py-16">
             <div class="text-center">
                 <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wide">404 error</p>
-                <h1 class="mt-2 font-extrabold text-gray-900 tracking-tight text-5xl dark:text-slate-100">Page not found.</h1>
-                <p class="mt-2 text-base text-gray-500 dark:text-slate-100">Sorry, we couldn’t find the page you’re looking for.</p>
+                <h1 class="mt-2 font-extrabold text-gray-900 tracking-tight text-5xl dark:text-slate-100">{{main}}</h1>
+                <p class="mt-2 text-base text-gray-500 dark:text-slate-400">{{sub}}</p>
                 <div class="mt-6">
-                    <a href="#" class="text-base font-medium text-indigo-600 hover:text-indigo-500">Go back home<span aria-hidden="true"> &rarr;</span></a>
+                    <a href="{{ url_for('main.cpanel') }}" class="text-base font-medium text-indigo-600 hover:text-indigo-500">Return to the home page<span aria-hidden="true"> &rarr;</span></a>
                 </div>
             </div>
         </div>

@@ -273,3 +273,9 @@ def getCustomer(customerName):
     if(customerName == '_ALL_'):
         return Client.query.all()
     return Client.query.filter(Client.name.contains(customerName)).all()
+
+def getCustomerByID(customerID):
+    """ 
+        The following function queries the database for a given customer by their ID.
+    """
+    return Client.query.filter_by(id = customerID).first()

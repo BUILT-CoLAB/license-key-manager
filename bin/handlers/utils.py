@@ -1,5 +1,7 @@
 from flask import render_template, request
+from .. import databaseAPI as DBAPI
 import re
+import time
 
 def validateMultiple_Customer(name, email, phoneNumber):
     sequence = [ (validateName, name), (validateEmail, email), (validatePhone, phoneNumber)]
@@ -7,6 +9,10 @@ def validateMultiple_Customer(name, email, phoneNumber):
 
 def validateMultiple_Admin(username, password, email):
     sequence = [ (validateUsername, username), (validatePassword, password), (validateEmail, email)]
+    return validateSequence(sequence)
+
+def validateMultiple_License(clientID, maxDevices, expiryDate):
+    sequence = [ (validateClientID, clientID), (validateMaxDevices, maxDevices), (validateExpiryDate, expiryDate)]
     return validateSequence(sequence)
 
 def validateSequence(sequence):
@@ -45,6 +51,17 @@ def validateName(name):
     if( not str(name).replace(' ', '').isalpha() ):
         raise Exception("- Invalid Name")
 
+def validateClientID(clientID):
+    if( (not str(clientID).isnumeric()) or DBAPI.getCustomerByID(clientID) == None ):
+        raise Exception("- Invalid Client ID (must exist)")
+
+def validateMaxDevices(maxDevices):
+    if( (not str(maxDevices).isnumeric()) or int(maxDevices) <= 0 ):
+        raise Exception("- Invalid Max Devices (must be >= 1)")
+
+def validateExpiryDate(expiryDate):
+    if( (not expiryDate == 0) and expiryDate <= ( int(time.time()) + 86399) ):
+        raise Exception("- Invalid Date (must be after Today)")
 
 
 

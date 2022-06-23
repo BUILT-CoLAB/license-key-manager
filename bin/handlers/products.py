@@ -1,7 +1,8 @@
-from ..keys import create_product_keys, decrypt_data, generateSerialKey
+from ..keys import create_product_keys
 from flask import render_template, request
 from flask_login import current_user
 from .. import databaseAPI as DBAPI
+from . import utils as Utils
 import json
 
 def displayProductList():
@@ -10,12 +11,16 @@ def displayProductList():
 
 def displayProduct(productID):
     if( not str(productID).isnumeric() ):
-        return render_template('404.html', mode = request.cookies.get('mode'))
+        return Utils.render404("Product not found", "Sorry, but the product you have entered is invalid ...")
     
+
     licenses = DBAPI.getKeys(productID)
     productContent = DBAPI.getProductByID(productID)
     customers = DBAPI.getCustomer('_ALL_')
     clientcount = DBAPI.getDistinctClients(productID)
+
+    if( productContent == None ):
+        return Utils.render404("Product not found", "Sorry, but the product you have entered doesn't yet exist ...")
     return render_template('product.html', licenses = licenses, clients = clientcount, product = productContent, pubKey = productContent.publicK.decode('utf-8'), customers = customers, mode = request.cookies.get('mode'))
 
 def createProduct(requestData):

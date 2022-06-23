@@ -9,7 +9,7 @@ import json
 import time
 import math
 
-from .handlers import admins as AdminHandler, changelogs as ChangelogHandler, customers as CustomerHandler, products as ProductHandler
+from .handlers import admins as AdminHandler, changelogs as ChangelogHandler, customers as CustomerHandler, products as ProductHandler, licenses as LicenseHandler
 
 main = Blueprint('main', __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -99,21 +99,12 @@ def deleteCustomer(customerid):
 @main.route('/product/<productid>/createlicense', methods=['POST'])
 @login_required
 def createLicense(productid):
-    adminAcc = getCurrentUser()
-    dataInfo = request.get_json()
-    serialKey = generateSerialKey(20)
-    keyId = DBAPI.createKey(productid, int( dataInfo.get('idclient') ), serialKey, int( dataInfo.get('maxdevices') ), int( dataInfo.get('expirydate') ) )
-    DBAPI.submitLog(keyId, adminAcc.id, 'CreatedKey', '$$' + str(adminAcc.name) + '$$ created license #' + str(keyId) + ' for product #' + str(productid))
-    return "OKAY"
+    return LicenseHandler.createLicense( productid, request.get_json() )
 
 @main.route('/licenses/<licenseid>')
 @login_required
 def licenseDisplay(licenseid):
-    license = DBAPI.getKeyAndClient(licenseid)
-    changelog = DBAPI.getKeyLogs(licenseid)
-    changelog.reverse()
-    devices = DBAPI.getKeyHWIDs(licenseid)
-    return render_template('license.html', license = license, changelog = changelog, devices = devices, mode = request.cookies.get('mode'))
+    return LicenseHandler.displayLicense(licenseid)
 
 @main.route('/licenses/editkeys', methods=['POST'])
 @login_required

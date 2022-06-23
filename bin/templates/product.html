@@ -379,7 +379,13 @@
     httpRequest.onreadystatechange = function() {
       if (httpRequest.readyState === 4) {
           if (httpRequest.status === 200) {
-            location.reload()
+            let response = JSON.parse(httpRequest.responseText);
+            if( response['code'] == "OKAY" )
+              location.reload()
+            else{
+              hideLoader(  );
+              showAlert( response['message'] )
+            }
           } else {
             console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.");
             hideLoader();
