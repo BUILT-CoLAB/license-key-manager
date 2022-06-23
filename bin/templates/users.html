@@ -153,7 +153,7 @@
                         <input type="text" id="accountName" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Unique username" required="">
                     </div>
                     <div class="col-span-3">
-                        <label class="text-sm font-medium text-gray-900 block mb-2">Account Password</label>
+                        <label class="text-sm font-medium text-gray-900 block mb-2">Account Password (+10 characters)</label>
                         <input type="text" id="accountPassword" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Secure Password" required="">
                     </div>
                     <div class="col-span-3">
@@ -229,7 +229,13 @@
             httpRequest.onreadystatechange = function() {
                 if (httpRequest.readyState === 4) {
                     if (httpRequest.status === 200) {
-                        location.reload()
+                        let response = JSON.parse(httpRequest.responseText);
+                        if( response['code'] == "OKAY" )
+                            location.reload()
+                        else{
+                            hideLoader(  );
+                            showAlert( response['message'] )
+                        }
                     } else {
                         console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.");
                         hideLoader();
@@ -242,7 +248,7 @@
         async function generatePassword(returnValue = false){
             let characters = "0123456789abcdefghijklmnopqrstuvwxyz!$%.ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             let password = "";
-            for (var i = 0; i <= 12; i++) {
+            for (var i = 0; i <= 15; i++) {
                 var randomNumber = Math.floor(Math.random() * characters.length);
                 password += characters.substring(randomNumber, randomNumber +1);
             }
@@ -295,11 +301,13 @@
             httpRequest.onreadystatechange = async function() {
                 if (httpRequest.readyState === 4) {
                     if (httpRequest.status === 200) {
-                        if(action != 'TOGGLESTATUS'){
-                            await navigator.clipboard.writeText(newPassword);
-                            alert("The generated password has been copied to your clipboard.")
+                        let response = JSON.parse(httpRequest.responseText);
+                        if( response['code'] == "OKAY" )
+                            location.reload()
+                        else{
+                            hideLoader(  );
+                            showAlert( response['message'] )
                         }
-                        location.reload()
                     } else {
                         console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.");
                         hideLoader();

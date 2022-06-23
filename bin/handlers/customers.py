@@ -17,7 +17,7 @@ def createCustomer(requestData):
     country = requestData.get('country')
     # ###################################################
 
-    validationR = Utils.validateMultiple_NEP(name, email, phone)
+    validationR = Utils.validateMultiple_Customer(name, email, phone)
     if not validationR == "":
         return json.dumps({ 'code' : "ERROR", 'message' : "Some of your input fields are incorrect: \n" + str(validationR) })
     
@@ -25,7 +25,7 @@ def createCustomer(requestData):
         DBAPI.createCustomer(name, email, phone, country)
         DBAPI.submitLog(None, adminAcc.id, 'CreatedCustomer', '$$' + str(adminAcc.name) + "$$ has registered the customer '" + str(name) + "'.")
     except Exception:
-        return json.dumps({ 'code' : "ERROR", 'message' : 'Unknown error. The database failed to create the customer.' })
+        return json.dumps({ 'code' : "ERROR", 'message' : 'The database failed to create the customer - #UNKNOWN ERROR' })
     
     return json.dumps({ 'code' : "OKAY" })
 
@@ -38,7 +38,7 @@ def editCustomer(customerid, requestData):
     country = requestData.get('country')
     # ###################################################
 
-    validationR = Utils.validateMultiple_NEP(name, email, phone)
+    validationR = Utils.validateMultiple_Customer(name, email, phone)
     if not validationR == "":
         return json.dumps({ 'code' : "ERROR", 'message' : "Incorrect input: \n" + str(validationR) })
 
@@ -46,7 +46,7 @@ def editCustomer(customerid, requestData):
         DBAPI.modifyCustomer(customerid, name, email, phone, country)
         DBAPI.submitLog(None, adminAcc.id, 'EditedCustomer', '$$' + str(adminAcc.name) + "$$ has modified the data of customer '" + str(name) + "'.")
     except Exception:
-        return json.dumps({ 'code' : "ERROR", 'message' : 'Unknown error. The database failed to edit the customer data.' })
+        return json.dumps({ 'code' : "ERROR", 'message' : 'The database failed to edit the customer data - #UNKNOWN ERROR' })
     
     return json.dumps({ 'code' : "OKAY" })
 
@@ -54,6 +54,6 @@ def deleteCustomer(customerid):
     try:
         DBAPI.deleteCustomer(customerid)
     except Exception:
-        return json.dumps({ 'code' : "ERROR", 'message' : 'Unknown error. The database failed to delete the customer.' })
+        return json.dumps({ 'code' : "ERROR", 'message' : 'The database failed to delete the customer - #UNKNOWN ERROR' })
 
     return json.dumps({ 'code' : "OKAY" })

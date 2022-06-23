@@ -113,9 +113,6 @@ def getKeys(productID):
         The following function queries the database for all keys belonging to a product. The product
         is identified by an ID.
     """
-    if( not ( isinstance(productID, int) or productID.isnumeric() ) ):
-        raise Exception("Invalid input - Denying database querying!")
-    
     return db.engine.execute("""
     SELECT * FROM key JOIN (select id as cid, name from client) ON cid = KEY.clientid where Key.productid = """ + str(productID)
     ).fetchall()

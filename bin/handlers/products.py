@@ -1,5 +1,5 @@
 from ..keys import create_product_keys, decrypt_data, generateSerialKey
-from flask import Blueprint, render_template, request
+from flask import render_template, request
 from flask_login import current_user
 from .. import databaseAPI as DBAPI
 import json
@@ -9,6 +9,9 @@ def displayProductList():
     return render_template('products.html', products = products, mode = request.cookies.get('mode'))
 
 def displayProduct(productID):
+    if( not str(productID).isnumeric() ):
+        return render_template('404.html', mode = request.cookies.get('mode'))
+    
     licenses = DBAPI.getKeys(productID)
     productContent = DBAPI.getProductByID(productID)
     customers = DBAPI.getCustomer('_ALL_')
