@@ -14,9 +14,19 @@ docker build --tag license-manager .
 
 **Step 2:** Run it with the command
 
-```
+Linux:
+
+```bash
 docker run -v $(pwd)/bin/sqlite.db:/license-manager/bin/sqlite.db -p 8000:8000 license-manager
 ```
+
+Windows:
+
+```powershell
+docker run -v ${PWD}/bin/sqlite.db:/license-manager/bin/sqlite.db -p 8000:8000 license-manager
+```
+
+Optional docker envs: `--env WORKERS=2 --env THREADS=4 --env PORT=8000`
 
 Now the project should simply be available at `http://localhost:8000/`.
 
