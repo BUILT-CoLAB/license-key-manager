@@ -23,6 +23,10 @@ def verify_token(token):
 def index():
     return render_template('index.html', mode = request.cookies.get('mode'))
 
+@main.route('/healthcheck')
+def health():
+    return
+
 @main.route('/tutorial')
 @login_required
 def tutorial():
