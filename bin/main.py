@@ -6,7 +6,7 @@ import json
 import time
 import math
 
-from .handlers import admins as AdminHandler, changelogs as ChangelogHandler, customers as CustomerHandler, products as ProductHandler, licenses as LicenseHandler, validation as ValidationHandler
+from .handlers import admins as AdminHandler, customers as CustomerHandler, logs as LogHandler, products as ProductHandler, licenses as LicenseHandler, validation as ValidationHandler
 
 main = Blueprint('main', __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -33,7 +33,7 @@ def cpanel():
         ratio = 100
     else:
         ratio = ( activated / (activated + awaitingApproval) ) * 100
-    return render_template('cpanel.html', activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio), mode = request.cookies.get('mode'), successV = successfulV, unsuccessV = unsuccessfulV)
+    return render_template('cpanel.html', products = DBAPI.getProductCount(), activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio), mode = request.cookies.get('mode'), successV = successfulV, unsuccessV = unsuccessfulV)
 
 
 
@@ -117,15 +117,30 @@ def hardwareIDRemove(keyid):
 ###########################################################################
 ########### CHANGELOG HANDLING
 ###########################################################################
-@main.route('/changelog')
+@main.route('/logs/changes')
 @login_required
-def changelog():
-    return ChangelogHandler.displayChangelog()
+def changelogs():
+    return LogHandler.displayChangelog()
 
-@main.route('/changelog/query')
+@main.route('/logs/changes/query')
 @login_required
-def getlogs():
-    return ChangelogHandler.queryLogs( request.args.to_dict() )
+def getchangelog():
+    return LogHandler.queryLogs( request.args.to_dict() )
+
+
+###########################################################################
+########### VALIDATION LOG HANDLING
+###########################################################################
+@main.route('/logs/validations')
+@login_required
+def validationlogs():
+    return LogHandler.displayValidationLog()
+
+@main.route('/logs/validations/query')
+@login_required
+def getvalidationlogs():
+    return LogHandler.queryValidationLogs( request.args.to_dict() )
+
 
 
 ###########################################################################

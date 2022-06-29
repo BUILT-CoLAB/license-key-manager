@@ -95,7 +95,7 @@
 					 </div>
 					 <div class="sm:flex sm:px-6 sm:py-5 bg-gray-100 dark:bg-slate-800">
 						<dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0 w-48">Expiration Date</dt>
-						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 dark:text-gray-300">
+						<dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:ml-6 sm:col-span-2 dark:text-gray-300 timestamp">
 						   <p>{{license.expirydate}}</p>
 						</dd>
 					 </div>
@@ -233,6 +233,7 @@
 
 {% block scripts %}
 	<script>
+		convertAllTimestamps()
 		const actionButtons = document.getElementsByClassName("action-button");
 		const licenseID = '{{license.id}}'
 		const confirmationComp = document.getElementsByClassName("confirmation-c")

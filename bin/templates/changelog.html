@@ -26,7 +26,7 @@
 
 <div class="relative rounded-lg">
     <div class="absolute inset-0 z-10 rounded-lg">
-        <img class="w-full h-full object-cover" src="{{ url_for('static', filename='wallpaperchangelog.jpg') }}" alt="">
+        <div class="w-full h-full bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900"></div>
         <div class="absolute inset-0 bg-indigo-800 mix-blend-multiply" aria-hidden="true"></div>
     </div>
     <div class="relative max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 lg:flex lg:justify-between z-20">
@@ -135,7 +135,7 @@
         }
 
         let http = new XMLHttpRequest();
-        http.open("GET", "/changelog/query" + formatParams(params), true);
+        http.open("GET", "/logs/changes/query" + formatParams(params), true);
         http.onreadystatechange = function(){
             if(http.readyState == 4 && http.status == 200) {
                 displayTemplate( JSON.parse(http.responseText) );
@@ -167,6 +167,7 @@
             </tr>
             `
         }
+        convertAllTimestamps()
     }
     
     function parseDescription(description){

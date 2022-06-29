@@ -204,6 +204,17 @@ When it comes to the documentation of the database, you can check its structure 
 | action          | TEXT |     |     |     | NONE     |
 | description     | TEXT |     |     |     | NONE     |
 
+| VALIDATIONLOG Table   | Type | PK  | UQ  | AI  | ONDELETE |
+| --------------------- | ---- | --- | --- | --- | -------- |
+| id                    | INT  | X   |     | X   | NONE     |
+| timestamp             | INT  |     |     |     | NONE     |
+| result                | TEXT |     |     |     | NONE     |
+| type                  | TEXT |     |     |     | NONE     |
+| ipaddress             | TEXT |     |     |     | NONE     |
+| apiKey                | TEXT |     |     |     | NONE     |
+| serialKey             | TEXT |     |     |     | NONE     |
+| hardwareID            | TEXT |     |     |     | NONE     |
+
 All modifications in SQLAlchemy are based on this model. You are free to use another database, but you will need to change the Flask settings (`__init__.py` file).
 
 In order to facilitate the transition between databases, the entire web app connects with the database by using the functions in the `databaseAPI.py` file. This means you are free to rewrite these functions, so long the inputs and returns continue to make sense in the context of the overall web app. In any case, the functions either return nothing or they simply return an object whose fields / local variables are identical to each field in the respective table. Some other functions may return specific values. You can see in the table bellow which functions return an object and which don't.
@@ -215,13 +226,14 @@ In order to facilitate the transition between databases, the entire web app conn
 | createUser()               | None                             |
 | changeUserPassword()       | None                             |
 | toggleUserStatus()       	 | None                             |
-| getProduct()               | Product object (0+ records)      |
+| getProduct()               | Product object (multiple)        |
+| getProductCount()          | Integer                          |
 | getDistinctClients()       | Integer                          |
 | getProductByID             | Product object (1 record)        |
 | createProduct()            | Product object (1 record)        |
 | editProduct()              | None                             |
 | getProductThroughAPI()     | Product object (1 record)        |
-| getKeys()                  | Key object (0+ records)          |
+| getKeys()                  | Key object (multiple)            |
 | getKeysBySerialKey()       | Key object (1 record)            |
 | createKey()                | ID field of new Key object       |
 | setKeyState()              | None                             |
@@ -231,20 +243,22 @@ In order to facilitate the transition between databases, the entire web app conn
 | getKeyStatistics()         | 2 Integers                       |
 | getKeyAndClient()          | Key JOIN Customer object         |
 | submitLog()                | None                             |
-| getKeyLogs()               | Changelog object (0+ records)    |
-| getUserLogs()              | Changelog object (0+ records)    |
-| queryLogs()                | Changelog object (0+ records)    |
-| queryValidationStats()     | 2 Integers                       |
+| getKeyLogs()               | Changelog object (multiple)      |
+| getUserLogs()              | Changelog object (multiple)      |
+| queryLogs()                | Changelog object (multiple)      |
 | getRegistration()          | Registration object (1 record)   |
-| getKeyHWIDs()              | Registration object (1+ records) |
+| getKeyHWIDs()              | Registration object (multiple)   |
 | deleteRegistrationsOfKey() | None                             |
 | deleteRegistrationOfHWID() | None                             |
 | addRegistration()          | None                             |
 | createCustomer()           | None                             |
 | modifyCustomer()           | None                             |
 | deleteCustomer()           | None                             |
-| getCustomer()              | Customer object (0+ records)     |
+| getCustomer()              | Customer object (multiple)       |
 | getCustomerByID()          | Customer object (1 record)       |
+| submitValidationLog()      | None                             |
+| queryValidationLogs()      | Validationlog object (multiple)  |
+| queryValidationsStats()    | 2 Integers                       |
 
 ## RESTful API Documentation
 
@@ -299,7 +313,8 @@ Displays a webpage with the information of an individual product specified in th
 **Authentication required** : YES\
 **Parameters** : 
 ```
-productid (?URL) - The ID of the product we wish to check. Must be a valid ID.
+PATH:
+    productid - The ID of the product we wish to check. Must be a valid ID.
 ```
 **Response** : `TEMPLATE_HTML` or `404` if the productid is invalid.
 
@@ -312,12 +327,13 @@ Creates a product with the details specified in its body payload. The input must
 **Authentication required** : YES\
 **Parameters** : 
 ```
-{
-    'name' : 'Product name',
-    'category' : 'Product category',
-    'image' : 'Product image',
-    'details' : 'Product details'
-}
+BODY:
+    {
+        'name' : 'Product name',
+        'category' : 'Product category',
+        'image' : 'Product image',
+        'details' : 'Product details'
+    }
 ```
 **Response** : A `RESPONSE_FORM`*.
 
@@ -330,13 +346,14 @@ Modifies the data of an existing product with the details specified in its body 
 **Authentication required** : YES\
 **Parameters** : 
 ```
-{
-    'id' : 'The ID of the product which data we want to edit'
-    'name' : 'Product name',
-    'category' : 'Product category',
-    'image' : 'Product image',
-    'details' : 'Product details'
-}
+BODY:
+    {
+        'id' : 'The ID of the product which data we want to edit'
+        'name' : 'Product name',
+        'category' : 'Product category',
+        'image' : 'Product image',
+        'details' : 'Product details'
+    }
 ```
 **Response** : A `RESPONSE_FORM`*.
 
@@ -359,12 +376,13 @@ Adds a Customer to the database with the details specified in its body payload. 
 **Authentication required** : YES\
 **Parameters** : 
 ```
-{
-    'name' : 'Customer's name',
-    'email' : 'Customer's email',
-    'phone' : 'Customer's phone number',
-    'country' : 'Customer's country'
-}
+BODY:
+    {
+        'name' : 'Customer's name',
+        'email' : 'Customer's email',
+        'phone' : 'Customer's phone number',
+        'country' : 'Customer's country'
+    }
 ```
 **Response** : A `RESPONSE_FORM`*.
 
@@ -398,7 +416,8 @@ Deletes the data of an existing customer specified in the URL Path of the endpoi
 **Authentication required** : YES\
 **Parameters** : 
 ```
-customerid (?URL) - The ID of the Customer we wish to remove.
+PATH:
+    customerid - The ID of the Customer we wish to remove.
 ```
 **Response** : A `RESPONSE_FORM`*.
 
@@ -411,12 +430,14 @@ Creates a license assigned to the Product specified in the URL Path of the endpo
 **Authentication required** : YES\
 **Parameters** : 
 ```
-productid (?URL) - The ID of the Product we wish to assign this License to. It must be valid.
-{
-    'client' : 'The ID of the customer we will assign this License to',
-    'maxDevices' : 'The limit of concurrent devices in this License',
-    'expiryDate' : 'Expiration date for this License'
-}
+PATH:
+    productid - The ID of the Product we wish to assign this License to. It must be valid.
+BODY: 
+    {
+        'client' : 'The ID of the customer we will assign this License to',
+        'maxDevices' : 'The limit of concurrent devices in this License',
+        'expiryDate' : 'Expiration date for this License'
+    }
 ```
 **Response** : A `RESPONSE_FORM`*.
 
@@ -429,7 +450,8 @@ Displays a webpage with the all the necessary information about existing Custome
 **Authentication required** : YES\
 **Parameters** : 
 ```
-licenseid (?URL) - The ID of the License we wish to assign this License to. It must be valid.
+PATH:
+    licenseid (?URL) - The ID of the License we wish to assign this License to. It must be valid.
 ```
 **Response** : `TEMPLATE_HTML`
 
@@ -442,10 +464,11 @@ Changes the underlying information of the License by either disabling/enabling i
 **Authentication required** : YES\
 **Parameters** : 
 ```
-{
-    'licenseid' : 'The ID of the customer we will assign this License to',
-    'action' : 'The action that will be executed. Can be: SWITCHSTATE, DELETE or RESET'
-}
+BODY: 
+    {
+        'licenseid' : 'The ID of the customer we will assign this License to',
+        'action' : 'The action that will be executed. Can be: SWITCHSTATE, DELETE or RESET'
+    }
 ```
 **Response** : A `RESPONSE_FORM`*.
 
@@ -470,8 +493,8 @@ BODY:
 _________________
 
 ### Display Changelog
-Displays a Page where the logs will be displayed based on the settings chosen in the form inside.<br/><br/>
-**Path** : `/changelog`\
+Displays a Page where the changelogs will be displayed based on the settings chosen in the form inside.<br/><br/>
+**Path** : `/logs/changes`\
 **Method** : `GET`\
 **Authentication required** : YES\
 **Parameters** : NONE
@@ -480,8 +503,8 @@ Displays a Page where the logs will be displayed based on the settings chosen in
 _________________
 
 ### Get Logs
-Acquires the logs that fit the criteria sent through the Header.<br/><br/>
-**Path** : `/changelog/query`\
+Acquires the change logs that fit the criteria sent through the Header.<br/><br/>
+**Path** : `/logs/changes/query`\
 **Method** : `GET`\
 **Authentication required** : YES\
 **Parameters** : 
@@ -495,6 +518,33 @@ HEADER:
 ```
 **Response** : A `JSON` dictionary array containing the 'adminid', 'timestamp' and 'description' for each log.
 
+_________________
+
+### Display Validation Log
+Displays a Page where the validation logs will be displayed based on the settings chosen in the form inside.<br/><br/>
+**Path** : `/logs/validations`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : NONE
+**Response** : A `RESPONSE_FORM`*.
+
+_________________
+
+### Get Logs
+Acquires the validation logs that fit the criteria sent through the Header.<br/><br/>
+**Path** : `/logs/validations/query`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+HEADER: 
+    {
+        |OPTIONAL| 'typeSearch' : 'The type of logs we will be looking for. Successful attempts or failed attempts.',
+        |OPTIONAL| 'datestart' : 'The date that defines the start of our search',
+        |OPTIONAL| 'dateend' : 'The date that defines the limit of our search',
+    }
+```
+**Response** : A `JSON` dictionary array containing the Validationlog table rows obtained from the query.
 _________________
 
 ### Get Admins

@@ -63,4 +63,15 @@ class Changelog(db.Model):
     userid = db.Column( db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True )
     timestamp = db.Column( db.Integer, nullable=False )
     action = db.Column( db.String(40) )
-    description = db.Column( db.String(300), nullable=False, default='' )
+    description = db.Column( db.String(200), nullable=False, default='' )
+
+class Validationlog(db.Model):
+    __tablename__ = "validationlog"
+    id = db.Column( db.Integer, primary_key=True )
+    timestamp = db.Column( db.Integer, nullable=False )
+    result = db.Column( db.String(40), nullable=False, default='' )
+    type = db.Column( db.String(40), nullable=False, default='' )
+    ipaddress = db.Column( db.String(100), nullable=False, default='' )
+    apiKey = db.Column( db.String(100), nullable=False, default='' )
+    serialKey = db.Column( db.String(100), nullable=False, default='' )
+    hardwareID = db.Column( db.String(200), nullable=False, default='' )

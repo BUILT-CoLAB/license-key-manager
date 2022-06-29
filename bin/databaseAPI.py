@@ -1,8 +1,9 @@
-from .models import Product, Key, Changelog, Registration, User, Client
+from .models import Product, Key, Changelog, Registration, User, Client, Validationlog
 from sqlalchemy import desc, func
 from werkzeug.security import generate_password_hash
 from . import db
 from time import time
+import sys
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -63,6 +64,9 @@ def getProduct(productName):
     if(productName == '_ALL_'):
         return Product.query.all()
     return Product.query.filter(Product.name.contains(productName)).all()
+
+def getProductCount():
+    return Product.query.count()
 
 def getDistinctClients(productID):
     return db.session.query(Key.clientid).distinct().count()
@@ -195,9 +199,6 @@ def queryLogs(userid, startdate, enddate):
         return db.session.query(Changelog).order_by(desc(Changelog.timestamp)).all()
     return None
 
-def queryValidationsStats():
-    return Changelog.query.filter_by(action = 'VALIDATION_SUCCESS').count(), Changelog.query.filter_by(action = 'VALIDATION_ERROR').count()
-
 """
 //////////////////////////////////////////////////////////////////////////////
 ///////////  Registration Section ////////////////////////////////////////////
@@ -273,3 +274,25 @@ def getCustomerByID(customerID):
         The following function queries the database for a given customer by their ID.
     """
     return Client.query.filter_by(id = customerID).first()
+
+
+"""
+//////////////////////////////////////////////////////////////////////////////
+///////////  Validation Logs /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+"""
+
+def submitValidationLog(result, type, ipaddress, apiKey, serialKey, hardwareID):
+    newLog = Validationlog(timestamp = int( time() ), result = result, type = type, ipaddress = ipaddress, apiKey = apiKey, serialKey = serialKey, hardwareID = hardwareID)
+    db.session.add(newLog)
+    db.session.commit()
+
+def queryValidationLogs(resultTarget = None, timestampStart = 0, timestampEnd = sys.maxsize):
+    if(resultTarget == None):
+        return Validationlog.query.filter(Validationlog.timestamp >= timestampStart).filter(Validationlog.timestamp <= timestampEnd).all()
+    else:
+        return Validationlog.query.filter(Validationlog.result == resultTarget).filter(Validationlog.timestamp >= timestampStart).filter(Validationlog.timestamp <= timestampEnd).all()
+
+def queryValidationsStats():
+    lowerBoundTimestamp = int(time()) - 2592000
+    return Validationlog.query.filter_by(result = 'SUCCESS').filter(Validationlog.timestamp >= lowerBoundTimestamp).count(), Validationlog.query.filter_by(result = 'ERROR').filter(Validationlog.timestamp >= lowerBoundTimestamp).count()

@@ -105,7 +105,7 @@
           
           {% for license in licenses %}
             <li>
-              <a href="{{ url_for('main.licenseDisplay', licenseid = license.id) }}" class="group block bg-gray-50 pr-5 pl-5 rounded-lg dark:bg-slate-700 dark:hover:bg-slate-600 transition-all duration-300">
+              <a href="{{ url_for('main.licenseDisplay', licenseid = license.id) }}" class="group block bg-gray-50 pr-5 pl-5 dark:bg-slate-700 dark:hover:bg-slate-600 transition-all duration-300">
                 <div class="flex items-center py-5 px-4 sm:py-6 sm:px-0">
                   <div class="min-w-0 flex-1 flex items-center">
                     <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-3 md:gap-4">
@@ -133,7 +133,7 @@
                         <div>
                           <p class="text-sm text-gray-900 dark:text-gray-300">
                               Expires on
-                              <time class="timestamp">{{license.expirydate}}</time>
+                              <time class="timestamp replace-parent">{{license.expirydate}}</time>
                           </p>
                           {% if license.status == 0 %}
                             <p class="mt-2 flex items-center text-sm text-yellow-400">

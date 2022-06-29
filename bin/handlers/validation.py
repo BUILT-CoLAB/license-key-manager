@@ -7,8 +7,7 @@ import time
 
 def handleValidation(requestData):
     response = validate(requestData)
-    logData = generateLogContents(requestData, response)
-    DBAPI.submitLog(action = logData['result'], description = json.dumps(logData))
+    generateLogContents(requestData, response)
     return json.dumps(response)
 
 def validate(requestData):
@@ -28,23 +27,23 @@ def validate(requestData):
     # STEP 3 :: Validate the Serial Key by matching it to an existing License object
     keyObject = DBAPI.getKeysBySerialKey(decryptedData[0], product.id)
     if(keyObject==None or keyObject==[]):
-        return responseMessage(401, 'ERR_SERIAL_KEY', 'ERROR :: The Serial Key you have entered is invalid. The validation request went through but was rejected.')
+        return responseMessage(401, 'ERR_SERIAL_KEY', 'ERROR :: The Serial Key you have entered is invalid. The validation request went through but was rejected.', decryptedData)
     # ##############################################################################
 
     if(DBAPI.getRegistration(keyObject.id, decryptedData[1]) == None):
         return handleNonExistingState(keyObject, decryptedData)
     else:
-        return handleExistingState(keyObject)
+        return handleExistingState(keyObject, decryptedData)
 
-def handleExistingState(keyObject):
+def handleExistingState(keyObject, decryptedData):
     """
         Handles the situation where a device is already linked to the specified license. 
         In this situation, the method merely checks whether or not the license is still valid.
     """
     if( validateExpirationDate( keyObject.expirydate ) ):
-        return responseMessage(200, 'OKAY', 'OKAY STATUS :: This device is still registered and everything is okay.')
+        return responseMessage(200, 'OKAY', 'OKAY STATUS :: This device is still registered and everything is okay.', decryptedData)
     else:
-        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid.')
+        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid.', decryptedData)
 
 def handleNonExistingState(keyObject, decryptedData):
     """
@@ -54,23 +53,23 @@ def handleNonExistingState(keyObject, decryptedData):
 
     # STEP 1 :: Validate the status of the License (if it's revoked/disabled, then interrupt the validation with an error)
     if(keyObject.status == 2):
-        return responseMessage(403, 'ERR_KEY_REVOKED', 'ERROR :: The key was revoked. Your request was valid but the license is disabled until further notice.')
+        return responseMessage(403, 'ERR_KEY_REVOKED', 'ERROR :: The key was revoked. Your request was valid but the license is disabled until further notice.', decryptedData)
 
     # STEP 2 :: Check if the License has expired. If that's the case, then the validation should be interrupted with an error.
     if( not validateExpirationDate( keyObject.expirydate ) ):
-        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid and will not admit any new devices.')
+        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid and will not admit any new devices.', decryptedData)
     
     # STEP 3 :: Check if the License's device list can hold more devices.
     if(keyObject.devices == keyObject.maxdevices):
-        return responseMessage(400, 'ERR_KEY_DEVICES_FULL', 'ERROR :: The maximum number of devices for this license key has been reached.')
+        return responseMessage(400, 'ERR_KEY_DEVICES_FULL', 'ERROR :: The maximum number of devices for this license key has been reached.', decryptedData)
 
     # If all steps above go through, then we accept the validation
     DBAPI.addRegistration(keyObject.id, decryptedData[1], keyObject)
-    return responseMessage(201, 'SUCCESS', 'SUCCESS :: Your registration was successful!')
+    return responseMessage(201, 'SUCCESS', 'SUCCESS :: Your registration was successful!', decryptedData)
 
 
 # Utility Functions
-def responseMessage(HTTPCode = 200, ResponseCode = 'OKAY', Message = 'Everything is okay (DEFAULT RESPONSE)', KeyStatus = None, ExpiryTimestamp = None):
+def responseMessage(HTTPCode = 200, ResponseCode = 'OKAY', Message = 'Everything is okay (DEFAULT RESPONSE)', decryptedData = [None, None]):
     """
         Creates a JSON string that contains all the individual components of a standard response.
     """
@@ -78,15 +77,20 @@ def responseMessage(HTTPCode = 200, ResponseCode = 'OKAY', Message = 'Everything
         'HttpCode' : str(HTTPCode),
         'Message' : str(Message),
         'Code' : str(ResponseCode),
-        'KeyStatus' : str(KeyStatus),
-        'ExpirationTimestamp' : str(ExpiryTimestamp)
+        'SerialKey' : decryptedData[0],
+        'HardwareID' : decryptedData[1]
     }
 
 def generateLogContents(requestData, responseMessage):
-    validationResult = 'VALIDATION_ERROR' if ('ERR' in responseMessage['Code']) else 'VALIDATION_SUCCESS'
-    requestIPAddress = str( request.access_route[-1] )
-    APIKeyUsed = str( requestData.get('apiKey') )
-    return {'result' : validationResult, 'IPAddress' : requestIPAddress, 'APIKey' : APIKeyUsed}
+    # ################################################# SET-UP DATABASE FIELDS
+    result = 'ERROR' if ('ERR' in responseMessage['Code']) else 'SUCCESS'
+    code = str( responseMessage['Code'] )
+    apiKey = str( requestData.get('apiKey') )
+    serialKey = str( str( responseMessage['SerialKey'] ) )
+    hardwareID = str( responseMessage['HardwareID'] )
+    ipaddress = str( request.access_route[-1] )
+    # ########################################################################
+    DBAPI.submitValidationLog( result, code, ipaddress, apiKey, serialKey, hardwareID )
 
 
 ####### MERELY AUXILIARY FUNCTIONS
