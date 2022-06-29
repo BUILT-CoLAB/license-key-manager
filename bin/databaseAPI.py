@@ -67,9 +67,6 @@ def getProduct(productName):
 def getDistinctClients(productID):
     return db.session.query(Key.clientid).distinct().count()
 
-def getProductsByPopularity():
-    return db.engine.execute("""SELECT * FROM product LEFT JOIN (SELECT productid as licenses FROM Key) on licenses = product.id GROUP BY licenses ORDER BY licenses DESC""").fetchall()
-
 def getProductByID(productID):
     """ 
         The following function queries the database for a given product by its ID.
@@ -143,12 +140,6 @@ def setKeyState(keyid, newState):
 def deleteKey(keyid):
     keyS = Key.query.filter_by(id=keyid).first()
     db.session.delete(keyS)
-    db.session.commit()
-
-def deleteKeysOfClient(clientid):
-    keys = Key.query.filter_by(clientid = clientid).all()
-    for key in keys:
-        db.session.delete(key)
     db.session.commit()
 
 def resetKey(keyid):
