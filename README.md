@@ -250,7 +250,9 @@ In order to facilitate the transition between databases, the entire web app conn
 
 Listed bellow, you will see the details of our RESTful API. Each endpoint is listed bellow with their respective details.
 
-#### Login Page
+_________________
+
+### Login Page
 Displays the login-form to enter the Dashboard.<br/><br/>
 **Path** : `/`\
 **Method** : `GET`\
@@ -258,7 +260,9 @@ Displays the login-form to enter the Dashboard.<br/><br/>
 **Parameters** : NONE\
 **Response** : `TEMPLATE_HTML`
 
-#### Tutorial Page
+_________________
+
+### Tutorial Page
 Displays a tutorial page within the Dashboard.<br/><br/>
 **Path** : `/tutorial`\
 **Method** : `GET`\
@@ -266,7 +270,9 @@ Displays a tutorial page within the Dashboard.<br/><br/>
 **Parameters** : NONE\
 **Response** : `TEMPLATE_HTML`
 
-#### Dashboard Page
+_________________
+
+### Dashboard Page
 Displays the dashboard page along with the current statistics of the application.<br/><br/>
 **Path** : `/dashboard`\
 **Method** : `GET`\
@@ -274,7 +280,9 @@ Displays the dashboard page along with the current statistics of the application
 **Parameters** : NONE\
 **Response** : `TEMPLATE_HTML`
 
-#### Product List
+_________________
+
+### Product List
 Displays a webpage with the information of all products in the database, along with their respective details. The administrator is also allowed to create new products or edit existing ones in this webpage.<br/><br/>
 **Path** : `/products`\
 **Method** : `GET`\
@@ -282,7 +290,9 @@ Displays a webpage with the information of all products in the database, along w
 **Parameters** : NONE\
 **Response** : `TEMPLATE_HTML`
 
-#### Product Display
+_________________
+
+### Product Display
 Displays a webpage with the information of an individual product specified in the Path URL of this endpoint. In it, the administrator can check the API Key of the Product, the Public Key and create Licenses.<br/><br/>
 **Path** : `/products/id/<productid>`\
 **Method** : `POST`\
@@ -293,7 +303,9 @@ productid (?URL) - The ID of the product we wish to check. Must be a valid ID.
 ```
 **Response** : `TEMPLATE_HTML` or `404` if the productid is invalid.
 
-#### Create Product
+_________________
+
+### Create Product
 Creates a product with the details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
 **Path** : `/products/create`\
 **Method** : `POST`\
@@ -309,7 +321,9 @@ Creates a product with the details specified in its body payload. The input must
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Edit Product
+_________________
+
+### Edit Product
 Modifies the data of an existing product with the details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
 **Path** : `/products/edit`\
 **Method** : `POST`\
@@ -326,7 +340,9 @@ Modifies the data of an existing product with the details specified in its body 
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Customer List
+_________________
+
+### Customer List
 Displays a webpage with the all the necessary information about existing Customers. The administrator can also create new Customers, modify their data or even remove existing ones.
 **Path** : `/customers`\
 **Method** : `GET`\
@@ -334,7 +350,9 @@ Displays a webpage with the all the necessary information about existing Custome
 **Parameters** : NONE\
 **Response** : `TEMPLATE_HTML`
 
-#### Create Customer
+_________________
+
+### Create Customer
 Adds a Customer to the database with the details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
 **Path** : `/customers/create`\
 **Method** : `POST`\
@@ -350,7 +368,9 @@ Adds a Customer to the database with the details specified in its body payload. 
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Edit Customer
+_________________
+
+### Edit Customer
 Modifies the data of an existing customer with the new details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
 **Path** : `/customers/edit/<customerid>`\
 **Method** : `POST`\
@@ -369,7 +389,9 @@ BODY:
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Delete Customer
+_________________
+
+### Delete Customer
 Deletes the data of an existing customer specified in the URL Path of the endpoint.<br/><br/>
 **Path** : `/customers/delete/<customerid>`\
 **Method** : `POST`\
@@ -380,7 +402,9 @@ customerid (?URL) - The ID of the Customer we wish to remove.
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Create License
+_________________
+
+### Create License
 Creates a license assigned to the Product specified in the URL Path of the endpoint.<br/><br/>
 **Path** : `/product/<productid>/createlicense`\
 **Method** : `POST`\
@@ -396,8 +420,10 @@ productid (?URL) - The ID of the Product we wish to assign this License to. It m
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Display License
-Displays a webpage with the all the necessary information about existing Customers. The administrator can also create new Customers, modify their data or even remove existing ones.
+_________________
+
+### Display License
+Displays a webpage with the all the necessary information about existing Customers. The administrator can also create new Customers, modify their data or even remove existing ones.<br/><br/>
 **Path** : `/licenses/<licenseid>`\
 **Method** : `GET`\
 **Authentication required** : YES\
@@ -407,8 +433,10 @@ licenseid (?URL) - The ID of the License we wish to assign this License to. It m
 ```
 **Response** : `TEMPLATE_HTML`
 
-#### Edit License State
-Changes the underlying information of the License by either disabling/enabling it, deleting it or completely reseting it.
+_________________
+
+### Edit License State
+Changes the underlying information of the License by either disabling/enabling it, deleting it or completely reseting it.<br/><br/>
 **Path** : `/licenses/editkeys`\
 **Method** : `POST`\
 **Authentication required** : YES\
@@ -421,8 +449,10 @@ Changes the underlying information of the License by either disabling/enabling i
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Unlink device from License
-Unlinks a device through its Hardware ID from the License.
+_________________
+
+### Unlink device from License
+Unlinks a device through its Hardware ID from the License.<br/><br/>
 **Path** : `/licenses/<keyid>/removedevice`\
 **Method** : `POST`\
 **Authentication required** : YES\
@@ -437,16 +467,20 @@ BODY:
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Display Changelog
-Displays a Page where the logs will be displayed based on the settings chosen in the form inside.
+_________________
+
+### Display Changelog
+Displays a Page where the logs will be displayed based on the settings chosen in the form inside.<br/><br/>
 **Path** : `/changelog`\
 **Method** : `GET`\
 **Authentication required** : YES\
 **Parameters** : NONE
 **Response** : A `RESPONSE_FORM`*.
 
-#### Get Logs
-Acquires the logs that fit the criteria sent through the Header.
+_________________
+
+### Get Logs
+Acquires the logs that fit the criteria sent through the Header.<br/><br/>
 **Path** : `/changelog/query`\
 **Method** : `GET`\
 **Authentication required** : YES\
@@ -461,15 +495,19 @@ HEADER:
 ```
 **Response** : A `JSON` dictionary array containing the 'adminid', 'timestamp' and 'description' for each log.
 
-#### Get Admins
-Displays a webpage containing all the admins in the page. Only users flagged as 'Owners' can see this page and they can create admin accounts, disable them or redefine their passwords as they see fit.
+_________________
+
+### Get Admins
+Displays a webpage containing all the admins in the page. Only users flagged as 'Owners' can see this page and they can create admin accounts, disable them or redefine their passwords as they see fit.<br/><br/>
 **Path** : `/admins`\
 **Method** : `GET`\
 **Authentication required** : YES (Restricted to Owners)\
 **Parameters** :  NONE
 **Response** : `TEMPLATE_HTML`
 
-#### Create Admin Account
+_________________
+
+### Create Admin Account
 Creates an admin account that will be allowed to log in and act as an administrator. The data about the account must be sent in JSON format as a dictionary through the payload.<br/><br/>
 **Path** : `/admins/create`\
 **Method** : `POST`\
@@ -485,7 +523,9 @@ BODY:
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Edit Admin Account
+_________________
+
+### Edit Admin Account
 Modifies a specified admin account. This endpoint is, in fact, used only to re-define the password of the specified admin.<br/><br/>
 **Path** : `/admins/<userid>/edit`\
 **Method** : `POST`\
@@ -501,7 +541,9 @@ BODY:
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Toggle Admin Account State
+_________________
+
+### Toggle Admin Account State
 Enables or Disables the specified Admin Account based on the current status of the account.<br/><br/>
 **Path** : `/admins/<userid>/togglestatus`\
 **Method** : `POST`\
@@ -513,7 +555,9 @@ PATH:
 ```
 **Response** : A `RESPONSE_FORM`*.
 
-#### Validation
+_________________
+
+### Validation
 Validates a request coming from any external source to decipher whether or not the validation request is valid and that the license indicated is, in fact, genuine. The response follows the same format for all cases.<br/><br/>
 **Path** : `/validate`\
 **Method** : `POST`\
