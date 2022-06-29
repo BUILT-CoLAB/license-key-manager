@@ -109,6 +109,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='purify.min.js') }}"></script>
 <script>
     const typesList = document.getElementById("typesList");
     const responseType = document.getElementById("responseType");
@@ -186,13 +187,13 @@
             logTable.innerHTML += `
             <tr class="bg-white hover:bg-gray-100 dark:bg-slate-700 dark:hover:bg-slate-800 divide-x divide-gray-200 dark:divide-slate-800">
             <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + (i + 1) + `</td>
-            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + jsonResponse[i]['result'] + `</td>
-            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + jsonResponse[i]['type'] + `</td>
-            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + jsonResponse[i]['ipaddress'] + `</td>
-            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + jsonResponse[i]['apiKey'] + `</td>
-            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + jsonResponse[i]['serialKey'] + `</td>
-            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + jsonResponse[i]['hardwareID'] + `</td>
-            <td class="p-4 text-sm text-gray-500 dark:text-gray-100 timestamp">` + jsonResponse[i]['timestamp'] + `</td>
+            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + DOMPurify.sanitize( jsonResponse[i]['result'] ) + `</td>
+            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + DOMPurify.sanitize( jsonResponse[i]['type'] ) + `</td>
+            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + DOMPurify.sanitize( jsonResponse[i]['ipaddress'] ) + `</td>
+            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + DOMPurify.sanitize( jsonResponse[i]['apiKey'] ) + `</td>
+            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + DOMPurify.sanitize( jsonResponse[i]['serialKey'] ) + `</td>
+            <td class="p-4 text-sm text-gray-500 dark:text-gray-100">` + DOMPurify.sanitize( jsonResponse[i]['hardwareID'] ) + `</td>
+            <td class="p-4 text-sm text-gray-500 dark:text-gray-100 timestamp">` + DOMPurify.sanitize( jsonResponse[i]['timestamp'] ) + `</td>
             </tr>
             `
         }
