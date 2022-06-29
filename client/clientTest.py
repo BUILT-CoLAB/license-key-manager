@@ -15,9 +15,9 @@ D2CXCb2CYbKvpSSLNObfkUwCotPmdEXrY7jW7N1cHucTql/myTbS/cTGzjHZa/sz
 
 public_key = serialization.load_pem_public_key( str.encode(publicKey) )
 
-api_key = '6b67afa9-358f-44fe-8d92-c86a2e6c1e89'
-serial = '7QOA3-WQQJI-K6THZ-U897C'
-hwid= 'TestingHWID_N2' # Deterministic UID
+api_key = '6b67afa9-358f-44fe-8d92f-c86a2e6c1e89'
+serial = 'XMZ09-YRVOR-4V2QF-QMHCN'
+hwid= 'TestingHWID_N1' # Deterministic UID
 
 plaintexts = bytes(serial + ':' + hwid[:23],'utf-8')
 

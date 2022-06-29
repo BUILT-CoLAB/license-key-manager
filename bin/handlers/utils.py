@@ -44,7 +44,7 @@ def validateEmail(email):
         raise Exception("- Invalid Email")
 
 def validatePhone(phoneNumber):
-    if( not str(phoneNumber).isnumeric() ):
+    if( not str(phoneNumber).isnumeric() and not re.fullmatch(r'\+[0-9]* [0-9]*', phoneNumber) ):
         raise Exception("- Invalid Phone Number")
 
 def validateName(name):

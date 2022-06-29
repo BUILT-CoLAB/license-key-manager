@@ -403,16 +403,13 @@
 
   async function copyContent(index){
     let content = new String( copyButtons[index].getAttribute("content") );
+    document.getElementById("copy-contents").textContent = content;
     await navigator.clipboard.writeText(content);
 
-    if(index == 0){
+    if(index == 0)
       document.getElementById("copy-title").innerHTML = "API Key copied to clipboard";
-      document.getElementById("copy-contents").innerHTML = content;
-    }
-    else{
-      document.getElementById("copy-title").innerHTML = "Public Key copied to clipboard"
-      document.getElementById("copy-contents").innerHTML = content;
-    }
+    else
+      document.getElementById("copy-title").innerHTML = "Public Key copied to clipboard";
   }
 </script>
 {% endblock %}

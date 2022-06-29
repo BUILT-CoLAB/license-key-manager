@@ -1,23 +1,15 @@
 from flask import Blueprint, render_template, request
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
-from .models import Product
 from . import databaseAPI as DBAPI
-from .auth import getCurrentUser
-from .keys import create_product_keys, decrypt_data, generateSerialKey
 import json
 import time
 import math
 
-from .handlers import admins as AdminHandler, changelogs as ChangelogHandler, customers as CustomerHandler, products as ProductHandler, licenses as LicenseHandler
+from .handlers import admins as AdminHandler, changelogs as ChangelogHandler, customers as CustomerHandler, products as ProductHandler, licenses as LicenseHandler, validation as ValidationHandler
 
 main = Blueprint('main', __name__)
 auth = HTTPTokenAuth(scheme='Bearer')
-
-@auth.verify_token
-def verify_token(token):
-    tokens = Product.query.filter_by(apiK=token).first()
-    return tokens
 
 @main.route('/')
 def index():
@@ -35,13 +27,13 @@ def tutorial():
 @main.route('/dashboard')
 @login_required
 def cpanel():
-    productList = DBAPI.getProductsByPopularity()
     activated, awaitingApproval = DBAPI.getKeyStatistics()
+    successfulV, unsuccessfulV = DBAPI.queryValidationsStats()
     if( activated == 0 and awaitingApproval == 0 ):
         ratio = 100
     else:
         ratio = ( activated / (activated + awaitingApproval) ) * 100
-    return render_template('cpanel.html', productList = productList, activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio), mode = request.cookies.get('mode'))
+    return render_template('cpanel.html', activated = activated, awaitingApproval = awaitingApproval, ratio = round(ratio), mode = request.cookies.get('mode'), successV = successfulV, unsuccessV = unsuccessfulV)
 
 
 
@@ -160,90 +152,9 @@ def adminToggleStatus(userid):
     return AdminHandler.toggleAdminStatus(userid)
 
 
-
-
+###########################################################################
+########### VALIDATION PROCESS
+###########################################################################
 @main.route('/validate',methods=['POST'])
 def validate_product():
-    dataInfo = request.get_json()
-    
-    # 1st Step: Validate user with API key.
-    product = verify_token(dataInfo['apiKey'])
-    if(product==None or product==[]):
-        return{
-            'HttpCode' : 401,
-            'Message' : 'Unexistent API key'
-        }
-    # #####################################
-
-    decryptedData = decrypt_data(dataInfo['payload'], product)
-
-    # decryptedData[0] - Serial Key
-    # decryptedData[1] - Hardware ID
-
-    keyObject = DBAPI.getKeysBySerialKey(decryptedData[0], product.id)
-
-    if(keyObject==None or keyObject==[]):
-        return {
-            'HttpCode' : 404,
-            'Message' : 'Serial/License key not found'
-        }
-
-    print("[NOTE] Request received to authenticate HWID '" + str(decryptedData[1]) + "' with serial key '" + str(keyObject.id) + "'.")
-    print("[NOTE] Maximum number of devices: " + str(keyObject.maxdevices) + ".")
-    print("[NOTE] Current number of devices (pre-validation): " + str(keyObject.devices) + ".")
-
-    isStillValid = isDateWithin(keyObject.expirydate)
-
-    if(DBAPI.getRegistration(keyObject.id, decryptedData[1]) == None):
-        # Check if the key is revoked
-        if(keyObject.status == 2):
-            return {
-                'HttpCode' : 403,
-                'Message' : 'Forbbiden access :: Key revoked! Your hardware was not registered.',
-                'Code' : 'KEY_REVOKED'
-            }
-
-        # Check if the key is still valid
-        if( not isStillValid ):
-            return {
-                'HttpCode' : 400,
-                'Message' : 'Registration denied :: The key has expired.',
-                'Code' : 'KEY_EXPIRED'
-            }
-
-        # Check if the number of devices if okay
-        if(keyObject.devices < keyObject.maxdevices): # Add device to list of devices
-            DBAPI.addRegistration(keyObject.id, decryptedData[1], keyObject)
-            return {
-                'HttpCode' : 201,
-                'Message' : 'Registration successful',
-                'Code' : 'SUCCESS',
-                'ExpiryTimestamp' : keyObject.expirydate
-            }
-        else:   # No more devices available
-            return {
-                'HttpCode' : 400,
-                'Message' : 'Maximum number of devices reached for that license key',
-                'Code' : 'KEY_DEVICES_FULL'
-            }
-    else:
-        if( not isStillValid):
-            return {
-                'HttpCode' : 400,
-                'Message' : 'Your registration has expired. Update required.',
-                'Code' : 'KEY_EXPIRED'
-            }
-        else:
-            return {
-                'HttpCode' : 200,
-                'Message' : 'Your device is still registered.',
-                'KeyStatus' : keyObject.id,
-                'Code' : 'OKAY'
-            }
-
-def isDateWithin(limitDate):
-    if( limitDate == 0 ):   # Life-time license
-        return True
-    if( math.floor( time.time() ) > int(limitDate) ):
-        return False
-    return True
+    return ValidationHandler.handleValidation( request.get_json() )

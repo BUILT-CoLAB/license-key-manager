@@ -76,50 +76,44 @@
 		</div>
 	  </div>
 	</div>
-	<div class="w-full h-48 sm:h-64 lg:absolute lg:top-0 lg:right-0 lg:w-1/2 lg:h-full">
-	  	<img src="{{ url_for('static', filename='dashboardImage.jpg') }}" alt="" class="w-full h-full object-center object-cover">
+	<div class="absolute top-0 right-0 w-1/2 h-full">
+		<dl class="flex items-center justify-center flex-col h-full space-y-5">
+			<h3 class="text-2xl text-gray-800 font-bold italic">In the last 30 days</h3>
+			<div class="relative bg-white pb-12 pt-6 px-6 shadow rounded-lg overflow-hidden w-4/5 dark:bg-slate-800">
+				<dt>
+					<div class="absolute bg-teal-600 rounded-md p-3">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+						</svg>
+					</div>
+					<p class="ml-16 text-sm font-medium text-teal-600 truncate">Successful Validations</p>
+				</dt>
+				<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+					<p class="text-2xl font-semibold text-gray-900 dark:text-slate-200">{{successV}}</p>
+				</dd>
+
+				<dt class="pt-4">
+					<div class="absolute bg-rose-600 rounded-md p-3">
+						<!-- Heroicon name: outline/users -->
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</div>
+					<p class="ml-16 text-sm font-medium text-rose-600 truncate">Failed Validations</p>
+				</dt>
+				<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+					<p class="text-2xl font-semibold text-gray-900 dark:text-slate-200">{{unsuccessV}}</p>
+					<div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6 dark:bg-slate-700">
+						<div class="text-sm">
+						<a href="#" class="font-medium text-gray-900 hover:text-sky-500 dark:text-slate-200 dark:hover:text-sky-400"> Check validation logs</a>
+						</div>
+					</div>
+				</dd>
+			</div>
+
+		</dl>
 	</div>
 </div>
-
-<section aria-labelledby="trending-heading" class="bg-white dark:bg-slate-900">
-	<div class="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-	  <div class="px-4 flex items-center justify-between sm:px-6 lg:px-0">
-		<h2 id="trending-heading" class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-300">Trending products</h2>
-		<a href="#" class="hidden sm:block text-sm font-semibold text-blue-600 hover:text-blue-500">See all products<span aria-hidden="true"> &rarr;</span></a>
-	  </div>
-
-	  <div class="mt-8 relative">
-		<div class="relative w-full overflow-x-auto">
-		  <ul role="list" class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-8">
-			{% for product in productList %}
-				{% if product.licenses != None %}
-					<li class="w-64 inline-flex flex-col text-center lg:w-auto">
-						<div class="group relative">
-							<div class="w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1">
-								<img src="{{product.image}}" class="w-full h-full object-center object-cover group-hover:opacity-75">
-							</div>
-							<div class="mt-4">
-								<h3 class="mb-1 font-semibold text-gray-900 dark:text-slate-200">
-									<a href="#">
-										<span class="absolute inset-0"></span>
-										{{product.name}}
-									</a>
-								</h3>
-								<p class="text-sm text-gray-500">{{product.licenses}} licenses</p>
-							</div>
-						</div>
-					</li>
-				{% endif %}
-			{% endfor %}
-		  </ul>
-		</div>
-	  </div>
-
-	  <div class="mt-12 px-4 sm:hidden">
-		<a href="#" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">See everything<span aria-hidden="true"> &rarr;</span></a>
-	  </div>
-	</div>
-</section>
 {% endblock %}
 
 {% block scripts %}

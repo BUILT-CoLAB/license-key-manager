@@ -96,6 +96,9 @@ def editProduct(productid, name, category, image, details):
     product.details = details
     db.session.commit()
 
+def getProductThroughAPI(apiKey):
+    return Product.query.filter_by(apiK=apiKey).first()
+
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -176,12 +179,9 @@ def getKeyAndClient(keyid):
 ///////////  ChangeLog Section ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 """
-def submitLog(keyid, userid, action, description):
+def submitLog(keyid = None, userid = None, action = '', description = ''):
     timestamp = int(time())
-    if (keyid == None):
-        newLog = Changelog(userid = userid, timestamp=timestamp, action = action, description = description)
-    else:
-        newLog = Changelog(keyID = keyid, userid = userid, timestamp=timestamp, action = action, description = description)
+    newLog = Changelog(keyID = keyid, userid = userid, timestamp = timestamp, action = action, description = description)
     db.session.add(newLog)
     db.session.commit()
 
@@ -203,6 +203,9 @@ def queryLogs(userid, startdate, enddate):
     if( userid == -1 and startdate == -1 and enddate == -1 ):
         return db.session.query(Changelog).order_by(desc(Changelog.timestamp)).all()
     return None
+
+def queryValidationsStats():
+    return Changelog.query.filter_by(action = 'VALIDATION_SUCCESS').count(), Changelog.query.filter_by(action = 'VALIDATION_ERROR').count()
 
 """
 //////////////////////////////////////////////////////////////////////////////

@@ -62,5 +62,5 @@ class Changelog(db.Model):
     keyID = db.Column( db.Integer, db.ForeignKey('key.id', ondelete="cascade"), nullable=True )
     userid = db.Column( db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True )
     timestamp = db.Column( db.Integer, nullable=False )
-    action = db.Column( db.String(25) )
-    description = db.Column( db.String(150), nullable=False, default='' )
+    action = db.Column( db.String(40) )
+    description = db.Column( db.String(300), nullable=False, default='' )
