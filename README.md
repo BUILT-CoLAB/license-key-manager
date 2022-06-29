@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/BUILT-CoLAB/license-key-manager/76d5eeea20de8490283127bbc83a0d6832265c42/bin/static/logoComplete.svg?token=AOS6A7D325VXSDUAK7QYL53CXOVOW"/>
+  <img src="bin/static/logoComplete.svg"/>
 </p>
 
 # Multi-Purpose Software License Manager
