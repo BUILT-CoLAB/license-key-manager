@@ -13,7 +13,7 @@ The Multi-Purpose Software License Manager (SLM, for short) is a web application
 3. Documentation\
    3.1 Directory Structure\
    3.2 Database\
-   3.3 API
+   3.3 RESTful API
 4. Helping out
 
 ## Intruduction
@@ -87,36 +87,57 @@ In a more graphical way, the directory structure is represented bellow, with som
 ```
 .
 └── bin
-    └── static                                                    # All static resources go here
-        ├── bootstrap.bundle.min.js                               # Bootstrap's Javascript Module
-        ├── bootstrap.min.css                                     # Bootstrap's Styling Module
-        ├── loginImage.svg                                        # Login Image used for the main page
-        └── style.css                                             # The overall styling of the Project
-    └── templates                                                 # Generally, all pages (.html files) should go here!
-        ├── base.html                                             # The basic template that is available in every page
-        ├── cpanel.html                                           # CPanel's main page
-        ├── index.html                                            # This is the login page
-        ├── keydata.html                                          # This is the page that displays the information of each key
-        ├── product.html                                          # This is the page that displays the information of each product (and its keys)
-        └── profile.html                                          # The user profile
-    ├── __init__.py                                               # This is the initiating file for FLASK. You shouldn't need to modify it ...
-    ├── auth.py                                                   # All routes (API Endpoints) related to authentication should go here.
-    ├── databaseAPI.py                                            # All functions required to communicate with the Database go here.
-    ├── keys.py                                                   # All data related to key management should come here.
-    ├── main.py                                                   # All routes (API Endpoints) related to anything (except authentication) should go here.
-    ├── models.py                                                 # This files is meant for SQLAlchemy, used by FLASK to interact with our SQLite database.
-    └── sqlite.db                                                 # This file is our SQLite database.
+    └── handlers                                                  # The respective handler for each service route in the RESTful API (called by main.py).
+        ├── admins.py
+        ├── changelogs.py
+        ├── customers.py
+        ├── licenses.py
+        ├── products.py
+        ├── utils.py
+        └── validation.py
+    └── static                                                    # The containing folder for images, style sheets and javascript.
+        ├── dark.mode.handler.js
+        ├── dashboardImage.jpg
+        ├── default.jpg
+        ├── flowbite.min.css
+        ├── loginImage.svg
+        ├── logoComplete.svg
+        ├── style.css
+        ├── tailwind.js
+        ├── typography.min.css
+        └── wallpaperchangelog.jpg
+    └── templates                                                 # All pages (.html files) are placed in this folder (called by FLASK when it renders a page).
+        ├── 404.html
+        ├── base.html
+        ├── changelog.html
+        ├── cpanel.html
+        ├── customers.html
+        ├── index.html
+        ├── license.html
+        ├── product.html
+        ├── products.html
+        ├── tutorial.html
+        └── users.html
+    ├── __init__.py                                               # FLASK settings
+    ├── auth.py                                                   # API Authentication Endpoints are defined here.
+    ├── databaseAPI.py                                            # "Proxy" for database communication.
+    ├── keys.py                                                   # License methods are defined here.
+    ├── main.py                                                   # General API Endpoints are defined here.
+    ├── models.py                                                 # ORM definition of the Database (SQLAlchemy).
+    └── sqlite.db                                                 # The SQLite database file.
 
 └── client
-    └── clientTest.py                                             # This file simulates the Client-Side application trying to validate with our app.
+    └── clientTest.py                                             # A mock-up of a software trying to communicate with the web application.
 
 └── docs
-    └── .............                                             # All data inside this folder is merely done for evaluation purposes under pedagogical terms. It is not used in the Project.
+    └── .............                                             # Used for pedagogical terms and evaluation
 
-├── .env                                                          # Environment Variables file. Do not delete it.
-├── .gitignore                                                    # Used to ignore certain cache files from Python.
+├── .env                                                          # Environment Variables used by Docker
+├── Dockerfile                                                    # The Dockerfile used to set-up the Docker Image.
 ├── README.md                                                     # This documentation.
-└── requirements.txt                                              # Used for Step 1. After the set-up it may not be necessary anymore if you are not planning to use in other machines.
+├── LICENSE.md                                                    # MIT License statement
+├── requirements.txt                                              # Used by the pip3 command to install all dependencies
+└── server.py                                                     # Python script that runs the web application
 ```
 
 #### b) Database
@@ -127,61 +148,61 @@ Also, be aware that when you delete this file, ALL data will be lost. This inclu
 
 When it comes to the documentation of the database, you can check its structure in the `models.py` file. However, in order to help you get through the SQLAlchemy's syntax, we will represent the same information in the file in a tabular format:
 
-| USER Table | Type | PK  | UQ  | AI  |
-| ---------- | ---- | --- | --- | --- |
-| id         | INT  | X   |     | X   |
-| email      | TEXT |     | X   |     |
-| password   | TEXT |     |     |     |
-| name   | TEXT |     | X   |     |
-| owner   | BOOL |     |    |     |
-| disabled   | BOOL |     |    |     |
-| timestamp  | INT |     |   |     |
+| USER Table | Type | PK  | UQ  | AI  | ONDELETE |
+| ---------- | ---- | --- | --- | --- | -------- |
+| id         | INT  | X   |     | X   | NONE     |
+| email      | TEXT |     | X   |     | NONE     |
+| password   | TEXT |     |     |     | NONE     |
+| name       | TEXT |     | X   |     | NONE     |
+| owner      | BOOL |     |     |     | NONE     |
+| disabled   | BOOL |     |     |     | NONE     |
+| timestamp  | INT  |     |     |     | NONE     |
 
-| PRODUCT Table | Type | PK  | UQ  | AI  |
-| ------------- | ---- | --- | --- | --- |
-| id            | INT  | X   |     | X   |
-| name          | TEXT |     | X   |     |
-| category          | TEXT |     |    |     |
-| image          | TEXT |     |     |     |
-| details          | TEXT |     |     |     |
-| privateK      | TEXT |     | X   |     |
-| publicK       | TEXT |     | X   |     |
-| apiK          | TEXT |     | X   |     |
+| PRODUCT Table | Type | PK  | UQ  | AI  | ONDELETE |
+| ------------- | ---- | --- | --- | --- | -------- |
+| id            | INT  | X   |     | X   | NONE     |
+| name          | TEXT |     | X   |     | NONE     |
+| category      | TEXT |     |     |     | NONE     |
+| image         | TEXT |     |     |     | NONE     |
+| details       | TEXT |     |     |     | NONE     |
+| privateK      | TEXT |     | X   |     | NONE     |
+| publicK       | TEXT |     | X   |     | NONE     |
+| apiK          | TEXT |     | X   |     | NONE     |
 
-| CLIENT Table  | Type | PK  | UQ  | AI  |
-| ------------- | ---- | --- | --- | --- |
-| id            | INT  | X   |     | X   |
-| name  | TEXT |     |     |     |
-| email | TEXT |     |     |     |
-| phone | TEXT |     |     |     |
-| country | TEXT |     |     |     |
-| registrydate    | INT  |     |     |     |
+| CLIENT Table  | Type | PK  | UQ  | AI  | ONDELETE |
+| ------------- | ---- | --- | --- | --- | -------- |
+| id            | INT  | X   |     | X   | NONE     |
+| name          | TEXT |     |     |     | NONE     |
+| email         | TEXT |     |     |     | NONE     |
+| phone         | TEXT |     |     |     | NONE     |
+| country       | TEXT |     |     |     | NONE     |
+| registrydate  | INT  |     |     |     | NONE     |
 
-| KEY Table     | Type | PK  | UQ  | AI  |
-| ------------- | ---- | --- | --- | --- |
-| id            | INT  | X   |     | X   |
-| productid     | INT  | FK  |     |     |
-| clientid      | INT  | FK  |     |     |
-| serialkey     | TEXT |     | X   |     |
-| maxdevices    | INT  |     |     |     |
-| devices       | INT  |     |     |     |
-| status        | INT  |     |     |     |
-| expirydate    | INT  |     |     |     |
+| KEY Table     | Type | PK  | UQ  | AI  | ONDELETE |
+| ------------- | ---- | --- | --- | --- | -------- |
+| id            | INT  | X   |     | X   | NONE     |
+| productid     | INT  | FK  |     |     | CASCADE  |
+| clientid      | INT  | FK  |     |     | CASCADE  |
+| serialkey     | TEXT |     | X   |     | NONE     |
+| maxdevices    | INT  |     |     |     | NONE     |
+| devices       | INT  |     |     |     | NONE     |
+| status        | INT  |     |     |     | NONE     |
+| expirydate    | INT  |     |     |     | NONE     |
 
-| REGISTRATION Table | Type | PK  | UQ  | AI  |
-| ------------------ | ---- | --- | --- | --- |
-| id                 | INT  | X   |     | X   |
-| keyid              | INT  | FK  |
-| hardwareid         | TEXT |     |     |     |
+| REGISTRATION Table | Type | PK  | UQ  | AI  | ONDELETE |
+| ------------------ | ---- | --- | --- | --- | -------- |
+| id                 | INT  | X   |     | X   | NONE     |
+| keyid              | INT  | FK  |     |     | CASCADE  |
+| hardwareid         | TEXT |     |     |     | NONE     |
 
-| CHANGELOG Table | Type | PK  | UQ  | AI  |
-| --------------- | ---- | --- | --- | --- |
-| id              | INT  | X   |     | X   |
-| keyid           | INT  | FK  |     |     |
-| userid          | INT  | FK  |     |     |
-| timestamp       | INT  |     |     |     |
-| action          | TEXT |     |     |     |
-| description          | TEXT |     |     |     |
+| CHANGELOG Table | Type | PK  | UQ  | AI  | ONDELETE |
+| --------------- | ---- | --- | --- | --- | -------- |
+| id              | INT  | X   |     | X   | NONE     |
+| keyid           | INT  | FK  |     |     | CASCADE  |
+| userid          | INT  | FK  |     |     | SET NULL |
+| timestamp       | INT  |     |     |     | NONE     |
+| action          | TEXT |     |     |     | NONE     |
+| description     | TEXT |     |     |     | NONE     |
 
 All modifications in SQLAlchemy are based on this model. You are free to use another database, but you will need to change the Flask settings (`__init__.py` file).
 
@@ -225,6 +246,297 @@ In order to facilitate the transition between databases, the entire web app conn
 | getCustomer()              | Customer object (0+ records)     |
 | getCustomerByID()          | Customer object (1 record)       |
 
-## Section 4 :: API Documentation
+## RESTful API Documentation
 
-To be developed ...
+Listed bellow, you will see the details of our RESTful API. Each endpoint is listed bellow with their respective details.
+
+#### Login Page
+Displays the login-form to enter the Dashboard.<br/><br/>
+**Path** : `/`\
+**Method** : `GET`\
+**Authentication required** : NO\
+**Parameters** : NONE\
+**Response** : `TEMPLATE_HTML`
+
+#### Tutorial Page
+Displays a tutorial page within the Dashboard.<br/><br/>
+**Path** : `/tutorial`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : NONE\
+**Response** : `TEMPLATE_HTML`
+
+#### Dashboard Page
+Displays the dashboard page along with the current statistics of the application.<br/><br/>
+**Path** : `/dashboard`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : NONE\
+**Response** : `TEMPLATE_HTML`
+
+#### Product List
+Displays a webpage with the information of all products in the database, along with their respective details. The administrator is also allowed to create new products or edit existing ones in this webpage.<br/><br/>
+**Path** : `/products`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : NONE\
+**Response** : `TEMPLATE_HTML`
+
+#### Product Display
+Displays a webpage with the information of an individual product specified in the Path URL of this endpoint. In it, the administrator can check the API Key of the Product, the Public Key and create Licenses.<br/><br/>
+**Path** : `/products/id/<productid>`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+productid (?URL) - The ID of the product we wish to check. Must be a valid ID.
+```
+**Response** : `TEMPLATE_HTML` or `404` if the productid is invalid.
+
+#### Create Product
+Creates a product with the details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
+**Path** : `/products/create`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+{
+    'name' : 'Product name',
+    'category' : 'Product category',
+    'image' : 'Product image',
+    'details' : 'Product details'
+}
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Edit Product
+Modifies the data of an existing product with the details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
+**Path** : `/products/edit`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+{
+    'id' : 'The ID of the product which data we want to edit'
+    'name' : 'Product name',
+    'category' : 'Product category',
+    'image' : 'Product image',
+    'details' : 'Product details'
+}
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Customer List
+Displays a webpage with the all the necessary information about existing Customers. The administrator can also create new Customers, modify their data or even remove existing ones.
+**Path** : `/customers`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : NONE\
+**Response** : `TEMPLATE_HTML`
+
+#### Create Customer
+Adds a Customer to the database with the details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
+**Path** : `/customers/create`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+{
+    'name' : 'Customer's name',
+    'email' : 'Customer's email',
+    'phone' : 'Customer's phone number',
+    'country' : 'Customer's country'
+}
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Edit Customer
+Modifies the data of an existing customer with the new details specified in its body payload. The input must be in JSON format as a dictionary.<br/><br/>
+**Path** : `/customers/edit/<customerid>`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+PATH:
+    customerid (?URL) - The ID of the Customer whose data we wish to modify. Must be a valid ID.
+BODY:
+    {
+        'name' : 'Customer's name',
+        'email' : 'Customer's email',
+        'phone' : 'Customer's phone number',
+        'country' : 'Customer's country'
+    }
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Delete Customer
+Deletes the data of an existing customer specified in the URL Path of the endpoint.<br/><br/>
+**Path** : `/customers/delete/<customerid>`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+customerid (?URL) - The ID of the Customer we wish to remove.
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Create License
+Creates a license assigned to the Product specified in the URL Path of the endpoint.<br/><br/>
+**Path** : `/product/<productid>/createlicense`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+productid (?URL) - The ID of the Product we wish to assign this License to. It must be valid.
+{
+    'client' : 'The ID of the customer we will assign this License to',
+    'maxDevices' : 'The limit of concurrent devices in this License',
+    'expiryDate' : 'Expiration date for this License'
+}
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Display License
+Displays a webpage with the all the necessary information about existing Customers. The administrator can also create new Customers, modify their data or even remove existing ones.
+**Path** : `/licenses/<licenseid>`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+licenseid (?URL) - The ID of the License we wish to assign this License to. It must be valid.
+```
+**Response** : `TEMPLATE_HTML`
+
+#### Edit License State
+Changes the underlying information of the License by either disabling/enabling it, deleting it or completely reseting it.
+**Path** : `/licenses/editkeys`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+{
+    'licenseid' : 'The ID of the customer we will assign this License to',
+    'action' : 'The action that will be executed. Can be: SWITCHSTATE, DELETE or RESET'
+}
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Unlink device from License
+Unlinks a device through its Hardware ID from the License.
+**Path** : `/licenses/<keyid>/removedevice`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+PATH: 
+    keyid - The ID of the License we will unlink the Hardware from
+BODY: 
+    {
+        'hardwareID' : 'The ID of the hardware to be unlinked (unique for every device)'
+    }
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Display Changelog
+Displays a Page where the logs will be displayed based on the settings chosen in the form inside.
+**Path** : `/changelog`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : NONE
+**Response** : A `RESPONSE_FORM`*.
+
+#### Get Logs
+Acquires the logs that fit the criteria sent through the Header.
+**Path** : `/changelog/query`\
+**Method** : `GET`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+HEADER: 
+    {
+        |OPTIONAL| 'adminID' : 'The ID of the administrator whose logs we want to check',
+        |OPTIONAL| 'datestart' : 'The date that defines the start of our search',
+        |OPTIONAL| 'dateend' : 'The date that defines the limit of our search',
+    }
+```
+**Response** : A `JSON` dictionary array containing the 'adminid', 'timestamp' and 'description' for each log.
+
+#### Get Admins
+Displays a webpage containing all the admins in the page. Only users flagged as 'Owners' can see this page and they can create admin accounts, disable them or redefine their passwords as they see fit.
+**Path** : `/admins`\
+**Method** : `GET`\
+**Authentication required** : YES (Restricted to Owners)\
+**Parameters** :  NONE
+**Response** : `TEMPLATE_HTML`
+
+#### Create Admin Account
+Creates an admin account that will be allowed to log in and act as an administrator. The data about the account must be sent in JSON format as a dictionary through the payload.<br/><br/>
+**Path** : `/admins/create`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+BODY:
+    {
+        'email' : 'The admin's email',
+        'username' : 'The admin's username',
+        'password' : 'The admin's password'
+    }
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Edit Admin Account
+Modifies a specified admin account. This endpoint is, in fact, used only to re-define the password of the specified admin.<br/><br/>
+**Path** : `/admins/<userid>/edit`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+PATH:
+    userid - The admin account's ID that we wish to modify.
+BODY:
+    {
+        'password' : 'The new password that will be assigned to the admin'
+    }
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Toggle Admin Account State
+Enables or Disables the specified Admin Account based on the current status of the account.<br/><br/>
+**Path** : `/admins/<userid>/togglestatus`\
+**Method** : `POST`\
+**Authentication required** : YES\
+**Parameters** : 
+```
+PATH:
+    userid - The admin account's ID that will have its state changed (disabled or enabled)
+```
+**Response** : A `RESPONSE_FORM`*.
+
+#### Validation
+Validates a request coming from any external source to decipher whether or not the validation request is valid and that the license indicated is, in fact, genuine. The response follows the same format for all cases.<br/><br/>
+**Path** : `/validate`\
+**Method** : `POST`\
+**Authentication required** : NO\
+**Parameters** : 
+```
+BODY:
+{
+    'apiKey' : 'The API Key of the Product that the customer's license belongs to. Used to locate the product'
+    'payload' : 'A PublicKey-encrypted message that containts the HardwareID and the Serial Key of the License'
+}
+```
+**Response** : A `JSON` dictionary array containing four fields. It has a code indicating whether or not the validation succeeded (if the code starts with `ERR_` then the validation failed). It also has a description elaborating the reason why it failed.
+
+*`RESPONSE_FORM` - For every single endpoint above, this type of JSON dictionary response carries a CODE and a MESSAGE. The CODE is used by the script to know if the request succeeded. If it didn't, then the javascript will show the server-generated message to the client.
+
+## Helping out
+
+SLM is still a work in progress and is completely available for improvement. You can help out by:
+
+- Suggesting changes to the code by submitting issues
+- Making your own changes and requesting merge pulls
+- Creating your own version based on the current state of this project
+- Patching critical security issues
+
+You are also encouraged to write unit tests for new functionalities or even existing ones. Although one of the achievements of this application is to make a clear and readable interface, ensuring security is still the top priority in the issue list. Make sure to tag any security issues clearly.
