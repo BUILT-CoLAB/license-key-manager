@@ -1,7 +1,8 @@
 from flask import render_template, request
 from .. import databaseAPI as DBAPI
 import re
-import time
+from time import time
+from datetime import datetime
 
 def validateMultiple_Customer(name, email, phoneNumber):
     sequence = [ (validateName, name), (validateEmail, email), (validatePhone, phoneNumber)]
@@ -60,8 +61,10 @@ def validateMaxDevices(maxDevices):
         raise Exception("- Invalid Max Devices (must be >= 1)")
 
 def validateExpiryDate(expiryDate):
-    if( (not expiryDate == 0) and expiryDate <= ( int(time.time()) + 86399) ):
-        raise Exception("- Invalid Date (must be after Today)")
+    dtLowerBound = (datetime.fromtimestamp( int(time()) + 86400 )).replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+    lowerBoundTimestamp = datetime.timestamp(dtLowerBound)
+    if( (not expiryDate == 0) and expiryDate <= lowerBoundTimestamp ):
+        raise Exception("- Invalid Date (must be after " + dtLowerBound.strftime("%d/%m") + ", inclusive).")
 
 
 

@@ -4,6 +4,7 @@ from flask_login import current_user
 from .. import databaseAPI as DBAPI
 from . import utils as Utils
 import json
+from time import time
 
 def displayLicense(licenseID):
     """
@@ -15,6 +16,9 @@ def displayLicense(licenseID):
     
     try:
         license = DBAPI.getKeyAndClient(licenseID)
+        if(license.status != 3 and license.expirydate < int(time())):
+            print("Expiring key ...")
+            DBAPI.applyExpirationState(license.id)
         changelog = DBAPI.getKeyLogs(licenseID)
         changelog.reverse()
         devices = DBAPI.getKeyHWIDs(licenseID)

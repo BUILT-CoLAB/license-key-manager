@@ -3,6 +3,7 @@ from sqlalchemy import desc, func
 from werkzeug.security import generate_password_hash
 from . import db
 from time import time
+from datetime import datetime
 import sys
 
 """
@@ -100,6 +101,10 @@ def editProduct(productid, name, category, image, details):
 def getProductThroughAPI(apiKey):
     return Product.query.filter_by(apiK=apiKey).first()
 
+def resetProductCheck(productid):
+    productObj = getProductByID(productid)
+    productObj.lastchecked = 0
+    db.session.commit()
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -169,6 +174,27 @@ def getKeyAndClient(keyid):
     SELECT * FROM key JOIN (select id as cid, name from client) ON cid = key.clientid where Key.id = """ + str(keyid)
     ).fetchone()
 
+def updateKeyStatesFromProduct(productid):
+    product = Product.query.filter_by(id = productid).first()
+    dtUpperBound = (datetime.fromtimestamp( int(time()) )).replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+    currentMidnight = datetime.timestamp( dtUpperBound )
+    if( product.lastchecked >= currentMidnight ):
+        print("Already checked!")
+        return
+    else:
+        print("Not yet checked ...")
+        licenseList = Key.query.filter_by(productid=productid).all()
+        for license in licenseList:
+            if(currentMidnight >= license.expirydate and license.expirydate != 0):
+                license.status = 3
+        product.lastchecked = int( time() )
+    db.session.commit()
+    
+def applyExpirationState(keyid):
+    keyObject = getKeyData(keyid)
+    keyObject.status = 3
+    db.session.commit()
+
 """
 //////////////////////////////////////////////////////////////////////////////
 ///////////  ChangeLog Section ///////////////////////////////////////////////
@@ -188,16 +214,10 @@ def getUserLogs(userid):
     return Changelog.query.filter_by(userid = userid).all()
 
 def queryLogs(userid, startdate, enddate):
-    # db.session.query(Changelog, User.name).join(User, User.id == Changelog.userid).filter(Changelog.userid == userid).all()
-    if( userid != -1 and startdate == -1 and enddate == -1 ):
-        return db.session.query(Changelog).filter(Changelog.userid == userid).order_by(desc(Changelog.timestamp)).all()
-    if( userid != -1 and startdate != -1 and enddate != -1 ):
-        return db.session.query(Changelog).filter(Changelog.userid == userid and Changelog.timestamp >= startdate and Changelog.timestamp <= enddate).order_by(desc(Changelog.timestamp)).all()
-    if( userid == -1 and startdate != -1 and enddate != -1 ):
-        return db.session.query(Changelog).filter(Changelog.timestamp >= startdate and Changelog.timestamp <= enddate).order_by(desc(Changelog.timestamp)).all()
-    if( userid == -1 and startdate == -1 and enddate == -1 ):
-        return db.session.query(Changelog).order_by(desc(Changelog.timestamp)).all()
-    return None
+    if( userid == None ):
+        return Changelog.query.filter(Changelog.timestamp >= startdate).filter(Changelog.timestamp <= enddate).order_by(desc(Changelog.timestamp)).all()
+    else:
+        return Changelog.query.filter(Changelog.userid == userid).filter(Changelog.timestamp >= startdate).filter(Changelog.timestamp <= enddate).order_by(desc(Changelog.timestamp)).all()
 
 """
 //////////////////////////////////////////////////////////////////////////////
@@ -294,5 +314,11 @@ def queryValidationLogs(resultTarget = None, timestampStart = 0, timestampEnd = 
         return Validationlog.query.filter(Validationlog.result == resultTarget).filter(Validationlog.timestamp >= timestampStart).filter(Validationlog.timestamp <= timestampEnd).all()
 
 def queryValidationsStats():
-    lowerBoundTimestamp = int(time()) - 2592000
+    """
+        The following function extracts the validation stats from the last 30 days.
+        To achieve this, the current timestamp is reduced by 2592000 seconds (30 days) and the time is
+        rounded down to midnight of the same day. The result will represent the lower bound for the search.
+    """
+    dtLowerBound = (datetime.fromtimestamp( int(time()) - 2592000)).replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+    lowerBoundTimestamp = datetime.timestamp(dtLowerBound)
     return Validationlog.query.filter_by(result = 'SUCCESS').filter(Validationlog.timestamp >= lowerBoundTimestamp).count(), Validationlog.query.filter_by(result = 'ERROR').filter(Validationlog.timestamp >= lowerBoundTimestamp).count()

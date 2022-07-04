@@ -60,7 +60,12 @@ def createProduct():
 def editProduct():
     return ProductHandler.editProduct( request.get_json() )
 
-
+@main.route('/clearcheck/<productid>')
+@login_required
+def clearProductCheck(productid):
+    #DEBUG ROUTE - No need to remove as it doesn't affect the state of the application.
+    DBAPI.resetProductCheck(productid)
+    return "DONE! Next time the product page of the indicated product is loaded, the server will check for expired keys."
 
 
 

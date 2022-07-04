@@ -37,8 +37,10 @@
 					<div class="bg-amber-400 h-2"></div>
 				{% elif license.status == 1 %}
 					<div class="bg-green-400 h-2"></div>
-				{% else %}
+				{% elif license.status == 2 %}
 					<div class="bg-red-700 h-2"></div>
+				{% else %}
+					<div class="bg-black h-2"></div>
 				{% endif %}
 				<div class="flow-root">
 				   <div class="mt-6 ml-6 flex-1">
@@ -53,21 +55,27 @@
 							<span class="ml-2 bg-green-400 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
 								<span class="sr-only">Active</span>
 							</span>
-						 {% else %}
+						{% elif license.status == 2 %}
 							<span class="ml-2 bg-red-700 flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
 								<span class="sr-only">Revoked</span>
 							</span>
+						{% else %}
+							<span class="ml-2 bg-black flex-shrink-0 inline-block h-3 w-3 rounded-full mt-1">
+								<span class="sr-only">Expired</span>
+							</span>
 						 {% endif %}
 					   </div>
-					   <p class="text-sm text-gray-500">#{{license.id}} | {% if license.status == 0 %} Awaiting Activation {% elif license.status == 1 %} Active {% else %} Revoked {% endif %}</p>
+					   <p class="text-sm text-gray-500">#{{license.id}} | {% if license.status == 0 %} Awaiting Activation {% elif license.status == 1 %} Active {% elif license.status == 2 %} Revoked {% else %} Expired {% endif %}</p>
 					 </div>
 					 <div class="mt-6 flex flex-wrap justify-end space-y-3 sm:space-y-0 sm:space-x-3 w-80 float-right mr-4">
-						{% if license.status != 2 %}
-							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Revoke</button>
-						{% else %}
-							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Reactivate</button>
+						{% if license.status != 3 %}
+							{% if license.status != 2 %}
+								<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Revoke</button>
+							{% else %}
+								<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-shrink-0 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:flex-1">Reactivate</button>
+							{% endif %}
+							<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-1 w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Reset</button>
 						{% endif %}
-						<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-1 w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Reset</button>
 						<button data-modal-toggle="confirmation-modal" type="button" class="action-button flex-1 w-full inline-flex items-center justify-center px-4 py-2 border border-rose-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-rose-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Delete</button>
 					 </div>
 				   </div>

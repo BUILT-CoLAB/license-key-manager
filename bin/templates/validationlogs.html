@@ -149,7 +149,7 @@
         let params = {
             'typeSearch' : requestType,
             'datestart' : searchDateStart.value == '' ? -1 : ((new Date(searchDateStart.value)).getTime() / 1000),
-            'dateend' : searchDateStart.value == '' ? -1 : ((new Date(searchDateEnd.value)).getTime() / 1000) + 86399
+            'dateend' : searchDateEnd.value == '' ? -1 : ((new Date(searchDateEnd.value)).getTime() / 1000) + 86399
         }
 
         let http = new XMLHttpRequest();

@@ -26,6 +26,7 @@ class Product(db.Model):
     publicK = db.Column(db.String(1100), unique=True)
     apiK = db.Column( db.String(100), unique=True )
     keys = db.relationship('Key', cascade='all,delete', backref='product')
+    lastchecked = db.Column( db.Integer, nullable=False, default = 0)
 
 class Client(db.Model):
     __tablename__ = "client"

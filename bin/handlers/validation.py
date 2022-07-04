@@ -43,6 +43,7 @@ def handleExistingState(keyObject, decryptedData):
     if( validateExpirationDate( keyObject.expirydate ) ):
         return responseMessage(200, 'OKAY', 'OKAY STATUS :: This device is still registered and everything is okay.', decryptedData)
     else:
+        DBAPI.applyExpirationState(keyObject.id)
         return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid.', decryptedData)
 
 def handleNonExistingState(keyObject, decryptedData):
@@ -57,6 +58,7 @@ def handleNonExistingState(keyObject, decryptedData):
 
     # STEP 2 :: Check if the License has expired. If that's the case, then the validation should be interrupted with an error.
     if( not validateExpirationDate( keyObject.expirydate ) ):
+        DBAPI.applyExpirationState(keyObject.id)
         return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid and will not admit any new devices.', decryptedData)
     
     # STEP 3 :: Check if the License's device list can hold more devices.
