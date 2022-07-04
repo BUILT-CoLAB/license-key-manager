@@ -92,6 +92,7 @@ In a more graphical way, the directory structure is represented bellow, with som
         ├── changelogs.py
         ├── customers.py
         ├── licenses.py
+        ├── logs.py
         ├── products.py
         ├── utils.py
         └── validation.py
@@ -168,6 +169,7 @@ When it comes to the documentation of the database, you can check its structure 
 | privateK      | TEXT |     | X   |     | NONE     |
 | publicK       | TEXT |     | X   |     | NONE     |
 | apiK          | TEXT |     | X   |     | NONE     |
+| lastchecked   | INT  |     |     |     | NONE     |
 
 | CLIENT Table  | Type | PK  | UQ  | AI  | ONDELETE |
 | ------------- | ---- | --- | --- | --- | -------- |
@@ -219,46 +221,49 @@ All modifications in SQLAlchemy are based on this model. You are free to use ano
 
 In order to facilitate the transition between databases, the entire web app connects with the database by using the functions in the `databaseAPI.py` file. This means you are free to rewrite these functions, so long the inputs and returns continue to make sense in the context of the overall web app. In any case, the functions either return nothing or they simply return an object whose fields / local variables are identical to each field in the respective table. Some other functions may return specific values. You can see in the table bellow which functions return an object and which don't.
 
-| Function name              | Return details                   |
-| -------------------------- | -------------------------------- |
-| generateUser()             | None                             |
-| obtainUser()               | User object (1 record)           |
-| createUser()               | None                             |
-| changeUserPassword()       | None                             |
-| toggleUserStatus()       	 | None                             |
-| getProduct()               | Product object (multiple)        |
-| getProductCount()          | Integer                          |
-| getDistinctClients()       | Integer                          |
-| getProductByID             | Product object (1 record)        |
-| createProduct()            | Product object (1 record)        |
-| editProduct()              | None                             |
-| getProductThroughAPI()     | Product object (1 record)        |
-| getKeys()                  | Key object (multiple)            |
-| getKeysBySerialKey()       | Key object (1 record)            |
-| createKey()                | ID field of new Key object       |
-| setKeyState()              | None                             |
-| deleteKey()                | None                             |
-| resetKey()                 | None                             |
-| getKeyData()               | Key object (1 record)            |
-| getKeyStatistics()         | 2 Integers                       |
-| getKeyAndClient()          | Key JOIN Customer object         |
-| submitLog()                | None                             |
-| getKeyLogs()               | Changelog object (multiple)      |
-| getUserLogs()              | Changelog object (multiple)      |
-| queryLogs()                | Changelog object (multiple)      |
-| getRegistration()          | Registration object (1 record)   |
-| getKeyHWIDs()              | Registration object (multiple)   |
-| deleteRegistrationsOfKey() | None                             |
-| deleteRegistrationOfHWID() | None                             |
-| addRegistration()          | None                             |
-| createCustomer()           | None                             |
-| modifyCustomer()           | None                             |
-| deleteCustomer()           | None                             |
-| getCustomer()              | Customer object (multiple)       |
-| getCustomerByID()          | Customer object (1 record)       |
-| submitValidationLog()      | None                             |
-| queryValidationLogs()      | Validationlog object (multiple)  |
-| queryValidationsStats()    | 2 Integers                       |
+| Function name                 | Return details                   |
+| ----------------------------- | -------------------------------- |
+| generateUser()                | None                             |
+| obtainUser()                  | User object (1 record)           |
+| createUser()                  | None                             |
+| changeUserPassword()          | None                             |
+| toggleUserStatus()       	    | None                             |
+| getProduct()                  | Product object (multiple)        |
+| getProductCount()             | Integer                          |
+| getDistinctClients()          | Integer                          |
+| getProductByID                | Product object (1 record)        |
+| createProduct()               | Product object (1 record)        |
+| editProduct()                 | None                             |
+| getProductThroughAPI()        | Product object (1 record)        |
+| resetProductCheck()           | None (DEBUG ONLY)                |
+| getKeys()                     | Key object (multiple)            |
+| getKeysBySerialKey()          | Key object (1 record)            |
+| createKey()                   | ID field of new Key object       |
+| setKeyState()                 | None                             |
+| deleteKey()                   | None                             |
+| resetKey()                    | None                             |
+| getKeyData()                  | Key object (1 record)            |
+| getKeyStatistics()            | 2 Integers                       |
+| getKeyAndClient()             | Key JOIN Customer object         |
+| updateKeyStatesFromProduct()  | None                             |
+| applyExpirationState()        | None                             |
+| submitLog()                   | None                             |
+| getKeyLogs()                  | Changelog object (multiple)      |
+| getUserLogs()                 | Changelog object (multiple)      |
+| queryLogs()                   | Changelog object (multiple)      |
+| getRegistration()             | Registration object (1 record)   |
+| getKeyHWIDs()                 | Registration object (multiple)   |
+| deleteRegistrationsOfKey()    | None                             |
+| deleteRegistrationOfHWID()    | None                             |
+| addRegistration()             | None                             |
+| createCustomer()              | None                             |
+| modifyCustomer()              | None                             |
+| deleteCustomer()              | None                             |
+| getCustomer()                 | Customer object (multiple)       |
+| getCustomerByID()             | Customer object (1 record)       |
+| submitValidationLog()         | None                             |
+| queryValidationLogs()         | Validationlog object (multiple)  |
+| queryValidationsStats()       | 2 Integers                       |
 
 ## RESTful API Documentation
 
