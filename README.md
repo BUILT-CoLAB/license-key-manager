@@ -246,7 +246,7 @@ In order to facilitate the transition between databases, the entire web app conn
 | getKeyStatistics()            | 2 Integers                       |
 | getKeyAndClient()             | Key JOIN Customer object         |
 | updateKeyStatesFromProduct()  | None                             |
-| applyExpirationState()        | None                             |
+| applyExpirationState()        | Key object                       |
 | submitLog()                   | None                             |
 | getKeyLogs()                  | Changelog object (multiple)      |
 | getUserLogs()                 | Changelog object (multiple)      |
