@@ -16,9 +16,8 @@ def displayLicense(licenseID):
     
     try:
         license = DBAPI.getKeyAndClient(licenseID)
-        if(license.status != 3 and license.expirydate < int(time())):
-            print("Expiring key ...")
-            DBAPI.applyExpirationState(license.id)
+        if(license.expirydate != 0 and license.status != 3 and license.expirydate < int(time())):
+            license = DBAPI.applyExpirationState(license.id)
         changelog = DBAPI.getKeyLogs(licenseID)
         changelog.reverse()
         devices = DBAPI.getKeyHWIDs(licenseID)

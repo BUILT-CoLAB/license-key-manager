@@ -194,6 +194,7 @@ def applyExpirationState(keyid):
     keyObject = getKeyData(keyid)
     keyObject.status = 3
     db.session.commit()
+    return keyObject
 
 """
 //////////////////////////////////////////////////////////////////////////////
