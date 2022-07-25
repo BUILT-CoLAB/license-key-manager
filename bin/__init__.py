@@ -12,7 +12,7 @@ def create_app():
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/sqlite.db'
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -44,7 +44,7 @@ def create_app():
         from . import databaseAPI as DBAPI
 
         load_dotenv()
-        if(not exists('./bin/sqlite.db')):
+        if(not exists('sqlite.db')):
             db.create_all(app=app)
         DBAPI.generateUser(os.getenv("ADMINUSERNAME"), os.getenv(
             "ADMINPASSWORD"), os.getenv("ADMINEMAIL"))

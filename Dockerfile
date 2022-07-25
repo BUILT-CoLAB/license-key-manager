@@ -16,7 +16,6 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY ./bin /license-manager/bin
 COPY .env /license-manager/bin
 
-
 ARG DEFAULT_WORKERS=2
 ARG DEFAULT_THREADS=4
 ARG DEFAULT_PORT=8000
