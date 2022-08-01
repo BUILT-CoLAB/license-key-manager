@@ -20,9 +20,8 @@ jobs:
       - name: semgrep-run
         id: semgrep-run
         run: |
-          semgrep ci 2>&1 | tee test.log
-          result_code=${PIPESTATUS[0]}
-          exit $result_code
+          touch output.log
+          semgrep ci 2>&1 | tee output.log
         env:
           # Select rules for your scan with one of these two options.
           # Option 1: set hard-coded rulesets
@@ -35,21 +34,10 @@ jobs:
             p/flask
             p/python
 
-      - name: create-issue-from-file
-        if: failure()
-        uses: peter-evans/create-issue-from-file@v4
-        with:
-          title: Semgrep scan
-          content-filepath: test.log
-          labels: |
-            report
-            automated issue
-          assignees: ${{github.actor}}
-
       - name: upload-logs
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: semgrep.log
-          path: ~/.semgrep/last.log
+          name: output.log
+          path: output.log
           retention-days: 1
