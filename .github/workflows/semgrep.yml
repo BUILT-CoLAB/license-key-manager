@@ -1,0 +1,55 @@
+name: Semgrep
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "30 0 1 * *" # scheduled for 00:30 UTC on both the 1st of the month
+
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+    # Skip any PR created by dependabot to avoid permission issues
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      # Fetch project source
+      - uses: actions/checkout@v3
+
+      - name: semgrep-run
+        id: semgrep-run
+        run: |
+          semgrep ci 2>&1 | tee test.log
+          result_code=${PIPESTATUS[0]}
+          exit $result_code
+        env:
+          # Select rules for your scan with one of these two options.
+          # Option 1: set hard-coded rulesets
+          SEMGREP_RULES: >- # more at semgrep.dev/r
+            p/security-audit
+            p/secrets
+            p/ci
+            p/dockerfile
+            p/javascript
+            p/flask
+            p/python
+
+      - name: create-issue-from-file
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: Semgrep scan
+          content-filepath: test.log
+          labels: |
+            report
+            automated issue
+          assignees: ${{github.actor}}
+
+      - name: upload-logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: semgrep.log
+          path: ~/.semgrep/last.log
+          retention-days: 1
