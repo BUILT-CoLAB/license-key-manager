@@ -7,7 +7,7 @@ import string
 import random
 
 def create_product_keys():
-    private_key = rsa.generate_private_key(key_size=1024,public_exponent=65537)
+    private_key = rsa.generate_private_key(key_size=2048,public_exponent=65537)
     api_key = uuid4()
     
     public_key = private_key.public_key().public_bytes(
