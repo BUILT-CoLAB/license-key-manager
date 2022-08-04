@@ -16,6 +16,8 @@ namespace SampleClient
         private string _hostname { get; set; }
         private string _deviceUUID { get; set; }
 
+        private static string _endpoint = "/api/v1/validate";
+
 
         private string getCPUId()
         {
@@ -81,7 +83,7 @@ namespace SampleClient
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(_hostname + "/validate"),
+                RequestUri = new Uri(_hostname + _endpoint),
                 Content = JsonContent.Create(options),
             };
             var response = await client.SendAsync(request).ConfigureAwait(false);

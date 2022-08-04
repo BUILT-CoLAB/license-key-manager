@@ -38,7 +38,7 @@ if(isinstance(public_key, rsa.RSAPublicKey)):
     print(plaintexts)
     final_payload = base64.b64encode(payload).decode('utf-8')
     print(final_payload)
-    r = requests.post('http://127.0.0.1:5000/validate', json={
+    r = requests.post('http://127.0.0.1:5000/api/v1/validate', json={
         "apiKey": api_key, "payload": final_payload
     })
 

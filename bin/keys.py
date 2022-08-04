@@ -49,7 +49,7 @@ def decrypt_data(payload, product):
             algorithm=hashes.SHA256(),
             label=None
     ))
-    print(plaintext)
+    
     return plaintext.decode('utf-8').split(':')
 
 
