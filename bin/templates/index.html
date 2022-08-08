@@ -77,7 +77,7 @@
       }
 
       var httpRequest = new XMLHttpRequest();
-      httpRequest.open("POST", "/login", true);
+      httpRequest.open("POST", "{{ url_for('auth.login') }}", true);
       httpRequest.setRequestHeader('Content-Type', 'application/json');
       httpRequest.onload = function (e) {
         if (httpRequest.readyState === 4 && httpRequest.status === 200){
