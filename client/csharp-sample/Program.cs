@@ -1,4 +1,6 @@
-﻿namespace SampleClient
+﻿using LMlib;
+
+namespace SampleClient
 {
     class SampleClass
     {

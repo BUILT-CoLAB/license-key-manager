@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
 
-namespace SampleClient
+namespace LMlib
 {
     class LicenseManager
     {
