@@ -13,7 +13,7 @@ namespace SampleClient
 
             var serial = "9XAG0-OMRZ8-ZYZPT-5AHYO";
 
-            var hostname = "http://localhost:5000";
+            var hostname = "https://slm.localhost.direct/";
 
             LicenseManager lm = new LicenseManager(pubkey, api_key, serial, hostname);
             Task<string> task = lm.validate();
