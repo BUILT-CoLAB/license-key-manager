@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using LMlib;
 
@@ -15,7 +16,7 @@ namespace SampleClient
 
             var serial = "9XAG0-OMRZ8-ZYZPT-5AHYO";
 
-            var hostname = "https://slm.localhost.direct/";
+            var hostname = "https://slm.localhossadt.direct/";
 
             LicenseManager lm = new LicenseManager(pubkey, api_key, serial, hostname);
             Task<string> task = lm.validate();
@@ -24,6 +25,19 @@ namespace SampleClient
                 task.Wait();
                 Console.WriteLine(task.Result);
             }
+            catch (AggregateException ae)
+            {
+                ae.Handle((x) =>
+                {
+                    if (x is HttpRequestException) // This we know how to handle.
+                    {
+                        Console.WriteLine("{0} Exception caught in HTTP Request.", x.InnerException.Message);
+                        return true;
+                    }
+                    return false; // Let anything else stop the application.
+                });
+            }
+
             catch (Exception e)
             {
                 Console.WriteLine("{0} Exception caught.", e.InnerException.Message);
