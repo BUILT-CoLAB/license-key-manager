@@ -116,11 +116,11 @@ def PemToXML(pubkey):
     pubKxml = '<RSAKeyValue>'
     pubKxml += '<Modulus>'
     pubKxml += standard_b64encode(
-        long_to_bytes(pubk.public_numbers().e)).decode('utf-8')
+        long_to_bytes(pubk.public_numbers().n)).decode('utf-8')
     pubKxml += '</Modulus>'
     pubKxml += '<Exponent>'
     pubKxml += standard_b64encode(
-        long_to_bytes(pubk.public_numbers().n)).decode('utf-8')
+        long_to_bytes(pubk.public_numbers().e)).decode('utf-8')
     pubKxml += '</Exponent>'
     pubKxml += '</RSAKeyValue>'
 

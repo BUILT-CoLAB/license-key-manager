@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Net;
+using System.IO;
 
 namespace LMlib
 {
@@ -73,7 +75,7 @@ namespace LMlib
             return b64payload;
         }
 
-        public async Task<string> validate()
+        public async Task<string> ValidateAsync()
         {
             var client = new HttpClient();
 
@@ -87,12 +89,11 @@ namespace LMlib
                 RequestUri = new Uri(_hostname + _endpoint),
                 Content = new StringContent(options.ToString(), Encoding.UTF8, "application/json"),
             };
-            var response = await client.SendAsync(request).ConfigureAwait(false);
+            var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var responseBody = await response.Content.ReadAsStringAsync();
             return responseBody.ToString();
         }
-
 
         public LicenseManager(string pub, string api, string serial, string hostname)
         {
