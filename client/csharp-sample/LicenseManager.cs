@@ -1,9 +1,13 @@
+using System;
 using System.Management;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+
 
 namespace LMlib
 {
