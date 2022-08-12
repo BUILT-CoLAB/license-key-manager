@@ -17,7 +17,7 @@ namespace LMlib
         private string _hostname { get; set; }
         private string _deviceUUID { get; set; }
 
-        private static string _endpoint = "/api/v1/validate";
+        private static string _endpoint = "api/v1/validate";
 
 
         private string getCPUId()

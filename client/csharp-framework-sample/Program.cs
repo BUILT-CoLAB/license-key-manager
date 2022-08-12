@@ -16,7 +16,7 @@ namespace SampleClient
 
             var serial = "9XAG0-OMRZ8-ZYZPT-5AHYO";
 
-            var hostname = "https://slm.localhossadt.direct/";
+            var hostname = "https://slm.localhost.direct/";
 
             LicenseManager lm = new LicenseManager(pubkey, api_key, serial, hostname);
             Task<string> task = lm.validate();
@@ -31,7 +31,7 @@ namespace SampleClient
                 {
                     if (x is HttpRequestException) // This we know how to handle.
                     {
-                        Console.WriteLine("{0} Exception caught in HTTP Request.", x.InnerException.Message);
+                        Console.WriteLine("Exception caught in HTTP Request: {0}", x.InnerException.Message);
                         return true;
                     }
                     return false; // Let anything else stop the application.
@@ -40,7 +40,7 @@ namespace SampleClient
 
             catch (Exception e)
             {
-                Console.WriteLine("{0} Exception caught.", e.InnerException.Message);
+                Console.WriteLine("Exception caught: {0}", e.InnerException.Message);
             }
 
         }
