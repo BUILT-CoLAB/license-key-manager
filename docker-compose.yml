@@ -1,19 +1,6 @@
 version: '3'
 
 services:
-  proxy:
-    image: nginx:latest
-    volumes:
-      - ./nginx/certs/:/ssl/
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/logs:/var/log/nginx 
-      - ./nginx/cache/:/etc/nginx/cache
-    networks:
-      - slm_default
-    ports:
-      - 80:80
-      - 443:443
-
   slm:
     build: .
     ports:
