@@ -13,6 +13,7 @@ def displayProduct(productID):
     if( not str(productID).isnumeric() ):
         return Utils.render404("Product not found", "Sorry, but the product you have entered is invalid ...")
     
+    # TODO - FIX BUG IF PRODUCT ID IS NOT IN DB
     DBAPI.updateKeyStatesFromProduct(productID)
 
     licenses = DBAPI.getKeys(productID)
