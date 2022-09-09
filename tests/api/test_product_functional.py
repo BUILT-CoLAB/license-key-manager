@@ -1,10 +1,6 @@
 from bin import databaseAPI
 
-###########################################################################
-########### PRODUCT HANDLING
-###########################################################################
-
-def test_product_creation(auth,client,app):
+def test_creation(auth,client,app):
     """Tests if API successfully creates a product
 
     Parameters
@@ -48,7 +44,7 @@ def test_product_creation(auth,client,app):
         assert addedProduct.image == product['image']
 
 
-def test_product_edit(auth,client,app):
+def test_edit(auth,client,app):
     """Tests if API successfully edits a product database entry
 
     Parameters
@@ -92,6 +88,7 @@ def test_product_edit(auth,client,app):
     with app.app_context():
         addedProduct = databaseAPI.getProductByID(1)
         assert addedProduct != None
+        assert addedProduct != product
         assert addedProduct.id == changedProduct['id']
         assert addedProduct.name == changedProduct['name']
         assert addedProduct.category == changedProduct['category']
