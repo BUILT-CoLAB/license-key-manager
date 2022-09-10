@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  slm:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ./bin/database:/license-manager/bin/database
+    environment:
+      - WORKERS=2
+      - THREADS=4
+      - PORT=8000
+    networks:
+      - slm_default
+
+networks:
+  slm_default:

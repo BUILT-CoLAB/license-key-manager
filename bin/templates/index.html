@@ -1,93 +1,147 @@
 <!DOCTYPE html>
 {% if mode is defined and mode == 'NIGHT' %}
 <html lang="en" class="h-full dark">
-{% else %}
-<html lang="en" class="h-full">
-{% endif %}
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="A License Key Managing software meant to manage and create licenses.">
-		<meta name="author" content="Daniel | Isla | André">
-		<meta name="generator" content="Hugo 0.88.1">
-		<title>License Manager | Login</title>
+  {% else %}
+  <html lang="en" class="h-full">
+    {% endif %}
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta
+        name="description"
+        content="A License Key Managing software meant to manage and create licenses."
+      />
+      <meta name="author" content="Daniel | Isla | André" />
+      <meta name="generator" content="Hugo 0.88.1" />
+      <title>License Manager | Login</title>
+      <link
+        rel="shortcut icon"
+        href="{{ url_for('static', filename='favicon.ico') }}"
+      />
+      <link
+        href="{{ url_for('static', filename='style.css') }}"
+        rel="stylesheet"
+      />
+      <script src="{{ url_for('static', filename='tailwind.js') }}"></script>
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='flowbite.min.css') }}"
+      />
+      <script>
+        tailwind.config = {
+          darkMode: "class",
+        };
+      </script>
+    </head>
 
-		<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-		<script src="{{ url_for('static', filename='tailwind.js') }}"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='flowbite.min.css') }}" />
-		<script>
-			tailwind.config = {
-			  darkMode: 'class',
-			}
-		</script>
-	</head>
+    <body class="h-full dark:bg-slate-900">
+      <div class="min-h-full flex">
+        <div class="relative w-0 flex-1 flex justify-center items-center">
+          <img
+            class="h-3/5 w-3/5 object-fill"
+            src="{{ url_for('static', filename='loginImage.svg') }}"
+            alt=""
+          />
+        </div>
 
-	<body class="h-full dark:bg-slate-900">
-    <div class="min-h-full flex">
-      <div class="relative w-0 flex-1 flex justify-center items-center">
-        <img class="h-3/5 w-3/5 object-fill" src="{{ url_for('static', filename='loginImage.svg') }}" alt="">
-      </div>
+        <div
+          class="flex-1 flex flex-col justify-center py-12 px-40 lg:flex-none"
+        >
+          <div class="mx-auto w-full max-w-4xl w-fit">
+            <div>
+              <h2
+                class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-slate-100"
+              >
+                Multi-Purpose License Manager
+              </h2>
+              <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">
+                Before starting, let's log into your account.
+              </p>
+            </div>
 
-      <div class="flex-1 flex flex-col justify-center py-12 px-40 lg:flex-none">
-        <div class="mx-auto w-full max-w-4xl w-fit">
-          <div>
-            <h2 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-slate-100">Multi-Purpose License Manager</h2>
-            <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">Before starting, let's log into your account.</p>
-          </div>
-    
-          <div class="mt-8">
-            <div class="mt-6">
-              <div class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-slate-300"> Username </label>
-                  <div class="mt-1">
-                    <input type="text" autocomplete="off" class="form-content-data appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <div class="mt-8">
+              <div class="mt-6">
+                <div class="space-y-4">
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-slate-300"
+                    >
+                      Username
+                    </label>
+                    <div class="mt-1">
+                      <input
+                        type="text"
+                        autocomplete="off"
+                        class="form-content-data appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      />
+                    </div>
                   </div>
-                </div>
-    
-                <div class="space-y-1">
-                  <label class="block text-sm font-medium text-gray-700 dark:text-slate-300"> Password </label>
-                  <div class="mt-1">
-                    <input type="password" autocomplete="off" required class="form-content-data appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                  </div>
-                </div>
-    
-                <div>
-                  <button id="submitLoginData" class="mt-10 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign in</button>
-                </div>
 
-                <p id="loginErrorMessage" class="mt-0 text-sm text-red-700 font-bold"></p>
+                  <div class="space-y-1">
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-slate-300"
+                    >
+                      Password
+                    </label>
+                    <div class="mt-1">
+                      <input
+                        type="password"
+                        autocomplete="off"
+                        required
+                        class="form-content-data appearance-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <button
+                      id="submitLoginData"
+                      class="mt-10 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Sign in
+                    </button>
+                  </div>
+
+                  <p
+                    id="loginErrorMessage"
+                    class="mt-0 text-sm text-red-700 font-bold"
+                  ></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>    
-  </body>
+    </body>
 
-  <script>
-    document.getElementById("submitLoginData").addEventListener("click", submitRequest);
+    <script>
+      document
+        .getElementById("submitLoginData")
+        .addEventListener("click", submitRequest);
 
-    function submitRequest(){
-      let activeElements = document.getElementsByClassName("form-content-data");
-      // Get login data:
-      let loginData = {
-        'emailData' : activeElements[0].value,
-        'passwordData' : activeElements[1].value
+      function submitRequest() {
+        let activeElements =
+          document.getElementsByClassName("form-content-data");
+        // Get login data:
+        let loginData = {
+          emailData: activeElements[0].value,
+          passwordData: activeElements[1].value,
+        };
+
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open("POST", "{{ url_for('auth.login') }}", true);
+        httpRequest.setRequestHeader("Content-Type", "application/json");
+        httpRequest.onload = function (e) {
+          if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+            if (httpRequest.responseText == "OK")
+              window.location.href = "{{ url_for('main.cpanel') }}";
+            else
+              document.getElementById("loginErrorMessage").innerText =
+                httpRequest.responseText;
+          }
+        };
+        httpRequest.send(JSON.stringify(loginData));
       }
-
-      var httpRequest = new XMLHttpRequest();
-      httpRequest.open("POST", "{{ url_for('auth.login') }}", true);
-      httpRequest.setRequestHeader('Content-Type', 'application/json');
-      httpRequest.onload = function (e) {
-        if (httpRequest.readyState === 4 && httpRequest.status === 200){
-          if( httpRequest.responseText == "OK" )
-            window.location.href = "{{ url_for('main.cpanel') }}";
-          else
-            document.getElementById("loginErrorMessage").innerText = httpRequest.responseText;
-        }
-    };
-      httpRequest.send(JSON.stringify(loginData));
-    }
-  </script>
+    </script>
+  </html>
 </html>

@@ -127,8 +127,7 @@ def getKeys(productID):
     ).fetchall()
 
 def getKeysBySerialKey(serialKey, productID):
-    print('ID-',productID)
-    print('Serial-',serialKey)
+    print('Request with ID: %s, Serial: %s' % (productID,serialKey))
     return Key.query.filter_by(serialkey = serialKey, productid=productID).first()
 
 def createKey(productid, clientid, serialkey, maxdevices, expiryDate):
