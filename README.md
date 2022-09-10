@@ -668,7 +668,7 @@ PATH:
 ### Validation
 
 Validates a request coming from any external source to decipher whether or not the validation request is valid and that the license indicated is, in fact, genuine. The response follows the same format for all cases.<br/><br/>
-**Path** : `/validate`\
+**Path** : `/api/v1/validate`\
 **Method** : `POST`\
 **Authentication required** : NO\
 **Parameters** :
