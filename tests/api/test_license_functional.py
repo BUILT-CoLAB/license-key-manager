@@ -53,7 +53,7 @@ def create_license(app,create_customer,create_product):
 @pytest.fixture
 def add_device(app,create_customer,create_product,create_license):
     with app.app_context():
-        hw_id = str(uuid4())
+        hw_id = "AAAA-BBBB-CCCC-DDDD-EEEE"
         key = databaseAPI.getKeyData(create_license.id)
         databaseAPI.addRegistration(key.id, hw_id,key)
         registration = Registration.query.first()
@@ -243,7 +243,8 @@ def test_switch_state_with_active_devices(auth,client,app,create_customer,create
     """
 
     auth.login()       
-    
+
+    # Tries to change state of existent license
     license_edit = {
         'licenseID' : create_license.id,
         'action' : 'SWITCHSTATE'
@@ -266,6 +267,43 @@ def test_switch_state_with_active_devices(auth,client,app,create_customer,create
         assert licenses != None
         assert len(licenses) == 1
         assert licenses[0].status == 1
+
+@pytest.mark.parametrize(('licenseID', 'action','message'), (
+    (1+1, 'SWITCHSTATE', 'The license you have indicated does not exist ...'),
+    ('test', 'SWITCHSTATE', 'The license and (or) the action request you have indicated is (are) invalid ...'),
+    (1, 'test', 'The license and (or) the action request you have indicated is (are) invalid ...'),
+    (1+1, 'test', 'The license and (or) the action request you have indicated is (are) invalid ...')
+))
+def test_invalid_switch_state(auth,client,app,create_customer,create_product,create_license,add_device,licenseID,action,message):
+    """Tests if API rejects invalid switches license state requests
+
+    Parameters
+    ----------
+    auth : AuthActions
+        AuthActions class object to use for login
+
+    client : FlaskClient
+        The test client to use for requests
+
+    app :  FlaskApp
+        The app needed to query the Database
+
+    Returns
+    -------
+    """
+
+    auth.login()       
+    
+    # Tries to change state with invalid licenseID
+    invalid_license_edit = {
+        'licenseID' : licenseID,
+        'action' : action
+    }
+    response = client.post("/licenses/editkeys",json=invalid_license_edit)
+    assert response.status_code != 200
+    loaded_json = json.loads(response.data)
+    assert loaded_json['code'] == "ERROR"
+    assert loaded_json['message'] == message
 
 
 def test_unlinking_device(auth,client,app,create_customer,create_product,create_license,add_device):
@@ -295,6 +333,46 @@ def test_unlinking_device(auth,client,app,create_customer,create_product,create_
     response = client.post(string_endpoint,json=json_body)
     assert response.status_code == 200
     assert json.loads(response.data)['code'] == "OKAY"
+
+    with app.app_context():
+        registrations = databaseAPI.getRegistration(create_license.id,add_device.hardwareID)
+        assert registrations == None
+
+@pytest.mark.parametrize(('licenseID', 'hardwareID','message'), (
+    (1, 'test', 'There was an error managing the state of the license - #UNKNOWN ERROR'),
+    ('test', "AAAA-BBBB-CCCC-DDDD-EEEE", 'The license you have entered is invalid ...'),
+    (1+1, "AAAA-BBBB-CCCC-DDDD-EEEE", 'There was an error managing the state of the license - #UNKNOWN ERROR'),
+    (1+1, 'test', 'There was an error managing the state of the license - #UNKNOWN ERROR')
+))
+def test_invalid_unlinking_device(auth,client,app,create_customer,create_product,create_license,add_device,licenseID,hardwareID,message):
+    """Tests if API rejects invalid unlink requests
+
+    Parameters
+    ----------
+    auth : AuthActions
+        AuthActions class object to use for login
+
+    client : FlaskClient
+        The test client to use for requests
+
+    app :  FlaskApp
+        The app needed to query the Database
+
+    Returns
+    -------
+    """
+
+    auth.login()       
+
+    json_body = {
+        'hardwareID' : hardwareID
+    }
+    string_endpoint = "licenses/"+str(licenseID)+"/removedevice"
+    response = client.post(string_endpoint,json=json_body)    
+    loaded_json= json.loads(response.data)
+    assert loaded_json['code'] == "ERROR"
+    assert loaded_json['message'] == message
+    assert response.status_code != 200
 
     with app.app_context():
         registrations = databaseAPI.getRegistration(create_license.id,add_device.hardwareID)

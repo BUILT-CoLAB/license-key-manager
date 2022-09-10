@@ -1,3 +1,4 @@
+import json
 from bin import databaseAPI,db
 import pytest
 from bin.models import Client
@@ -81,7 +82,15 @@ def test_edit(auth,client,app,created_customer):
         'country':'SENEGAL'
     }
 
-    response = client.post("/customers/edit/1",json=changedCustomer)
+    # Tries to edit an unexistent customer
+    response = client.post("/customers/edit/"+str(created_customer.id+1),json=changedCustomer)
+    assert response.status_code != 200
+    parsed_json = json.loads(response.data)
+    assert parsed_json['code'] == "ERROR"
+    assert parsed_json['message'] == "The database failed to edit the customer data - #UNKNOWN ERROR"
+    
+    # Tries to edit an existent customer
+    response = client.post("/customers/edit/"+str(created_customer.id),json=changedCustomer)
     assert response.status_code == 200
     with app.app_context():    
         customer = databaseAPI.getCustomerByID(1)
@@ -117,6 +126,11 @@ def test_delete(auth,client,app,created_customer):
         customer = databaseAPI.getCustomerByID(created_customer.id)
         assert customer != None
 
+        # Tries to delete an unexistent customer
+        response = client.post("/customers/delete/"+str(created_customer.id+1))
+        assert response.status_code != 200
+
+        # Tries to delete an existent customer
         response = client.post("/customers/delete/"+str(created_customer.id))
         assert response.status_code == 200
 

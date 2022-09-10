@@ -82,11 +82,14 @@ def test_access(auth,client,app,created_product):
 
     auth.login()
 
+    # Tries to list an existent product
     response = client.get("/products/id/"+str(created_product.id))
     assert response.status_code == 200
 
+    # Tries to list an unexistent product
     response = client.get("/products/id/"+str(created_product.id+1))
     assert response.status_code == 404
+
 
 def test_edit(auth,client,app,created_product):
     """Tests if API successfully edits a product database entry
@@ -108,13 +111,28 @@ def test_edit(auth,client,app,created_product):
 
     auth.login()
 
-    changedProduct = {  'id':created_product.id,
-                        'name':'Final product',
-                        'category': 'CAT 003SAFINAL',
-                        'image':'',
-                        'details':'this product is the final product'
+    unexistent_product = { 
+        'id':created_product.id+1,
+        'name':'Final product',
+        'category': 'CAT 003SAFINAL',
+        'image':'',
+        'details':'this product is the final product'
     }
 
+    # Tries to edit an unexistent product
+    response = client.post("/products/edit",json=unexistent_product)
+    assert response.status_code != 200
+    assert response.status_code != 500
+
+    changedProduct = {  
+        'id':created_product.id,
+        'name':'Final product',
+        'category': 'CAT 003SAFINAL',
+        'image':'',
+        'details':'this product is the final product'
+    }
+
+    # Tries to edit an existent product
     response = client.post("/products/edit",json=changedProduct)
     assert response.status_code == 200
 
