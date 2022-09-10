@@ -3,9 +3,16 @@ from bin.models import User, Product
 from bin import keys 
 from bin.handlers import products
 from werkzeug.security import check_password_hash
+
+
 def test_newuser(auth,client,app):
     auth.login()
     with app.app_context():
+
+    #GIVEN a User model
+    #WHEN a new User is created
+    #THEN check the email, hashed_password, and name fields are defined correctly
+    # ALSO checks if user status is toggable
 
         DBAPI.generateUser('Marry', 'manuel2', 'marry32@gmail.com')
         user = DBAPI.obtainUser('Marry')
@@ -20,12 +27,12 @@ def test_changePassword(auth,client,app):
     auth.login()
     with app.app_context():
 
+   #GIVEN a User model
+    #WHEN a  User changes its password
+    #THEN check the  hashed_password is defined correctly
+
         DBAPI.generateUser('Marry', 'manuel2', 'marry32@gmail.com')
         user = DBAPI.obtainUser('Marry')
-        assert user.email == 'marry32@gmail.com'
-        assert user.name == 'Marry'
-        assert user.password != 'manuel2'
-
         DBAPI.changeUserPassword(user.id, 'newTestPass123')
         user = DBAPI.obtainUser('Marry')
         assert user.password != 'newTestPass123'
@@ -35,6 +42,12 @@ def test_changePassword(auth,client,app):
 
 
 def test_new_old_user(auth,client,app):
+    #GIVEN a Customer model
+    #WHEN a new Customer is created
+    #THEN check the email, hashed_password, and name fields are defined correctly
+    # ALSO 
+    #WHEN a new Customer is selected for deletion
+    #THEN check the none existance of the customer in the database
     auth.login()
     with app.app_context():
         DBAPI.createCustomer('Test', 'email@test.com', '87654321', 'Mozambique')
@@ -49,10 +62,10 @@ def test_new_old_user(auth,client,app):
         assert cust == None
 
 
-
-
-
 def test_new_product(auth,client,app):
+    #GIVEN a Product model
+    #WHEN a new product is created
+    #THEN check the increase of product,and category field defined correctly
     auth.login()
     with app.app_context():
         product_keys = keys.create_product_keys()
@@ -65,11 +78,16 @@ def test_new_product(auth,client,app):
         count = DBAPI.getProductCount() 
 
         product = DBAPI.createProduct(productspec.get('name'), productspec.get('category'), productspec.get('image'), productspec.get('details'), product_keys[0], product_keys[1], product_keys[2])
-
+        assert product.category == 'CAT 003SA'
         assert DBAPI.getProductCount() == (count+1)
+
+    #    ALSO 
+    #WHEN catefory of a product is editted
+    #THEN check the category fields are defined correctly
         DBAPI.editProduct(product.id, 'Testing Product', 'CAT 004ZA', '', 'Improved testing version')
         productsame = DBAPI.getProductThroughAPI(product_keys[2])
         assert productsame.category == 'CAT 004ZA'
+        assert productsame.details == 'Improved testing version'
         
 
         
@@ -77,6 +95,9 @@ def test_new_product(auth,client,app):
 
 
 def test_key_registration(auth, client, app):
+    #GIVEN a Key model
+    #WHEN a new lkey is created
+    #THEN check the increase of product keys and fields defined correctly
     auth.login()
     with app.app_context():
         product_keys = keys.create_product_keys()
@@ -91,15 +112,17 @@ def test_key_registration(auth, client, app):
         serial = keys.generateSerialKey(10)
         keyidd = DBAPI.createKey(product.id, 1, serial, 10, 1000000000000000000)
         assert keyidd != None
-        all_keys = DBAPI.getKeys(product.id)
         
         #this shouldnt fail but does
+        #all_keys = DBAPI.getKeys(product.id)
         #assert len(all_keys)>0
 
         keyy = DBAPI.getKeysBySerialKey(serial, product.id)
         assert keyidd == keyy.id
         assert keyy.devices ==0 
-        
+        #ALSO 
+        #WHEN a new regestiration is created
+        #THEN check the increase of devices and change in status keys 
         DBAPI.addRegistration(keyy.id, 123, keyy)
         keyy = DBAPI.getKeysBySerialKey(serial, product.id)
         assert keyy.devices ==1
@@ -107,6 +130,9 @@ def test_key_registration(auth, client, app):
 
 
 def test__admin_logs(auth, client, app):
+    #GIVEN a Log model
+    #WHEN a new product is created
+    #THEN check the increase of logs and fields defined correctly
     auth.login()
     with app.app_context():
         product_keys = keys.create_product_keys()

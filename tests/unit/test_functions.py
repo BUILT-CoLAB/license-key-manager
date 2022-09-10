@@ -6,6 +6,9 @@ from bin import keys
 import pytest
 
 def test_edits(auth, client,app ):
+    #GIVEN a User and customer model
+    #WHEN a new User and customer are edited
+    #THEN check the email, hashed_password, and name fields were edited correctly
     auth.login()
     with app.app_context():
         newCustomer = { 'name':'Test Customer',
@@ -37,9 +40,11 @@ def test_edits(auth, client,app ):
         
 
 
-
-
 def test_license(auth, client,app ):
+    #GIVEN a license model
+    #WHEN a license is edited
+    #THEN check the changes happen correctly
+    #this test fails due to lower level test fail
     auth.login()
     with client:
         with app.app_context():
@@ -86,6 +91,10 @@ def test_license(auth, client,app ):
 
 
 def test_utils():
+    #GIVEN a human world
+    #WHEN a data is inputed manually
+    #THEN check correct raise of flags
+    
     newCustomer = { 'name':'Test Customer',
                     'email': 'test@customer.com',
                     'phone':'123456789',
