@@ -1,4 +1,24 @@
 from bin import databaseAPI
+import pytest
+
+from bin.keys import create_product_keys
+from bin.models import Product
+from bin import db 
+
+@pytest.fixture
+def created_product(app):
+    with app.app_context():
+        product_keys = create_product_keys()
+        product = Product(name = 'Testing product',category = 'CAT 003SA', image = '',details = 'Testing product only', privateK = product_keys[0], publicK = product_keys[1], apiK = product_keys[2])
+        db.session.add(product)
+        db.session.commit()
+        final_product = Product.query.filter_by(id = product.id).first()
+    
+    yield final_product
+    with app.app_context():
+        db.session.delete(final_product)
+        db.session.commit()
+
 
 def test_creation(auth,client,app):
     """Tests if API successfully creates a product
@@ -19,8 +39,6 @@ def test_creation(auth,client,app):
     """
 
     auth.login()
-    response = client.get("/products/id/1")
-    assert response.status_code == 404
     
     product = { 'name':'Testing product',
                 'category': 'CAT 003SA',
@@ -29,9 +47,6 @@ def test_creation(auth,client,app):
     }
 
     response = client.post("/products/create",json=product)
-    assert response.status_code == 200
-
-    response = client.get("/products/id/1")
     assert response.status_code == 200
     
     with app.app_context():
@@ -44,7 +59,36 @@ def test_creation(auth,client,app):
         assert addedProduct.image == product['image']
 
 
-def test_edit(auth,client,app):
+def test_access(auth,client,app,created_product):
+    """Tests if API successfully lists a product info when the product exists
+
+    Parameters
+    ----------
+    auth : AuthActions
+        AuthActions class object to use for login
+
+    client : FlaskClient
+        The test client to use for requests
+    
+    app :  FlaskApp
+        The app needed to query the Database
+
+    created_product : Product
+        The product added to the Database before the test
+
+    Returns
+    -------
+    """
+
+    auth.login()
+
+    response = client.get("/products/id/"+str(created_product.id))
+    assert response.status_code == 200
+
+    response = client.get("/products/id/"+str(created_product.id+1))
+    assert response.status_code == 404
+
+def test_edit(auth,client,app,created_product):
     """Tests if API successfully edits a product database entry
 
     Parameters
@@ -63,32 +107,21 @@ def test_edit(auth,client,app):
     """
 
     auth.login()
-    response = client.get("/products/id/1")
-    assert response.status_code == 404
-    
-    product = {'name':'Testing product','category': 'CAT 003SA','image':'','details':'this product is for testing purposes only'}
-    response = client.post("/products/create",json=product)
-    assert response.status_code == 200
 
-    response = client.get("/products/id/1")
-    assert response.status_code == 200
-
-    changedProduct = {  'id':1,
+    changedProduct = {  'id':created_product.id,
                         'name':'Final product',
                         'category': 'CAT 003SAFINAL',
                         'image':'',
                         'details':'this product is the final product'
     }
+
     response = client.post("/products/edit",json=changedProduct)
     assert response.status_code == 200
 
-    response = client.get("/products/id/1")
-    assert response.status_code == 200
-    
     with app.app_context():
         addedProduct = databaseAPI.getProductByID(1)
         assert addedProduct != None
-        assert addedProduct != product
+        assert addedProduct != created_product
         assert addedProduct.id == changedProduct['id']
         assert addedProduct.name == changedProduct['name']
         assert addedProduct.category == changedProduct['category']
