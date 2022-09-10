@@ -108,14 +108,3 @@ def test_utils():
         assert False, f"'newcustomer_validation' raised an exception {exc}"
 
     
-
-
-
-
-
-
-    # except Exception as exc:
-    #     assert False, f"'sum_x_y' raised an exception {exc}"
-
-
-            
