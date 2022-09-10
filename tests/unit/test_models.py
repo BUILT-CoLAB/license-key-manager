@@ -2,6 +2,7 @@ from bin import databaseAPI as DBAPI
 from bin.models import User, Product
 from bin import keys 
 from bin.handlers import products
+from werkzeug.security import check_password_hash
 def test_newuser(auth,client,app):
     auth.login()
     with app.app_context():
@@ -14,6 +15,21 @@ def test_newuser(auth,client,app):
 
         DBAPI.toggleUserStatus(1)
         assert user.disabled == False
+
+def test_changePassword(auth,client,app):
+    auth.login()
+    with app.app_context():
+
+        DBAPI.generateUser('Marry', 'manuel2', 'marry32@gmail.com')
+        user = DBAPI.obtainUser('Marry')
+        assert user.email == 'marry32@gmail.com'
+        assert user.name == 'Marry'
+        assert user.password != 'manuel2'
+
+        DBAPI.changeUserPassword(user.id, 'newTestPass123')
+        user = DBAPI.obtainUser('Marry')
+        assert user.password != 'newTestPass123'
+        assert check_password_hash( user.password,'newTestPass123') == True
 
         
 
