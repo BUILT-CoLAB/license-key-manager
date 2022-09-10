@@ -7,7 +7,7 @@ import string
 import random
 
 def create_product_keys():
-    private_key = rsa.generate_private_key(key_size=1024,public_exponent=65537)
+    private_key = rsa.generate_private_key(key_size=2048,public_exponent=65537)
     api_key = uuid4()
     
     public_key = private_key.public_key().public_bytes(
@@ -49,7 +49,7 @@ def decrypt_data(payload, product):
             algorithm=hashes.SHA256(),
             label=None
     ))
-    print(plaintext)
+    
     return plaintext.decode('utf-8').split(':')
 
 

@@ -1,6 +1,7 @@
 FROM python:3.10.5-alpine3.16
 
 RUN apk add bash curl gcc libc-dev libffi-dev 
+RUN apk add sqlite3
 RUN pip3 install gunicorn gevent 
 
 # Create a group and user
@@ -13,8 +14,10 @@ WORKDIR /license-manager
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY ./bin /license-manager/bin
-COPY .env /license-manager/bin
+COPY --chown=appuser ./bin /license-manager/bin
+COPY --chown=appuser .env /license-manager/bin
+
+RUN chown appuser:appgroup -R /license-manager/bin/database
 
 ARG DEFAULT_WORKERS=2
 ARG DEFAULT_THREADS=4

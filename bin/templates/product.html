@@ -1,322 +1,711 @@
-{% extends "base.html" %}
-{% block title %}CPanel | Products{% endblock %}
-{% block second %}text-gray-600 bg-gray-50 dark:bg-gray-700{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}CPanel | Products{% endblock %} {%
+block second %}text-gray-600 bg-gray-50 dark:bg-gray-700{% endblock %} {% block
+content %}
 <main>
-    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-slate-900 dark:border-slate-700">
-       <div class="mb-1 w-full">
-			<div class="mb-2 pb-3">
-				<nav class="flex mb-4 pb-4 border-b border-gray-200 dark:border-slate-700" aria-label="Breadcrumb">
-					<ol class="inline-flex items-center space-x-1 md:space-x-2">
-						<li class="inline-flex items-center">
-							<a href="#" class="text-gray-700 hover:text-gray-900 inline-flex items-center dark:text-slate-300 dark:hover:text-slate-500">
-								<svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-									<path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-								</svg>
-								Dashboard
-							</a>
-						</li>
-						<li>
-							<div class="flex items-center">
-								<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-								</svg>
-								<a href="{{ url_for('main.products') }}" class="text-gray-700 hover:text-gray-900 ml-1 dark:text-slate-300 dark:hover:text-slate-500">Products</a>
-							</div>
-						</li>
-						<li>
-							<div class="flex items-center">
-								<svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-								</svg>
-								<a href="#" class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium dark:text-slate-300 dark:hover:text-slate-500">{{ product.name }}</a>
-							</div>
-						</li>
-					</ol>
-				</nav>
-        <div class="flex justify-between">
-          <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Product Display</h1>
-          <div>
-            <button type="button" data-modal-toggle="copy-modal" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" content="{{ product.apiK }}">API Key</button>
-            <button type="button" data-modal-toggle="copy-modal" class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" content="{{ pubKey }}">Public Key</button>
-          </div>
-        </div>
-			</div>
-        
-		<div class="bg-white border-b border-gray-200 dark:bg-slate-900 dark:border-slate-700">
-			<div class="pb-6">
-			  <div class="mt-1 w-full">
-				<div class="flex">
-					<div style="min-width: 400px; min-height: 400px; max-width: 400px; max-height: 400px">
-						<img src="{{ product.image }}" class="rounded-lg" style="height: 100%;">
-					</div>
-					<div class="ml-8 max-h-96 w-full">
-						<!-- Product details -->
-						<div>
-							<h1 class="text-xl font-bold text-gray-900 dark:text-gray-300">{{ product.name }}</h1>
-							<h2 class="text-m font-medium text-gray-600 dark:text-slate-400">{{ product.category }}</h2>
-							<h2 class="mt-6 text-sm font-medium text-gray-900 dark:text-gray-300">Description:</h2>
-							<div class="mt-2 prose prose-sm text-gray-500 max-h-32 overflow-y-auto dark:text-slate-400">
-								<p>{{ product.details }}</p>
-							</div>
-						</div>
-			
-						<!-- Policies -->
-						<section aria-labelledby="policies-heading" class="mt-10">
-						<dl class="grid grid-cols-2 gap-6">
-							<div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center dark:bg-slate-700 dark:border-slate-500">
-							<dt>
-								<!-- Heroicon name: outline/globe -->
-								<svg class="mx-auto h-6 w-6 flex-shrink-0 text-gray-400 dark:text-slate-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-								<span class="mt-4 text-sm font-medium text-gray-900 dark:text-slate-100"> Licenses </span>
-							</dt>
-							<dd class="mt-1 text-sm text-gray-500 dark:text-slate-400">{{licenses|length}}</dd>
-							</div>
-			
-							<div class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center dark:bg-slate-700 dark:border-slate-500">
-							<dt>
-								<!-- Heroicon name: outline/currency-dollar -->
-								<svg class="mx-auto h-6 w-6 flex-shrink-0 text-gray-400 dark:text-slate-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-								<span class="mt-4 text-sm font-medium text-gray-900 dark:text-slate-100"> Clients </span>
-							</dt>
-							<dd class="mt-1 text-sm text-gray-500 dark:text-slate-400">{{clients}}</dd>
-							</div>
-						</dl>
-						</section>
-					</div>
-				</div>
-			  </div>
-			</div>
-		</div>	
-
-    {% if customers|length > 0 %}
-      <div class="flex justify-between items-center">
-        <h1 class="mt-5 mb-2 font-semibold text-gray-900 text-2xl dark:text-gray-100">Product Licenses</h1>
-        <button type="button" class="w-fit px-4 py-2 mt-5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300" data-modal-toggle="creation-modal">Create License</button>
-      </div>
-      
-      {% if licenses|length > 0 %}
-        <ul role="list" class="mt-5 divide-y divide-gray-200">
-          
-          {% for license in licenses %}
-            <li>
-              <a href="{{ url_for('main.licenseDisplay', licenseid = license.id) }}" class="group block bg-gray-50 pr-5 pl-5 dark:bg-slate-700 dark:hover:bg-slate-600 transition-all duration-300">
-                <div class="flex items-center py-5 px-4 sm:py-6 sm:px-0">
-                  <div class="min-w-0 flex-1 flex items-center">
-                    <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-3 md:gap-4">
-                      <div>
-                        <p class="text-sm font-medium text-blue-600 truncate dark:text-sky-500">License #{{license.id}}</p>
-                        <p class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300">
-                          <!-- Heroicon name: solid/mail -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                            </svg>
-                            <span class="truncate">{{license.serialkey}}</span>
-                        </p>
-                      </div>
-                      <div class="hidden md:block">
-                        <div>
-                          <p class="text-sm text-gray-900 dark:text-gray-400">
-                              Client: '{{license.name}}'
-                          </p>
-                          <p class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300">
-                              Devices: {{license.devices}}/{{license.maxdevices}}
-                          </p>
-                        </div>
-                      </div>
-                      <div class="hidden md:block">
-                        <div>
-                          <p class="text-sm text-gray-900 dark:text-gray-300">
-                              Expires on
-                              <time class="timestamp replace-parent">{{license.expirydate}}</time>
-                          </p>
-                          {% if license.status == 0 %}
-                            <p class="mt-2 flex items-center text-sm text-yellow-400">
-                              <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                              </svg>
-                              Awaiting Activation
-                            </p>
-                          {% elif license.status == 1 %}
-                            <p class="mt-2 flex items-center text-sm text-green-400">
-                              <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                              </svg>
-                              Active
-                            </p>
-                          {% elif license.status == 2 %}
-                            <p class="mt-2 flex items-center text-sm text-red-400">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                              Revoked
-                            </p>
-                          {% else %}
-                            <p class="mt-2 flex items-center text-sm text-red-400">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                              Expired
-                            </p>
-                          {% endif %}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <!-- Heroicon name: solid/chevron-right -->
-                    <svg class="h-5 w-5 text-gray-400 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                    </svg>
-                  </div>
-                </div>
+  <div
+    class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-slate-900 dark:border-slate-700"
+  >
+    <div class="mb-1 w-full">
+      <div class="mb-2 pb-3">
+        <nav
+          class="flex mb-4 pb-4 border-b border-gray-200 dark:border-slate-700"
+          aria-label="Breadcrumb"
+        >
+          <ol class="inline-flex items-center space-x-1 md:space-x-2">
+            <li class="inline-flex items-center">
+              <a
+                href="#"
+                class="text-gray-700 hover:text-gray-900 inline-flex items-center dark:text-slate-300 dark:hover:text-slate-500"
+              >
+                <svg
+                  class="w-5 h-5 mr-2.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+                  ></path>
+                </svg>
+                Dashboard
               </a>
             </li>
-          {% endfor %}
-
-        </ul>
-      {% else %}
-        <div class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8 dark:bg-transparent">
-          <div class="max-w-max mx-auto">
-            <main class="sm:flex">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-yellow-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-              </svg>
-              <div class="sm:ml-6">
-                <div class="sm:border-l sm:border-gray-200 sm:pl-6">
-                  <h1 class="text-4xl font-extrabold text-yellow-700 tracking-tight sm:text-5xl">No Product Licenses ...</h1>
-                  <p class="mt-1 text-base text-gray-500 dark:text-slate-400">Currently, this product doesn't have any licenses attached to it. You can fix that by creating one first!</p>
-                </div>
+            <li>
+              <div class="flex items-center">
+                <svg
+                  class="w-6 h-6 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <a
+                  href="{{ url_for('main.products') }}"
+                  class="text-gray-700 hover:text-gray-900 ml-1 dark:text-slate-300 dark:hover:text-slate-500"
+                  >Products</a
+                >
               </div>
-            </main>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <svg
+                  class="w-6 h-6 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <a
+                  href="#"
+                  class="text-gray-700 hover:text-gray-900 ml-1 md:ml-2 text-sm font-medium dark:text-slate-300 dark:hover:text-slate-500"
+                  >{{ product.name }}</a
+                >
+              </div>
+            </li>
+          </ol>
+        </nav>
+        <div class="flex justify-between">
+          <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+            Product Display
+          </h1>
+          <div>
+            <button
+              type="button"
+              data-modal-toggle="copy-modal"
+              class="copy-button w-28 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300"
+              content="{{ product.apiK }}"
+            >
+              API Key
+            </button>
+            <button
+              type="button"
+              data-modal-toggle="copy-modal"
+              class="copy-button w-29 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300"
+              content="{{ pubKey }}"
+            >
+              Public Key (PEM)
+            </button>
+            <button
+              type="button"
+              data-modal-toggle="copy-modal"
+              class="copy-button w-29 mx-1 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300"
+              content="{{ pubKeyXML }}"
+            >
+              Public Key (XML)
+            </button>
           </div>
         </div>
-      {% endif %}
-    {% else %}
-      <div class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8 dark:bg-transparent">
+      </div>
+
+      <div
+        class="bg-white border-b border-gray-200 dark:bg-slate-900 dark:border-slate-700"
+      >
+        <div class="pb-6">
+          <div class="mt-1 w-full">
+            <div class="flex">
+              <div
+                style="
+                  min-width: 400px;
+                  min-height: 400px;
+                  max-width: 400px;
+                  max-height: 400px;
+                "
+              >
+                <img
+                  src="{{ product.image }}"
+                  class="rounded-lg"
+                  style="height: 100%"
+                />
+              </div>
+              <div class="ml-8 max-h-96 w-full">
+                <!-- Product details -->
+                <div>
+                  <h1
+                    class="text-xl font-bold text-gray-900 dark:text-gray-300"
+                  >
+                    {{ product.name }}
+                  </h1>
+                  <h2
+                    class="text-m font-medium text-gray-600 dark:text-slate-400"
+                  >
+                    {{ product.category }}
+                  </h2>
+                  <h2
+                    class="mt-6 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Description:
+                  </h2>
+                  <div
+                    class="mt-2 prose prose-sm text-gray-500 max-h-32 overflow-y-auto dark:text-slate-400"
+                  >
+                    <p>{{ product.details }}</p>
+                  </div>
+                </div>
+
+                <!-- Policies -->
+                <section aria-labelledby="policies-heading" class="mt-10">
+                  <dl class="grid grid-cols-2 gap-6">
+                    <div
+                      class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center dark:bg-slate-700 dark:border-slate-500"
+                    >
+                      <dt>
+                        <!-- Heroicon name: outline/globe -->
+                        <svg
+                          class="mx-auto h-6 w-6 flex-shrink-0 text-gray-400 dark:text-slate-100"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <span
+                          class="mt-4 text-sm font-medium text-gray-900 dark:text-slate-100"
+                        >
+                          Licenses
+                        </span>
+                      </dt>
+                      <dd
+                        class="mt-1 text-sm text-gray-500 dark:text-slate-400"
+                      >
+                        {{licenses|length}}
+                      </dd>
+                    </div>
+
+                    <div
+                      class="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center dark:bg-slate-700 dark:border-slate-500"
+                    >
+                      <dt>
+                        <!-- Heroicon name: outline/currency-dollar -->
+                        <svg
+                          class="mx-auto h-6 w-6 flex-shrink-0 text-gray-400 dark:text-slate-100"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <span
+                          class="mt-4 text-sm font-medium text-gray-900 dark:text-slate-100"
+                        >
+                          Clients
+                        </span>
+                      </dt>
+                      <dd
+                        class="mt-1 text-sm text-gray-500 dark:text-slate-400"
+                      >
+                        {{clients}}
+                      </dd>
+                    </div>
+                  </dl>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if customers|length > 0 %}
+      <div class="flex justify-between items-center">
+        <h1
+          class="mt-5 mb-2 font-semibold text-gray-900 text-2xl dark:text-gray-100"
+        >
+          Product Licenses
+        </h1>
+        <button
+          type="button"
+          class="w-fit px-4 py-2 mt-5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-sky-500 dark:hover:bg-sky-600 transition-all duration-300"
+          data-modal-toggle="creation-modal"
+        >
+          Create License
+        </button>
+      </div>
+
+      {% if licenses|length > 0 %}
+      <ul role="list" class="mt-5 divide-y divide-gray-200">
+        {% for license in licenses %}
+        <li>
+          <a
+            href="{{ url_for('main.licenseDisplay', licenseid = license.id) }}"
+            class="group block bg-gray-50 pr-5 pl-5 dark:bg-slate-700 dark:hover:bg-slate-600 transition-all duration-300"
+          >
+            <div class="flex items-center py-5 px-4 sm:py-6 sm:px-0">
+              <div class="min-w-0 flex-1 flex items-center">
+                <div
+                  class="min-w-0 flex-1 px-4 md:grid md:grid-cols-3 md:gap-4"
+                >
+                  <div>
+                    <p
+                      class="text-sm font-medium text-blue-600 truncate dark:text-sky-500"
+                    >
+                      License #{{license.id}}
+                    </p>
+                    <p
+                      class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300"
+                    >
+                      <!-- Heroicon name: solid/mail -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                        />
+                      </svg>
+                      <span class="truncate">{{license.serialkey}}</span>
+                    </p>
+                  </div>
+                  <div class="hidden md:block">
+                    <div>
+                      <p class="text-sm text-gray-900 dark:text-gray-400">
+                        Client: '{{license.name}}'
+                      </p>
+                      <p
+                        class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-300"
+                      >
+                        Devices: {{license.devices}}/{{license.maxdevices}}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="hidden md:block">
+                    <div>
+                      <p class="text-sm text-gray-900 dark:text-gray-300">
+                        Expires on
+                        <time class="timestamp replace-parent"
+                          >{{license.expirydate}}</time
+                        >
+                      </p>
+                      {% if license.status == 0 %}
+                      <p class="mt-2 flex items-center text-sm text-yellow-400">
+                        <svg
+                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        Awaiting Activation
+                      </p>
+                      {% elif license.status == 1 %}
+                      <p class="mt-2 flex items-center text-sm text-green-400">
+                        <svg
+                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        Active
+                      </p>
+                      {% elif license.status == 2 %}
+                      <p class="mt-2 flex items-center text-sm text-red-400">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        Revoked
+                      </p>
+                      {% else %}
+                      <p class="mt-2 flex items-center text-sm text-red-400">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        Expired
+                      </p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <!-- Heroicon name: solid/chevron-right -->
+                <svg
+                  class="h-5 w-5 text-gray-400 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 transition-all duration-300"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div
+        class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8 dark:bg-transparent"
+      >
         <div class="max-w-max mx-auto">
           <main class="sm:flex">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-red-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-20 w-20 text-yellow-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              ></path>
             </svg>
             <div class="sm:ml-6">
               <div class="sm:border-l sm:border-gray-200 sm:pl-6">
-                <h1 class="text-4xl font-extrabold text-red-900 tracking-tight sm:text-5xl dark:text-red-800">License creation disabled</h1>
-                <p class="mt-1 text-base text-gray-500 dark:text-slate-400">There must be at least one registered customer in the web application to create a product license.</p>
-              </div>
-              <div class="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-                <a href="{{ url_for('main.customers') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-rose-800 hover:bg-rose-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"> Check Customers </a>
-                <a href="{{ url_for('main.products') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"> Return to Products </a>
+                <h1
+                  class="text-4xl font-extrabold text-yellow-700 tracking-tight sm:text-5xl"
+                >
+                  No Product Licenses ...
+                </h1>
+                <p class="mt-1 text-base text-gray-500 dark:text-slate-400">
+                  Currently, this product doesn't have any licenses attached to
+                  it. You can fix that by creating one first!
+                </p>
               </div>
             </div>
           </main>
         </div>
       </div>
-    {% endif %}
+      {% endif %} {% else %}
+      <div
+        class="bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8 dark:bg-transparent"
+      >
+        <div class="max-w-max mx-auto">
+          <main class="sm:flex">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-20 w-20 text-red-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              ></path>
+            </svg>
+            <div class="sm:ml-6">
+              <div class="sm:border-l sm:border-gray-200 sm:pl-6">
+                <h1
+                  class="text-4xl font-extrabold text-red-900 tracking-tight sm:text-5xl dark:text-red-800"
+                >
+                  License creation disabled
+                </h1>
+                <p class="mt-1 text-base text-gray-500 dark:text-slate-400">
+                  There must be at least one registered customer in the web
+                  application to create a product license.
+                </p>
+              </div>
+              <div
+                class="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6"
+              >
+                <a
+                  href="{{ url_for('main.customers') }}"
+                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-rose-800 hover:bg-rose-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Check Customers
+                </a>
+                <a
+                  href="{{ url_for('main.products') }}"
+                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Return to Products
+                </a>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
- </main>
- 
- <div id="creation-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-slate-800">
-          <!-- Modal header -->
-            <div class="flex justify-between items-center p-5 rounded-t border-b dark:border-slate-600">
-              <h3 class="text-xl font-medium text-gray-900 dark:text-gray-100">
-                  Create License
-              </h3>
-              <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="creation-modal">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
-              </button>
+</main>
+
+<div
+  id="creation-modal"
+  data-modal-placement="center-center"
+  tabindex="-1"
+  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
+>
+  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow dark:bg-slate-800">
+      <!-- Modal header -->
+      <div
+        class="flex justify-between items-center p-5 rounded-t border-b dark:border-slate-600"
+      >
+        <h3 class="text-xl font-medium text-gray-900 dark:text-gray-100">
+          Create License
+        </h3>
+        <button
+          type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+          data-modal-toggle="creation-modal"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="p-6 space-y-6">
+        <form action="#">
+          <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-6 sm:col-span-3">
+              <label
+                class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100"
+                >Maximum Devices</label
+              >
+              <input
+                type="number"
+                id="keyDeviceMax"
+                class="dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                placeholder="Device linking limit"
+              />
             </div>
-            <!-- Modal body -->
-            <div class="p-6 space-y-6">
-                <form action="#">
-                    <div class="grid grid-cols-6 gap-6">
-                       <div class="col-span-6 sm:col-span-3">
-                          <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Maximum Devices</label>
-                          <input type="number" id="keyDeviceMax" class="dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Device linking limit">
-                       </div>
-                       <div class="col-span-6 sm:col-span-3">
-                          <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Expiry Date</label>
-                          <input type="date" id="expiryDate" class="dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Software">
-                       </div>
-                      <div class="col-span-full">
-                          <label class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100">Assign a client</label>
-                          <div>
-                            <div class="mt-1 relative">
-                              <button id="clientSelector" type="button" class="dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
-                                <span class="w-full inline-flex truncate">
-                                  <span id="clientNameS" class="truncate"></span>
-                                  <span id="clientIDS" class="ml-2 truncate text-gray-500 dark:text-gray-400"></span>
-                                </span>
-                                <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                  </svg>
-                                </span>
-                              </button>
-                          
-                              <ul id="clientList" class="dark:bg-gray-700 absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm hidden" tabindex="-1" role="listbox" aria-labelledby="listbox-label" aria-activedescendant="listbox-option-3">
-                                {% for customer in customers %}
-                                  <li class="selectable text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 client-list-option hover:bg-gray-100 dark:hover:bg-gray-600" role="option">
-                                    <div class="flex">
-                                      <span class="font-normal truncate dark:text-white">{{customer.name}}</span>
-                                      <span class="text-gray-500 ml-2 truncate dark:text-gray-400">#{{customer.id}}</span>
-                                    </div>
-                                  </li>
-                                {% endfor %}
-                              </ul>
-                            </div>
-                          </div>
-                          <div class="h-40"></div>
+            <div class="col-span-6 sm:col-span-3">
+              <label
+                class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100"
+                >Expiry Date</label
+              >
+              <input
+                type="date"
+                id="expiryDate"
+                class="dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                placeholder="Software"
+              />
+            </div>
+            <div class="col-span-full">
+              <label
+                class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-100"
+                >Assign a client</label
+              >
+              <div>
+                <div class="mt-1 relative">
+                  <button
+                    id="clientSelector"
+                    type="button"
+                    class="dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    aria-haspopup="listbox"
+                    aria-expanded="true"
+                    aria-labelledby="listbox-label"
+                  >
+                    <span class="w-full inline-flex truncate">
+                      <span id="clientNameS" class="truncate"></span>
+                      <span
+                        id="clientIDS"
+                        class="ml-2 truncate text-gray-500 dark:text-gray-400"
+                      ></span>
+                    </span>
+                    <span
+                      class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                    >
+                      <svg
+                        class="h-5 w-5 text-gray-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+
+                  <ul
+                    id="clientList"
+                    class="dark:bg-gray-700 absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm hidden"
+                    tabindex="-1"
+                    role="listbox"
+                    aria-labelledby="listbox-label"
+                    aria-activedescendant="listbox-option-3"
+                  >
+                    {% for customer in customers %}
+                    <li
+                      class="selectable text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 client-list-option hover:bg-gray-100 dark:hover:bg-gray-600"
+                      role="option"
+                    >
+                      <div class="flex">
+                        <span class="font-normal truncate dark:text-white"
+                          >{{customer.name}}</span
+                        >
+                        <span
+                          class="text-gray-500 ml-2 truncate dark:text-gray-400"
+                          >#{{customer.id}}</span
+                        >
                       </div>
-                    </div>
-                </form>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              <div class="h-40"></div>
             </div>
-            <!-- Modal footer -->
-            <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-slate-600">
-               <button id="submitLicense" data-modal-toggle="creation-modal" type="button" class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
-            </div>
-        </div>
+          </div>
+        </form>
+      </div>
+      <!-- Modal footer -->
+      <div
+        class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-slate-600"
+      >
+        <button
+          id="submitLicense"
+          data-modal-toggle="creation-modal"
+          type="button"
+          class="text-white bg-green-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Create
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
-<div id="copy-modal" data-modal-placement="center-center" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-    <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle max-w-md w-full p-6 dark:bg-slate-700">
+<div
+  id="copy-modal"
+  data-modal-placement="center-center"
+  tabindex="-1"
+  class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
+>
+  <div class="relative p-4 w-full max-w-xl h-full md:h-auto">
+    <div
+      class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle max-w-xl w-full p-6 dark:bg-slate-700"
+    >
       <div>
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+        <div
+          class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
+        >
           <!-- Heroicon name: outline/check -->
-          <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          <svg
+            class="h-6 w-6 text-green-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </div>
         <div class="mt-3 text-center sm:mt-5">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-slate-100" id="copy-title"></h3>
+          <h3
+            class="text-lg leading-6 font-medium text-gray-900 dark:text-slate-100"
+            id="copy-title"
+          ></h3>
           <div class="mt-2">
-            <p class="text-sm text-gray-500 break-words dark:text-slate-400" id="copy-contents"></p>
+            <p
+              class="text-sm text-gray-500 break-words dark:text-slate-400"
+              id="copy-contents"
+            ></p>
           </div>
         </div>
       </div>
       <div class="mt-5 sm:mt-6 w-full">
         <div class="w-1/3 mx-auto">
-          <button type="button" data-modal-toggle="copy-modal" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">Alright</button>
+          <button
+            type="button"
+            data-modal-toggle="copy-modal"
+            class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+          >
+            Alright
+          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
   // Constants
   const clientNameC = document.getElementById("clientNameS");
@@ -334,22 +723,23 @@
 
 <script>
   /* This script handles the Client Section */
-	const clientList = document.getElementById("clientList");
+  const clientList = document.getElementById("clientList");
   const clientSelector = document.getElementById("clientSelector");
   const clients = document.getElementsByClassName("client-list-option");
   const selectableList = document.getElementsByClassName("selectable");
   let selectedList = undefined;
 
   // Apply Selectable Event Listener
-  for(let i = 0; i < selectableList.length; i++)
-    selectableList[i].onclick =  handleSelect.bind(this, i);
+  for (let i = 0; i < selectableList.length; i++)
+    selectableList[i].onclick = handleSelect.bind(this, i);
 
-  function handleSelect(index){
-    if(selectedList != undefined)
-      selectedList.children[1].remove();
-    
-    clientNameC.innerText = selectableList[index].children[0].children[0].innerText;
-    clientIDC.innerText = selectableList[index].children[0].children[1].innerText;
+  function handleSelect(index) {
+    if (selectedList != undefined) selectedList.children[1].remove();
+
+    clientNameC.innerText =
+      selectableList[index].children[0].children[0].innerText;
+    clientIDC.innerText =
+      selectableList[index].children[0].children[1].innerText;
     selectableList[index].innerHTML += selectedTickC;
     selectedList = selectableList[index];
     toggleList(false);
@@ -357,66 +747,72 @@
 
   // Focus Handling
   clientSelector.addEventListener("focus", toggleList.bind(this, true));
-  function toggleList(isFocused){
-    if(isFocused)
-      clientList.classList.remove("hidden");
-    else
-      clientList.classList.add("hidden");
+  function toggleList(isFocused) {
+    if (isFocused) clientList.classList.remove("hidden");
+    else clientList.classList.add("hidden");
   }
 </script>
 
 <script>
   convertAllTimestamps();
 
-  document.getElementById("submitLicense").addEventListener("click", createLicense);
-  function createLicense(){
+  document
+    .getElementById("submitLicense")
+    .addEventListener("click", createLicense);
+  function createLicense() {
     showLoader();
 
     let licenseData = {
-      'idclient' : parseInt( clientIDC.innerText.replace( /^\D+/g, '') ),
-      'maxdevices' : parseInt( maxDevicesC.value ),
-      'expirydate' : expiryDateC.value == '' ? 0 : ( (new Date(expiryDateC.value)).getTime() / 1000 )
+      idclient: parseInt(clientIDC.innerText.replace(/^\D+/g, "")),
+      maxdevices: parseInt(maxDevicesC.value),
+      expirydate:
+        expiryDateC.value == ""
+          ? 0
+          : new Date(expiryDateC.value).getTime() / 1000,
     };
 
-    path = "/product/" + '{{product.id}}' + "/createlicense";
+    path = "/product/" + "{{product.id}}" + "/createlicense";
     let httpRequest = new XMLHttpRequest();
     httpRequest.open("POST", path, true);
-    httpRequest.setRequestHeader('Content-Type', 'application/json');
-    httpRequest.send( JSON.stringify(licenseData) );
-    httpRequest.onreadystatechange = function() {
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.send(JSON.stringify(licenseData));
+    httpRequest.onreadystatechange = function () {
       if (httpRequest.readyState === 4) {
-          if (httpRequest.status === 200) {
-            let response = JSON.parse(httpRequest.responseText);
-            if( response['code'] == "OKAY" )
-              location.reload()
-            else{
-              hideLoader(  );
-              showAlert( response['message'] )
-            }
-          } else {
-            console.error("The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it.");
+        if (httpRequest.status === 200) {
+          let response = JSON.parse(httpRequest.responseText);
+          if (response["code"] == "OKAY") location.reload();
+          else {
             hideLoader();
-            showAlert("The Server failed to accept your input.")
+            showAlert(response["message"]);
           }
+        } else {
+          console.error(
+            "The request failed to be executed. Your input is most likely invalid or you have modified the contents. If you think this is a bug, please report it."
+          );
+          hideLoader();
+          showAlert("The Server failed to accept your input.");
+        }
       }
-    }
+    };
   }
 </script>
 
 <script>
   const copyButtons = document.getElementsByClassName("copy-button");
-  for(let i = 0; i < copyButtons.length; i++)
-    copyButtons[i].addEventListener("click", copyContent.bind(this, i))
+  for (let i = 0; i < copyButtons.length; i++)
+    copyButtons[i].addEventListener("click", copyContent.bind(this, i));
 
-  async function copyContent(index){
-    let content = new String( copyButtons[index].getAttribute("content") );
+  async function copyContent(index) {
+    let content = new String(copyButtons[index].getAttribute("content"));
     document.getElementById("copy-contents").textContent = content;
     await navigator.clipboard.writeText(content);
 
-    if(index == 0)
-      document.getElementById("copy-title").innerHTML = "API Key copied to clipboard";
+    if (index == 0)
+      document.getElementById("copy-title").innerHTML =
+        "API Key copied to clipboard";
     else
-      document.getElementById("copy-title").innerHTML = "Public Key copied to clipboard";
+      document.getElementById("copy-title").innerHTML =
+        "Public Key copied to clipboard";
   }
 </script>
 {% endblock %}
