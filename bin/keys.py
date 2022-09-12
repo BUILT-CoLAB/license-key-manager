@@ -36,7 +36,8 @@ def generateSerialKey(length):
         serialKey += random.choice(characters)
     return serialKey
 
-# Data Format: licensekey-hardwareID 
+# Data Format: licensekey:hardwareID 
+#TODO - CATCH ERROR IF DECRYPTION FAILS. SERVER CRASHES
 def decrypt_data(payload, product):
     private_key = get_private_key(product)
 

@@ -58,6 +58,8 @@ def editProduct(requestData):
     image = requestData.get('image')
     details = requestData.get('details')
     # ###################################################
+    
+    #TODO - validate input (id). Can't edit a product that does  not exist
 
     DBAPI.editProduct(int(id), name, category, image, details)
     DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' +
