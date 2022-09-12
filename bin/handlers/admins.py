@@ -4,6 +4,7 @@ from . import utils as Utils
 import json
 
 def displayAdminPage():
+    #TODO - ONLY USERS WITH PROPERTY owner = True should see this page (as defined in the API documentation)
     userList = DBAPI.obtainUser('_ALL_')
     return render_template('users.html', users = userList, mode = request.cookies.get('mode'))
 

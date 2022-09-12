@@ -121,6 +121,9 @@ def test_edit(auth,client,app,created_product):
 
     # Tries to edit an unexistent product
     response = client.post("/products/edit",json=unexistent_product)
+    # RESPONSE STATUS CODE SHOULD NOT BE 200.
+    # THE SERVER SENDS 200 BECAUSE JSON.DUMPS DOES NOT THINK AN ERROR OCURRED
+    # THAT NEEDS TO BE CHANGED. THROW EXCEPTION OR SEND AN DIFFERENT HTTP CODE
     assert response.status_code != 200
     assert response.status_code != 500
 

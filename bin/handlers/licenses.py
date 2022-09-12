@@ -35,6 +35,7 @@ def createLicense(productID, requestData):
         The return comes in a JSON format, made out of a 'code' field and a 'message' field. The function will always return an error as a 'code' if the productID is invalid or does not exist, if the request data is also invalid or if an error occurs while handling the Database. 
     """
     adminAcc = current_user
+    #TODO - replace json dumps when requirements are not matched. Response HTTP Code should be != 200
     if( (not str(productID).isnumeric()) or DBAPI.getProductByID(productID) == None):
         return json.dumps({ 'code' : "ERROR", 'message' : "The product you have indicated is invalid or does not exist." })
     
@@ -59,6 +60,7 @@ def changeLicenseState(requestData):
     adminAcc = current_user
     licenseID = requestData.get('licenseID')
     action = requestData.get('action')
+    #TODO - replace json dumps when requirements are not matched. Response HTTP Code should be != 200
     if( not str(licenseID).isnumeric() or (action != 'SWITCHSTATE' and action != 'DELETE' and action != 'RESET') ):
         return json.dumps({ 'code' : "ERROR", 'message' : "The license and (or) the action request you have indicated is (are) invalid ..." })
 
@@ -89,11 +91,13 @@ def changeLicenseState(requestData):
 
 def unlinkHardwareDevice(licenseID, hardwareID):
     adminAcc = current_user
+    #TODO - replace json dumps when requirements are not matched. Response HTTP Code should be != 200
     if( not str(licenseID).isnumeric() ):
         return json.dumps({ 'code' : "ERROR", 'message' : "The license you have entered is invalid ..." })
 
     try:
         DBAPI.deleteRegistrationOfHWID(licenseID, hardwareID)
+        print(licenseID+"-"+hardwareID)
         DBAPI.submitLog(licenseID, adminAcc.id, 'UnlinkedHWID$$$' + hardwareID, '$$' + str(adminAcc.name) + '$$ removed Hardware ' + str(hardwareID) + ' from license #' + str(licenseID))
     except Exception:
         return json.dumps({ 'code' : "ERROR", 'message' : "There was an error managing the state of the license - #UNKNOWN ERROR" })

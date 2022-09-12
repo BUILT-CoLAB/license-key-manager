@@ -300,6 +300,9 @@ def test_invalid_switch_state(auth,client,app,create_customer,create_product,cre
         'action' : action
     }
     response = client.post("/licenses/editkeys",json=invalid_license_edit)
+    # RESPONSE STATUS CODE SHOULD NOT BE 200.
+    # THE SERVER SENDS 200 BECAUSE JSON.DUMPS DOES NOT THINK AN ERROR OCURRED
+    # THAT NEEDS TO BE CHANGED. THROW EXCEPTION OR SEND AN DIFFERENT HTTP CODE
     assert response.status_code != 200
     loaded_json = json.loads(response.data)
     assert loaded_json['code'] == "ERROR"
@@ -372,8 +375,12 @@ def test_invalid_unlinking_device(auth,client,app,create_customer,create_product
     loaded_json= json.loads(response.data)
     assert loaded_json['code'] == "ERROR"
     assert loaded_json['message'] == message
+    # RESPONSE STATUS CODE SHOULD NOT BE 200.
+    # THE SERVER SENDS 200 BECAUSE JSON.DUMPS DOES NOT THINK AN ERROR OCURRED
+    # THAT NEEDS TO BE CHANGED. THROW EXCEPTION OR SEND AN DIFFERENT HTTP CODE
     assert response.status_code != 200
 
     with app.app_context():
         registrations = databaseAPI.getRegistration(create_license.id,add_device.hardwareID)
-        assert registrations == None
+        assert registrations != None
+        assert registrations.id == add_device.id

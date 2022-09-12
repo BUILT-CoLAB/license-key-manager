@@ -84,6 +84,9 @@ def test_edit(auth,client,app,created_customer):
 
     # Tries to edit an unexistent customer
     response = client.post("/customers/edit/"+str(created_customer.id+1),json=changedCustomer)
+    # RESPONSE STATUS CODE SHOULD NOT BE 200.
+    # THE SERVER SENDS 200 BECAUSE JSON.DUMPS DOES NOT THINK AN ERROR OCURRED
+    # THAT NEEDS TO BE CHANGED. THROW EXCEPTION OR SEND AN DIFFERENT HTTP CODE
     assert response.status_code != 200
     parsed_json = json.loads(response.data)
     assert parsed_json['code'] == "ERROR"
@@ -128,11 +131,20 @@ def test_delete(auth,client,app,created_customer):
 
         # Tries to delete an unexistent customer
         response = client.post("/customers/delete/"+str(created_customer.id+1))
+        # RESPONSE STATUS CODE SHOULD NOT BE 200.
+        # THE SERVER SENDS 200 BECAUSE JSON.DUMPS DOES NOT THINK AN ERROR OCURRED
+        # THAT NEEDS TO BE CHANGED. THROW EXCEPTION OR SEND AN DIFFERENT HTTP CODE
         assert response.status_code != 200
+        json_loaded = json.loads(response.data)
+        assert json_loaded['code']=="ERROR"
+        assert json_loaded['message']=="The database failed to delete the customer - #UNKNOWN ERROR"
+        
 
         # Tries to delete an existent customer
         response = client.post("/customers/delete/"+str(created_customer.id))
         assert response.status_code == 200
+        json_loaded = json.loads(response.data)
+        assert json_loaded['code']=="OKAY"
 
         customer = databaseAPI.getCustomerByID(created_customer.id)
         assert customer == None

@@ -657,7 +657,7 @@ def test_bad_encryption(auth,client,app,created_product_1,created_product_2,crea
     }
 
     response = client.post("/api/v1/validate",json = json_info)
-    #assert response.status_code != 500
+    assert response.status_code != 500
 
     with app.app_context():
         registration = databaseAPI.getRegistration(created_license.id,hw_id)
