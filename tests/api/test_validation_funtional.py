@@ -123,13 +123,13 @@ def test_device_validation(auth,client,app,created_product_1,created_customer,cr
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
     created_license : Key
-        The license ORM object added to the database before the test
+        License ORM object added to the database before the test (fixture)
 
     Returns
     -------
@@ -182,13 +182,13 @@ def test_max_devices_fail(auth,client,app,created_product_1,created_customer,cre
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
     created_license : Key
-        The license ORM object added to the database before the test
+        License ORM object added to the database before the test (fixture)
 
     Returns
     -------
@@ -307,13 +307,13 @@ def test_device_validation_on_expired_license(auth,client,app,created_product_1,
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
-    created_license : Key
-        The license ORM object added to the database before the test
+    created_expired_license : Key
+        License (expired) ORM object added to the database before the test (fixture)
 
     Returns
     -------
@@ -366,16 +366,16 @@ def test_device_revalidation_on_valid_license(auth,client,app,created_product_1,
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
     created_license : Key
-        The license ORM object added to the database before the test
+        License ORM object added to the database before the test (fixture)
 
     add_device_valid : Registration
-        The registration ORM object added to the database before the test
+        Registration ORM object added to the database before the test (fixture)
 
     Returns
     -------
@@ -435,16 +435,16 @@ def test_device_revalidation_on_expired_license(auth,client,app,created_product_
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
     created_expired_license : Key
-        The license ORM object added to the database before the test
+        License (expired) ORM object added to the database before the test (fixture)
 
     add_device_expired : Registration
-        The registration ORM object added to the database before the test
+        Registration (expired) ORM object added to the database before the test (fixture)
 
     Returns
     -------
@@ -505,13 +505,10 @@ def test_invalid_validation_input_serial_key(auth,client,app,created_product_1,c
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
-
-    created_license : Key
-        The license ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
     Returns
     -------
@@ -563,13 +560,13 @@ def test_invalid_validation_input_api_key(auth,client,app,created_product_1,crea
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
     created_license : Key
-        The license ORM object added to the database before the test
+        License ORM object added to the database before the test (fixture)
 
     Returns
     -------
@@ -622,16 +619,16 @@ def test_bad_encryption(auth,client,app,created_product_1,created_product_2,crea
         The app needed to query the Database
 
     created_product_1 : Product
-        The product ORM object added to the database before the test
+        Product (1) ORM object added to the database before the test (fixture)
 
     created_product_2 : Product
-        Another product ORM object added to the database before the test
+        Product (2) ORM object added to the database before the test (fixture)
 
     created_customer : Customer
-        The customer ORM object added to the database before the test
+        Customer ORM object added to the database before the test (fixture)
 
     created_license : Key
-        The license ORM object added to the database before the test
+        License ORM object added to the database before the test (fixture)
 
     Returns
     -------

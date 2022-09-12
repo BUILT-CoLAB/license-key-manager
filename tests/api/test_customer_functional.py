@@ -70,6 +70,9 @@ def test_edit(auth,client,app,created_customer):
     app :  FlaskApp
         The app needed to query the Database
 
+    created_customer : Client
+        Client orm object added to the database before the test (fixture)
+
     Returns
     -------
     """
@@ -119,6 +122,9 @@ def test_delete(auth,client,app,created_customer):
     
     app :  FlaskApp
         The app needed to query the Database
+
+    created_customer : Client
+        Client orm object added to the database before the test (fixture)
 
     Returns
     -------

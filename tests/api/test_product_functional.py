@@ -74,7 +74,7 @@ def test_access(auth,client,app,created_product):
         The app needed to query the Database
 
     created_product : Product
-        The product added to the Database before the test
+        Product orm object added to the database before the test (fixture)
 
     Returns
     -------
@@ -105,6 +105,9 @@ def test_edit(auth,client,app,created_product):
     app :  FlaskApp
         The app needed to query the Database
 
+    created_product : Product
+        Product orm object added to the database before the test (fixture)
+        
     Returns
     -------
     """

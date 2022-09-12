@@ -79,6 +79,12 @@ def test_creation(auth,client,app,create_product,create_customer):
     app :  FlaskApp
         The app needed to query the Database
 
+    create_product : Product
+        Product orm object added to the database before the test (fixture)
+    
+    create_customer : Product
+        Client orm object added to the database before the test (fixture)
+
     Returns
     -------
     """
@@ -110,7 +116,7 @@ def test_creation(auth,client,app,create_product,create_customer):
         assert licenses[0].devices == 0
 
 
-def test_delete_without_associated_device(app,auth,client,create_license):
+def test_delete_without_associated_device(auth,client,app,create_license):
     """Tests if API successfully deletes a license when there is no associated devices
 
     Parameters
@@ -123,6 +129,9 @@ def test_delete_without_associated_device(app,auth,client,create_license):
 
     app :  FlaskApp
         The app needed to query the Database
+
+    create_license : Key
+        Key orm object added to the database before the fixture
 
     Returns
     -------
@@ -143,7 +152,7 @@ def test_delete_without_associated_device(app,auth,client,create_license):
         assert len(licenses) == 0
 
 
-def test_delete_with_associated_device(app,auth,client,create_license):
+def test_delete_with_associated_device(auth,client,app,create_license):
     """Tests if API successfully deletes a license when there are associated devices
 
     Parameters
@@ -156,6 +165,9 @@ def test_delete_with_associated_device(app,auth,client,create_license):
 
     app :  FlaskApp
         The app needed to query the Database
+
+    create_license : Key
+        Key orm object added to the database before the fixture
 
     Returns
     -------
@@ -180,7 +192,7 @@ def test_delete_with_associated_device(app,auth,client,create_license):
         assert len(registrations) == 0
 
 
-def test_switch_state_no_active_devices(auth,client,app,create_customer,create_product,create_license):
+def test_switch_state_no_active_devices(auth,client,app,create_product,create_customer,create_license):
     """Tests if API successfully switches license state. License has no devices associated
 
     Parameters
@@ -193,6 +205,15 @@ def test_switch_state_no_active_devices(auth,client,app,create_customer,create_p
 
     app :  FlaskApp
         The app needed to query the Database
+
+    create_product : Product
+        Product orm object added to the database before the test (fixture)
+    
+    create_customer : Product
+        Client orm object added to the database before the test (fixture)
+
+    create_license : Key
+        Key orm object added to the database before the fixture
 
     Returns
     -------
@@ -224,7 +245,7 @@ def test_switch_state_no_active_devices(auth,client,app,create_customer,create_p
         assert licenses[0].status == 0
 
 
-def test_switch_state_with_active_devices(auth,client,app,create_customer,create_product,create_license,add_device):
+def test_switch_state_with_active_devices(auth,client,app,create_product,create_customer,create_license,add_device):
     """Tests if API successfully switches license state when there is 1 associated device
 
     Parameters
@@ -237,6 +258,18 @@ def test_switch_state_with_active_devices(auth,client,app,create_customer,create
 
     app :  FlaskApp
         The app needed to query the Database
+
+    create_product : Product
+        Product orm object added to the database before the test (fixture)
+    
+    create_customer : Product
+        Client orm object added to the database before the test (fixture)
+    
+    create_license : Key
+        Key orm object added to the database before the fixture
+
+    add_device : Registration
+        Registration orm object added to the database before the fixture
 
     Returns
     -------
@@ -274,7 +307,7 @@ def test_switch_state_with_active_devices(auth,client,app,create_customer,create
     (1, 'test', 'The license and (or) the action request you have indicated is (are) invalid ...'),
     (1+1, 'test', 'The license and (or) the action request you have indicated is (are) invalid ...')
 ))
-def test_invalid_switch_state(auth,client,app,create_customer,create_product,create_license,add_device,licenseID,action,message):
+def test_invalid_switch_state(auth,client,app,create_product,create_customer,create_license,add_device,licenseID,action,message):
     """Tests if API rejects invalid switches license state requests
 
     Parameters
@@ -287,6 +320,24 @@ def test_invalid_switch_state(auth,client,app,create_customer,create_product,cre
 
     app :  FlaskApp
         The app needed to query the Database
+
+    create_product : Product
+        Product orm object added to the database before the test (fixture)
+    
+    create_customer : Product
+        Client orm object added to the database before the test (fixture)
+    
+    create_license : Key
+        Key orm object added to the database before the fixture
+
+    add_device : Registration
+        Registration orm object added to the database before the fixture
+
+    licenseID : Fixture parameter
+    
+    action : Fixture parameter
+    
+    message : Fixture parameter
 
     Returns
     -------
@@ -309,7 +360,7 @@ def test_invalid_switch_state(auth,client,app,create_customer,create_product,cre
     assert loaded_json['message'] == message
 
 
-def test_unlinking_device(auth,client,app,create_customer,create_product,create_license,add_device):
+def test_unlinking_device(auth,client,app,create_product,create_customer,create_license,add_device):
     """Tests if API successfully unlinks device from license
 
     Parameters
@@ -322,6 +373,18 @@ def test_unlinking_device(auth,client,app,create_customer,create_product,create_
 
     app :  FlaskApp
         The app needed to query the Database
+
+    create_product : Product
+        Product orm object added to the database before the test (fixture)
+    
+    create_customer : Product
+        Client orm object added to the database before the test (fixture)
+    
+    create_license : Key
+        Key orm object added to the database before the fixture
+
+    add_device : Registration
+        Registration orm object added to the database before the fixture
 
     Returns
     -------
@@ -347,7 +410,7 @@ def test_unlinking_device(auth,client,app,create_customer,create_product,create_
     (1+1, "AAAA-BBBB-CCCC-DDDD-EEEE", 'There was an error managing the state of the license - #UNKNOWN ERROR'),
     (1+1, 'test', 'There was an error managing the state of the license - #UNKNOWN ERROR')
 ))
-def test_invalid_unlinking_device(auth,client,app,create_customer,create_product,create_license,add_device,licenseID,hardwareID,message):
+def test_invalid_unlinking_device(auth,client,app,create_product,create_customer,create_license,add_device,licenseID,hardwareID,message):
     """Tests if API rejects invalid unlink requests
 
     Parameters
@@ -360,6 +423,24 @@ def test_invalid_unlinking_device(auth,client,app,create_customer,create_product
 
     app :  FlaskApp
         The app needed to query the Database
+
+    create_product : Product
+        Product orm object added to the database before the test (fixture)
+    
+    create_customer : Product
+        Client orm object added to the database before the test (fixture)
+    
+    create_license : Key
+        Key orm object added to the database before the fixture
+
+    add_device : Registration
+        Registration orm object added to the database before the fixture
+    
+    licenseID : Fixture parameter
+    
+    hardwareID : Fixture parameter
+    
+    message : Fixture parameter
 
     Returns
     -------

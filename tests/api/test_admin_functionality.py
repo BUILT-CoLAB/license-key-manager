@@ -49,6 +49,9 @@ def test_non_owner_access_admin_list(auth,client,user_not_owner):
     client : FlaskClient
         The test client to use for requests
 
+    user_not_owner : User
+        User orm object added to the database before the test (fixture)
+
     Returns
     -------
     """
@@ -75,6 +78,9 @@ def test_admin_creation(auth,client,app):
 
     client : FlaskClient
         The test client to use for requests
+
+    app : FlaskApp
+        The application
 
     Returns
     -------
@@ -106,6 +112,12 @@ def test_admin_edit(auth,client,app,user_not_owner):
 
     client : FlaskClient
         The test client to use for requests
+
+    app : FlaskApp
+        The application
+
+    user_not_owner : User
+        User orm object added to the database before the test (fixture)
 
     Returns
     -------
@@ -139,6 +151,12 @@ def test_admin_toggle_state(client,auth,app,user_not_owner):
     client : FlaskClient
         The test client to use for requests
 
+    app : FlaskApp
+        The application
+
+    user_not_owner : User
+        User orm object added to the database before the test (fixture)
+        
     Returns
     -------
     """
