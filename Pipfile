@@ -11,6 +11,7 @@ flask-login = "==0.6.0"
 flask-sqlalchemy = "==2.5.1"
 python-dotenv = "==0.20.0"
 werkzeug = "==2.1.2"
+pytest = "==7.1.2"
 
 [dev-packages]
 
