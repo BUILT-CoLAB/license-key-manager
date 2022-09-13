@@ -90,7 +90,7 @@ def render404(mainMessage=None, subMessage=None):
     mainMessage = "Page not found" if mainMessage == None else mainMessage
     subMessage = "Sorry, but the page you are looking for does not exist ..." if subMessage == None else subMessage
 
-    return render_template('404.html', mode = request.cookies.get('mode'), main = mainMessage, sub = subMessage),404
+    return render_template('404.html', mode = request.cookies.get('mode'), main = mainMessage, sub = subMessage), 404
 
 
 

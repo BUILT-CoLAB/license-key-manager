@@ -145,12 +145,11 @@ def test__admin_logs(auth, client, app):
         product = DBAPI.createProduct(productspec.get('name'), productspec.get('category'), productspec.get('image'), productspec.get('details'), product_keys[0], product_keys[1], product_keys[2])
 
         DBAPI.createCustomer('Test', 'email@test.com', '87654321', 'Mozambique')
-        adminAcc =  DBAPI.getCustomer('Test')
-        #este teste nao passa se usar os dados do adminAcc, basically getCustomer doesnt work 
-        logsnr =  len(DBAPI.getUserLogs(adminAcc))
-        DBAPI.submitLog(None,adminAcc[0].id, 'EditedProduct', '$$' + str(adminAcc[0].name) + '$$ created product #' + str(product.id))
+        adminAcc =  DBAPI.getCustomer('Test')[0]
+        logsnr =  len(DBAPI.getUserLogs(adminAcc.id))
+        DBAPI.submitLog(None,adminAcc.id, 'EditedProduct', '$$' + str(adminAcc.name) + '$$ created product #' + str(product.id))
         
-        logs = DBAPI.getUserLogs(adminAcc)
+        logs = DBAPI.getUserLogs(adminAcc.id)
         assert len(logs)>= 1
         assert len(logs) == logsnr+1
         

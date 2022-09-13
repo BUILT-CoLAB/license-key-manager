@@ -17,8 +17,12 @@ def validate(requestData):
         return responseMessage(401, 'ERR_API_KEY', 'ERROR :: The API Key you have entered is invalid. The validation request did not go through.')
     # ##############################################################################
 
-    # STEP 2 :: Extract the descrypted data
-    decryptedData = decrypt_data( requestData.get('payload') , product)
+    # STEP 2 :: Extract the descrypted data (fail if it is invalid)
+    try:
+        decryptedData = decrypt_data( requestData.get('payload') , product)
+    except Exception:
+        return responseMessage(401, 'ERR_PUB_PRIV_KEY', 'ERROR :: Decription has failed. Your key may be invalid.')
+    
     # The data in the decryptedData section is organized as:
     # decryptedData[0] - Serial Key
     # decryptedData[1] - Hardware ID
