@@ -35,4 +35,7 @@ RUN set FLASK_ENV=production
 HEALTHCHECK --interval=15m --timeout=5s \
     CMD curl --fail http://localhost:${PORT} || exit 1     
 
-CMD ["bash", "-c", "gunicorn -w ${WORKERS} --threads ${THREADS} -b :${PORT} -k gevent --preload 'bin:create_app(testing=\"False\",database=\"no\")'"]
+# Tell docker that all future commands should run as the appuser user
+USER appuser
+
+CMD ["bash", "-c", "gunicorn -w ${WORKERS} --threads ${THREADS} -b :${PORT} -k gevent --preload 'bin:create_app()'"]
