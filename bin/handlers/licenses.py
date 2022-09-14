@@ -35,9 +35,8 @@ def createLicense(productID, requestData):
         The return comes in a JSON format, made out of a 'code' field and a 'message' field. The function will always return an error as a 'code' if the productID is invalid or does not exist, if the request data is also invalid or if an error occurs while handling the Database. 
     """
     adminAcc = current_user
-    #TODO - replace json dumps when requirements are not matched. Response HTTP Code should be != 200
     if( (not str(productID).isnumeric()) or DBAPI.getProductByID(productID) == None):
-        return json.dumps({ 'code' : "ERROR", 'message' : "The product you have indicated is invalid or does not exist." })
+        return json.dumps({ 'code' : "ERROR", 'message' : "The product you have indicated is invalid or does not exist." }), 500
     
     client = requestData.get('idclient')
     maxDevices = requestData.get('maxdevices')
@@ -45,28 +44,28 @@ def createLicense(productID, requestData):
 
     validationR = Utils.validateMultiple_License(client, maxDevices, expiryDate)
     if not validationR == "":
-        return json.dumps({ 'code' : "ERROR", 'message' : "Incorrect input: \n" + str(validationR) })
+        return json.dumps({ 'code' : "ERROR", 'message' : "Incorrect input: \n" + str(validationR) }), 500
 
     try:
         serialKey = generateSerialKey(20)
         keyId = DBAPI.createKey(productID, int( client ), serialKey, int( maxDevices ), int( expiryDate ) )
         DBAPI.submitLog(keyId, adminAcc.id, 'CreatedKey', '$$' + str(adminAcc.name) + '$$ created license #' + str(keyId) + ' for product #' + str(productID))
-    except Exception:
-        return json.dumps({ 'code' : "ERROR", 'message' : "An error has occurred when storing the License in the database - #UNKNOWN ERROR!" })
+    except Exception as exp:
+        print(exp)
+        return json.dumps({ 'code' : "ERROR", 'message' : "An error has occurred when storing the License in the database - #UNKNOWN ERROR!" }), 500
     
-    return json.dumps({ 'code' : "OKAY" })
+    return json.dumps({ 'code' : "OKAY" }), 200
 
 def changeLicenseState(requestData):
     adminAcc = current_user
     licenseID = requestData.get('licenseID')
     action = requestData.get('action')
-    #TODO - replace json dumps when requirements are not matched. Response HTTP Code should be != 200
     if( not str(licenseID).isnumeric() or (action != 'SWITCHSTATE' and action != 'DELETE' and action != 'RESET') ):
-        return json.dumps({ 'code' : "ERROR", 'message' : "The license and (or) the action request you have indicated is (are) invalid ..." })
+        return json.dumps({ 'code' : "ERROR", 'message' : "The license and (or) the action request you have indicated is (are) invalid ..." }), 500
 
     licenseObject = DBAPI.getKeyData(licenseID)
     if( licenseObject == None ):
-        return json.dumps({ 'code' : "ERROR", 'message' : "The license you have indicated does not exist ..." })
+        return json.dumps({ 'code' : "ERROR", 'message' : "The license you have indicated does not exist ..." }), 500
 
     try:
         if action == 'SWITCHSTATE':
@@ -85,22 +84,21 @@ def changeLicenseState(requestData):
             DBAPI.resetKey(licenseID)
             DBAPI.submitLog(licenseID, adminAcc.id, 'ResetKey', '$$' + str(adminAcc.name) + '$$ reset license #' + str(licenseID))
     except Exception:
-        return json.dumps({ 'code' : "ERROR", 'message' : "There was an error handling the state of the license - #UNKNOWN ERROR" })
+        return json.dumps({ 'code' : "ERROR", 'message' : "There was an error handling the state of the license - #UNKNOWN ERROR" }), 500
 
     return json.dumps({ 'code' : "OKAY" })
 
 def unlinkHardwareDevice(licenseID, hardwareID):
     adminAcc = current_user
-    #TODO - replace json dumps when requirements are not matched. Response HTTP Code should be != 200
     if( not str(licenseID).isnumeric() ):
-        return json.dumps({ 'code' : "ERROR", 'message' : "The license you have entered is invalid ..." })
+        return json.dumps({ 'code' : "ERROR", 'message' : "The license you have entered is invalid ..." }), 500
 
     try:
         DBAPI.deleteRegistrationOfHWID(licenseID, hardwareID)
         print(licenseID+"-"+hardwareID)
         DBAPI.submitLog(licenseID, adminAcc.id, 'UnlinkedHWID$$$' + hardwareID, '$$' + str(adminAcc.name) + '$$ removed Hardware ' + str(hardwareID) + ' from license #' + str(licenseID))
     except Exception:
-        return json.dumps({ 'code' : "ERROR", 'message' : "There was an error managing the state of the license - #UNKNOWN ERROR" })
+        return json.dumps({ 'code' : "ERROR", 'message' : "There was an error managing the state of the license - #UNKNOWN ERROR" }), 500
     
     return json.dumps({ 'code' : "OKAY" })
 

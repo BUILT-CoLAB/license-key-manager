@@ -163,10 +163,14 @@ def test_authenticated_views_access(auth,client):
     response = client.get("/logs/changes")
     assert 200==response.status_code
     response = client.get("/logs/changes/query",query_string={})
+    assert 500==response.status_code
+    response = client.get("/logs/changes/query",query_string={'adminid' : -1, 'datestart' : -1, 'dateend' : -1})
     assert 200==response.status_code
     response = client.get("/logs/validations")
     assert 200==response.status_code
     response = client.get("/logs/validations/query",query_string={})
+    assert 500==response.status_code
+    response = client.get("/logs/validations/query",query_string={'typeSearch' : '', 'datestart' : -1, 'dateend' : -1})
     assert 200==response.status_code
     response = client.get("/admins")
     assert 200==response.status_code

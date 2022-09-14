@@ -63,9 +63,6 @@ def test_non_owner_access_admin_list(auth,client,user_not_owner):
         assert flask_login.current_user.name == user_not_owner.name
         response = client.get("/admins")
         assert user_not_owner.owner == False
-        # RESPONSE STATUS CODE SHOULD NOT BE 200 BECAUSE USER SHOULD BE REDIRECTED OR ERROR THROWN
-        # THE SERVER SENDS 200 BECAUSE JSON.DUMPS DOES NOT THINK AN ERROR OCURRED
-        # THAT NEEDS TO BE CHANGED. THROW EXCEPTION OR SEND AN DIFFERENT HTTP CODE
         assert response.status_code != 200
 
 def test_admin_creation(auth,client,app):
