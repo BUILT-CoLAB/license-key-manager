@@ -14,9 +14,11 @@ WORKDIR /license-manager
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY --chown=appuser ./bin /license-manager/bin
-COPY --chown=appuser .env /license-manager/bin
 
+COPY ./bin /license-manager/bin
+COPY .env /license-manager/bin
+
+RUN mkdir -p /license-manager/bin/database
 RUN chown -R appuser:appgroup /license-manager/bin/database
 
 ARG DEFAULT_WORKERS=2
