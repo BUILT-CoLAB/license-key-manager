@@ -44,7 +44,7 @@ def test_license(auth, client,app ):
     #GIVEN a license model
     #WHEN a license is edited
     #THEN check the changes happen correctly
-    #this test fails due to lower level test fail
+
     auth.login()
     with client:
         with app.app_context():
@@ -63,32 +63,29 @@ def test_license(auth, client,app ):
             except Exception as exc:
                 assert False, f"'newlicense_validation' raised an exception when filling the Database {exc}"
 
-            # TODO: FIX the code bellow
-            # Note: Each test automatically erases the database whenever a new test starts.
-            # Also, avoid calling endpoints, such as 'licenses.changeLicenseState(data)' since the Flask won't have the required
-            # payload to determine what's the current AdminAccount (and it will fail). Use the DBAPI if you wish to directly
-            # manipulate the data in the database (or simply erase this test if you think it doesn't make sense)
-
-            #assert len(DBAPI.getKeys(product.id)) >0
-            #current_key = DBAPI.getKeys(product.id)[-1]
-            #DBAPI.addRegistration()
-
-            #one might not be what im looking for ...
-            #dtemp = DBAPI.getKeyData(1)
-            #DBAPI.addRegistration(1, 123, dtemp)
-            #dtemp = DBAPI.getKeyData(1)
-            #assert dtemp.devices ==1
-            #data = {'licenseID': 1,'idclient' :'1','action':'RESET', 'maxdevices': '10','expirydate':'1000000' }
-            #licenses.changeLicenseState(data)
-            #datatemp = DBAPI.getKeyData(1)
-            #assert datatemp.devices ==0
+            assert len(DBAPI.getKeys(product.id)) >0
+            
+            dtemp = DBAPI.getKeyData(1)
+            DBAPI.addRegistration(1, 123, dtemp)
+            dtemp = DBAPI.getKeyData(1)
+            assert dtemp.devices ==1
+            data = {'licenseID': 1,'idclient' :'1','action':'RESET', 'maxdevices': '10','expirydate':'1000000' }
+            licenses.changeLicenseState(data)
+            dtemp = DBAPI.getKeyData(1)
+            assert dtemp.devices ==0
 
 
-            #data = {'licenseID': current_key,'idclient' :'1','action':'DELETE', 'maxdevices': '10','expirydate':'1000000' }
-            #licenses.changeLicenseState(data)
-            #datatemp =  DBAPI.getKeyData(current_key)
-            #assert datatemp == None
-
+            
+            licens = DBAPI.getKeys(product.id)
+            assert len(licens)>0
+            current_key = licens[0]
+            data = {'licenseID': 1,'idclient' :'1','action':'DELETE', 'maxdevices': '10','expirydate':'1000000' }
+            licenses.changeLicenseState(data)
+            licens = DBAPI.getKeys(1)
+            assert licens != None
+            assert len(licens) == 0
+        
+                    
 
 def test_utils():
     #GIVEN a human world
@@ -116,4 +113,4 @@ def test_utils():
     except Exception as exc:
         assert False, f"'newcustomer_validation' raised an exception {exc}"
 
-    
+

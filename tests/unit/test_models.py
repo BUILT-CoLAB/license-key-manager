@@ -23,6 +23,8 @@ def test_newuser(auth,client,app):
         DBAPI.toggleUserStatus(1)
         assert user.disabled == False
 
+
+
 def test_changePassword(auth,client,app):
     auth.login()
     with app.app_context():
@@ -110,7 +112,7 @@ def test_key_registration(auth, client, app):
         product = DBAPI.createProduct(productspec.get('name'), productspec.get('category'), productspec.get('image'), productspec.get('details'), product_keys[0], product_keys[1], product_keys[2])
         
         serial = keys.generateSerialKey(10)
-        keyidd = DBAPI.createKey(product.id, 1, serial, 10, 1000000000000000000)
+        keyidd = DBAPI.createKey(product.id, 1, serial, 3, 1000000000000000000)
         assert keyidd != None
         
         #this shouldnt fail but does
@@ -127,6 +129,13 @@ def test_key_registration(auth, client, app):
         keyy = DBAPI.getKeysBySerialKey(serial, product.id)
         assert keyy.devices ==1
         assert keyy.status == 1
+        assert len(DBAPI.getKeyHWIDs(keyy.id)) == 1
+
+        clientcount = DBAPI.getDistinctClients(product.id)
+        assert clientcount == 1
+
+        
+
 
 
 def test__admin_logs(auth, client, app):
