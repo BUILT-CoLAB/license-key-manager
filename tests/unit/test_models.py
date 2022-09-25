@@ -56,8 +56,10 @@ def test_new_old_user(auth,client,app):
         useer = DBAPI.getCustomer('Test')
         assert len(useer) >0
         assert useer[0].name == 'Test'
+        DBAPI.modifyCustomer(1, 'modTest', 'email@test.com', '987654214', 'Mozambique')
         cust = DBAPI.getCustomerByID(1)
         assert cust != None
+        assert cust.name == 'modTest'
 
         DBAPI.deleteCustomer(1)
         cust = DBAPI.getCustomerByID(1)
@@ -126,13 +128,19 @@ def test_key_registration(auth, client, app):
         #WHEN a new regestiration is created
         #THEN check the increase of devices and change in status keys 
         DBAPI.addRegistration(keyy.id, 123, keyy)
+        DBAPI.addRegistration(keyy.id, 234, keyy)
         keyy = DBAPI.getKeysBySerialKey(serial, product.id)
-        assert keyy.devices ==1
+        assert keyy.devices ==2
         assert keyy.status == 1
-        assert len(DBAPI.getKeyHWIDs(keyy.id)) == 1
+        assert len(DBAPI.getKeyHWIDs(keyy.id)) == 2
 
         clientcount = DBAPI.getDistinctClients(product.id)
         assert clientcount == 1
+
+        DBAPI.deleteRegistrationOfHWID(keyy.id, 234)
+        keyy = DBAPI.getKeysBySerialKey(serial, product.id)
+        assert keyy.devices ==1
+
 
         
 
@@ -161,4 +169,10 @@ def test__admin_logs(auth, client, app):
         logs = DBAPI.getUserLogs(adminAcc.id)
         assert len(logs)>= 1
         assert len(logs) == logsnr+1
+
+        DBAPI.submitValidationLog('OK', 'Key', '12.32.1234.221.1', 12342, 123432, 1234)
+        result = DBAPI.queryValidationLogs()
+        assert len(result)>0
+
+
         

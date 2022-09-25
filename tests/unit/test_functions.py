@@ -3,7 +3,9 @@ from pydoc import cli
 from bin import databaseAPI as DBAPI
 from bin.handlers import admins, customers,licenses,logs,products,utils,validation
 from bin import keys
+from bin.models import User
 import pytest, time
+from datetime import datetime
 
 def test_edits(auth, client,app ):
     #GIVEN a User and customer model
@@ -67,6 +69,10 @@ def test_license(auth, client,app ):
             
             dtemp = DBAPI.getKeyData(1)
             DBAPI.addRegistration(1, 123, dtemp)
+            DBAPI.addRegistration(1, 234, dtemp)
+            dtemp = DBAPI.getKeyData(1)
+            assert dtemp.devices ==2
+            licenses.unlinkHardwareDevice(1,234)
             dtemp = DBAPI.getKeyData(1)
             assert dtemp.devices ==1
             data = {'licenseID': 1,'idclient' :'1','action':'RESET', 'maxdevices': '10','expirydate':'1000000' }
@@ -84,9 +90,49 @@ def test_license(auth, client,app ):
             licens = DBAPI.getKeys(1)
             assert licens != None
             assert len(licens) == 0
-        
-                    
+            
 
+def test_keys(auth, client, app):
+    auth.login()
+    with client:
+        with app.app_context():
+            product_keys = keys.create_product_keys()
+            assert len(product_keys) == 3
+            assert product_keys[0] != product_keys[1]
+            assert product_keys[1] != product_keys[2]
+            assert product_keys[0] != product_keys[2]
+
+            kk = keys.generateSerialKey(9)
+            assert len(kk) == (9+1)
+
+
+
+# def test_admin(auth, client, app):
+#     admin_data = {
+#         'email' : 'testing@admin1.com',
+#         'username' : 'admin1',
+#         'password' : 'administrator1'
+#     }
+#     admin_editdata = {
+#         'email' : 'edit@admin.com',
+#         'username' : 'admin1',
+#         'password' : 'administrator1'
+#     }
+#     auth.login()
+#     with client:
+#         with app.app_context():
+#             admins.createAdmin(admin_data)
+#             user = User.query.filter_by(name = admin_data['username']).first()
+#             assert user != None
+#             assert user.email == admin_data['email']
+
+#             admins.editAdmin(1, admin_editdata)
+
+#             user = User.query.filter_by(name = admin_data['username']).first()
+#             assert user != None
+#             assert user.email == admin_editdata['email']
+
+            
 def test_utils():
     #GIVEN a human world
     #WHEN a data is inputed manually
@@ -105,6 +151,9 @@ def test_utils():
         utils.validatePhone('abc123')
         utils.validateClientID(3)
         utils.validateMultiple_Customer(newCustomer.get('name'), newCustomer.get('email'), newCustomer.get('phone'))
+        utils.validateMaxDevices('a')
+        utils.validateMaxDevices(0)
+        utils.validateExpiryDate(int( time.time() )-50 )
 
     
     customers.createCustomer(newCustomer)
