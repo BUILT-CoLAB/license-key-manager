@@ -132,6 +132,22 @@ In a more graphical way, the directory structure is represented bellow, with som
 └── docs
     └── .............                                             # Used for pedagogical terms and evaluation
 
+└── tests
+    └── api                                                       # API Tests
+        └── __init__.py
+        └── test_admin_functionality.py
+        └── test_customer_functionality.py
+        └── test_license_functionality.py
+        └── test_product_functionality.py
+        └── test_security.py
+        └── test_validation_functionality.py
+    └── unit                                                      # Unit Tests
+        └── test_functions.py
+        └── test_models.py
+    └── __init__.py
+    └── conftest.py                                               # Pytest main configuration file
+        
+
 ├── .env                                                          # Environment Variables used by Docker
 ├── Dockerfile                                                    # The Dockerfile used to set-up the Docker Image.
 ├── README.md                                                     # This documentation.
