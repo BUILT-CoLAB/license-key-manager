@@ -6,20 +6,21 @@ import requests
 import base64
 
 publicKey = """-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6rS3LTgnh9quJ+AdiHjM
-SHG2KXh6Li5cPId1XSElia1WOS4j0jNLScSGVS28naD6254YCZqkN8zdGt62RlAY
-dAErrcaYR5dbhIJ91uiKI/7yucr8TA8l2Pao7XRCqWNeqhsakoiATHye9Xvqsoo6
-sN8EaVACrIl7Cd0w1UlWowVw9cxXZO5qj2ebUhpJqS7+g4c2cx1fhmI9Kl4dZvid
-iJCIMJNxHMZL80ZcxftalR8xuuNnnvScbv84twhmh2NXeelK7rddVj9ZJfs2MIWt
-ReGxJyjrd9pdkn0xUCIlqlTswB/+BLR8kznAbXkvSyNnyS9PHt9LyAGzRiJXuiaL
-qwIDAQAB
------END PUBLIC KEY-----"""
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3iTYnI6MQhcX4YUa1cP7
+5ACmKKV2aRckk/tBkXd8qXNzofE9zvlaAaOlR4vubGRRIZz4gtFEvJan/Dy/TekT
+Nph6wzjeBszRZDZSLknhyJMmMQxxEgKbWjwLNUfHjFfpY6wlmnZwcERBpxUIaNlI
+889IJF8zDik9Wg5R3j1DEPoLWDL8flMJUpWN9A4FQXPvUUXgluUmFHU4GpCwgHEF
+NywpcwMEVlGbVTJyVf12y0p8R4xWEg8fREzA7RoBuSa51apzAzFoGyT6gD4NT7nE
+FVX1LFjk3G/JivIhqZq4DevuPX92vMCKvgvoocaSdpgqavgQ+KA+m7a5bR2TIFKq
+rQIDAQAB
+-----END PUBLIC KEY-----
+"""
 
 public_key = serialization.load_pem_public_key(str.encode(publicKey))
 
-api_key = '3ebec076-b65f-4e5d-bc3a-27846b13bffb'
-serial = '9XAG0-OMRZ8-ZYZPT-5AHYO'
-hwid = 'CPU0_BFEBFBFF000806C1_ToBeFilledByO.E.M.'  # Deterministic UID
+api_key = '474a7bca-92fd-46cc-b754-5ca783cf37e8'
+serial = 'YESKG-FQ6TJ-XIE8R-CRW99'
+hwid = 'CPU0_BFEBFBFF000806C3_ToBeFilledByO.E.M.'  # Deterministic UID
 
 plaintexts = bytes(serial + ':' + hwid, 'utf-8')
 
@@ -38,7 +39,7 @@ if(isinstance(public_key, rsa.RSAPublicKey)):
     print(plaintexts)
     final_payload = base64.b64encode(payload).decode('utf-8')
     print(final_payload)
-    r = requests.post('http://127.0.0.1:5000/api/v1/validate', json={
+    r = requests.post('http://localhost:8000/api/v1/validate', json={
         "apiKey": api_key, "payload": final_payload
     })
 

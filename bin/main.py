@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, Response
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
 from . import databaseAPI as DBAPI
@@ -19,7 +19,7 @@ def index():
 
 @main.route('/healthcheck')
 def health():
-    return
+    return Response(status = 204)
 
 
 @main.route('/tutorial')
