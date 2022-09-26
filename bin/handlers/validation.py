@@ -41,10 +41,10 @@ def handleExistingState(keyObject, decryptedData):
         In this situation, the method merely checks whether or not the license is still valid.
     """
     if( validateExpirationDate( keyObject.expirydate ) ):
-        return responseMessage(200, 'OKAY', 'OKAY STATUS :: This device is still registered and everything is okay.', decryptedData)
+        return responseMessage(200, 'OKAY', 'OKAY STATUS :: This device is still registered and everything is okay.', decryptedData, keyObject.expirydate)
     else:
         DBAPI.applyExpirationState(keyObject.id)
-        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid.', decryptedData)
+        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid.', decryptedData, keyObject.expirydate)
 
 def handleNonExistingState(keyObject, decryptedData):
     """
@@ -54,24 +54,24 @@ def handleNonExistingState(keyObject, decryptedData):
 
     # STEP 1 :: Validate the status of the License (if it's revoked/disabled, then interrupt the validation with an error)
     if(keyObject.status == 2):
-        return responseMessage(403, 'ERR_KEY_REVOKED', 'ERROR :: The key was revoked. Your request was valid but the license is disabled until further notice.', decryptedData)
+        return responseMessage(403, 'ERR_KEY_REVOKED', 'ERROR :: The key was revoked. Your request was valid but the license is disabled until further notice.', decryptedData, keyObject.expirydate)
 
     # STEP 2 :: Check if the License has expired. If that's the case, then the validation should be interrupted with an error.
     if( not validateExpirationDate( keyObject.expirydate ) ):
         DBAPI.applyExpirationState(keyObject.id)
-        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid and will not admit any new devices.', decryptedData)
+        return responseMessage(400, 'ERR_KEY_EXPIRED', 'ERROR :: This license is no longer valid and will not admit any new devices.', decryptedData, keyObject.expirydate)
     
     # STEP 3 :: Check if the License's device list can hold more devices.
     if(keyObject.devices == keyObject.maxdevices):
-        return responseMessage(400, 'ERR_KEY_DEVICES_FULL', 'ERROR :: The maximum number of devices for this license key has been reached.', decryptedData)
+        return responseMessage(400, 'ERR_KEY_DEVICES_FULL', 'ERROR :: The maximum number of devices for this license key has been reached.', decryptedData, keyObject.expirydate)
 
     # If all steps above go through, then we accept the validation
     DBAPI.addRegistration(keyObject.id, decryptedData[1], keyObject)
-    return responseMessage(201, 'SUCCESS', 'SUCCESS :: Your registration was successful!', decryptedData)
+    return responseMessage(201, 'SUCCESS', 'SUCCESS :: Your registration was successful!', decryptedData, keyObject.expirydate)
 
 
 # Utility Functions
-def responseMessage(HTTPCode = 200, ResponseCode = 'OKAY', Message = 'Everything is okay (DEFAULT RESPONSE)', decryptedData = [None, None]):
+def responseMessage(HTTPCode = 200, ResponseCode = 'OKAY', Message = 'Everything is okay (DEFAULT RESPONSE)', decryptedData = [None, None], expirationDate = None):
     """
         Creates a JSON string that contains all the individual components of a standard response.
     """
@@ -80,7 +80,8 @@ def responseMessage(HTTPCode = 200, ResponseCode = 'OKAY', Message = 'Everything
         'Message' : str(Message),
         'Code' : str(ResponseCode),
         'SerialKey' : decryptedData[0],
-        'HardwareID' : decryptedData[1]
+        'HardwareID' : decryptedData[1],
+        'ExpirationDate' : int( -1 ) if expirationDate == None else int( expirationDate )
     }
 
 def generateLogContents(requestData, responseMessage):
