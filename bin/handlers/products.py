@@ -15,15 +15,16 @@ def displayProduct(productID):
     if(not str(productID).isnumeric()):
         return Utils.render404("Product not found", "Sorry, but the product you have entered is invalid ...")
 
+    productContent = DBAPI.getProductByID(productID)
+    if(productContent == None):
+        return Utils.render404("Product not found", "Sorry, but the product you have entered doesn't yet exist ...")
+
     DBAPI.updateKeyStatesFromProduct(productID)
 
     licenses = DBAPI.getKeys(productID)
-    productContent = DBAPI.getProductByID(productID)
     customers = DBAPI.getCustomer('_ALL_')
     clientcount = DBAPI.getDistinctClients(productID)
 
-    if(productContent == None):
-        return Utils.render404("Product not found", "Sorry, but the product you have entered doesn't yet exist ...")
     return render_template('product.html', licenses=licenses, clients=clientcount, product=productContent, pubKey=productContent.publicK.decode('utf-8'), pubKeyXML=Utils.PemToXML(productContent.publicK), customers=customers, mode=request.cookies.get('mode'))
 
 
@@ -55,6 +56,9 @@ def editProduct(requestData):
     image = requestData.get('image')
     details = requestData.get('details')
     # ###################################################
+    
+    if(DBAPI.getProductByID( int(id) ) == None):
+        return Utils.render404("Product not found", "Sorry, but the product you have entered doesn't yet exist ...")
 
     DBAPI.editProduct(int(id), name, category, image, details)
     DBAPI.submitLog(None, adminAcc.id, 'EditedProduct', '$$' +

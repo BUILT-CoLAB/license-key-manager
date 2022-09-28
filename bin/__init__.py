@@ -7,12 +7,15 @@ db = SQLAlchemy()
 _KEY_LENGTH_ = 64
 
 
-def create_app():
+def create_app(testing,database):
 
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/sqlite.db'
+    if(testing is None or testing==False):
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/sqlite.db'
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+database
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

@@ -236,9 +236,10 @@ def deleteRegistrationsOfKey(keyID):
     db.session.commit()
 
 def deleteRegistrationOfHWID(keyID, hardwareID):
-    Registration.query.filter_by(keyID = keyID, hardwareID = hardwareID).delete()
+    reg = Registration.query.filter_by(keyID = keyID, hardwareID = hardwareID).first()
+    db.session.delete(reg)
     originalKey = getKeyData(keyID)
-    originalKey.devices = originalKey.devices - 1
+    originalKey.devices = originalKey.devices - 1    
     db.session.commit()
 
 def addRegistration(keyID, hardwareID, keyObject):
