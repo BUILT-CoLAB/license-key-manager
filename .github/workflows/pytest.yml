@@ -17,11 +17,28 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.x"
-          cache: 'pip' # caching pip dependencies
+          cache: "pip" # caching pip dependencies
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+          pip install autopep8
+          pip install pylint
+
+      - name: autopep8
+        id: autopep8
+        uses: peter-evans/autopep8@v1
+        with:
+          args: --recursive --in-place --aggressive --aggressive .
+
+      - name: Fail if autopep8 made changes
+        if: steps.autopep8.outputs.exit-code == 2
+        run: exit 1
+
+      - name: Analysing the code with pylint
+        run: |
+          find . -name '*.py' -exec pylint {} \;
+
       - name: Run test suite
         run: |
           pytest -v

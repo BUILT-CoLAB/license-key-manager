@@ -6,3 +6,4 @@ nginx/cache
 nginx/logs
 *.log
 .vs
+.pytest_cache

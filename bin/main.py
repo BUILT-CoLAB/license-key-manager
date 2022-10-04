@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, Response
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
-from . import databaseAPI as DBAPI
+from . import database_api as DBAPI
 import json
 import time
 import math
@@ -19,7 +19,7 @@ def index():
 
 @main.route('/healthcheck')
 def health():
-    return Response(status = 204)
+    return Response(status=204)
 
 
 @main.route('/tutorial')

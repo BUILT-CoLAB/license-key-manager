@@ -1,7 +1,7 @@
 from ..keys import create_product_keys
 from flask import render_template, request
 from flask_login import current_user
-from .. import databaseAPI as DBAPI
+from .. import database_api as DBAPI
 from . import utils as Utils
 import json
 
@@ -56,8 +56,8 @@ def editProduct(requestData):
     image = requestData.get('image')
     details = requestData.get('details')
     # ###################################################
-    
-    if(DBAPI.getProductByID( int(id) ) == None):
+
+    if(DBAPI.getProductByID(int(id)) == None):
         return Utils.render404("Product not found", "Sorry, but the product you have entered doesn't yet exist ...")
 
     DBAPI.editProduct(int(id), name, category, image, details)

@@ -44,7 +44,7 @@ def create_app(testing=None, database=None):
         import os
         from dotenv import load_dotenv
         from os.path import exists
-        from . import databaseAPI as DBAPI
+        from . import database_api as DBAPI
 
         load_dotenv()
         if(not exists('sqlite.db')):

@@ -32,16 +32,19 @@ namespace LMlib
 
             foreach (ManagementObject mo in moc)
             {
-                Object obj = mo.Properties["deviceId"].Value.ToString();
-                cpuInfo.Append(Convert.ToString(obj));
-                cpuInfo.Append('_');
+                if (mo.Properties["deviceId"].Value != null)
+                {
+                    Object obj = mo.Properties["deviceId"].Value.ToString();
+                    cpuInfo.Append(Convert.ToString(obj));
+                    cpuInfo.Append('_');
 
-                obj = mo.Properties["processorID"].Value.ToString();
-                cpuInfo.Append(Convert.ToString(obj));
-                cpuInfo.Append('_');
+                    obj = mo.Properties["processorID"].Value.ToString();
+                    cpuInfo.Append(Convert.ToString(obj));
+                    cpuInfo.Append('_');
 
-                obj = mo.Properties["SerialNumber"].Value.ToString();
-                cpuInfo.Append(Convert.ToString(obj));
+                    obj = mo.Properties["SerialNumber"].Value.ToString();
+                    cpuInfo.Append(Convert.ToString(obj));
+                }
             }
             return cpuInfo.ToString().Replace(" ", string.Empty);
         }
