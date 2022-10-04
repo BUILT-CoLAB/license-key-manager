@@ -1,9 +1,9 @@
 import json
 import pytest
-from bin.models import User
+from src import db
+from src.models import User
 from werkzeug.security import generate_password_hash
 from time import time
-from bin import database_api, db
 import flask_login
 from flask import session
 
@@ -66,7 +66,7 @@ def test_non_owner_access_admin_list(auth, client, user_not_owner):
         assert session['_user_id'] == str(user_not_owner.id)
         assert flask_login.current_user.name == user_not_owner.name
         response = client.get("/admins")
-        assert user_not_owner.owner == False
+        assert user_not_owner.owner is False
         assert response.status_code != 200
 
 
@@ -101,7 +101,7 @@ def test_admin_creation(auth, client, app):
 
     with app.app_context():
         user = User.query.filter_by(name=json_info['username']).first()
-        assert user != None
+        assert user is not None
         assert user.email == json_info['email']
 
 
@@ -138,7 +138,8 @@ def test_admin_edit(auth, client, app, user_not_owner):
 
     auth.logout()
 
-    auth.login(username=user_not_owner.name, password="new_testing_password")
+    auth.login(username=user_not_owner.name,
+               password="new_testing_password")
     with client:
         client.get('/')
         assert session['_user_id'] == str(user_not_owner.id)
@@ -168,17 +169,18 @@ def test_admin_toggle_state(client, auth, app, user_not_owner):
 
     auth.login()
 
-    response = client.post("admins/"+str(user_not_owner.id)+"/togglestatus")
+    response = client.post(
+        "admins/"+str(user_not_owner.id)+"/togglestatus")
     assert response.status_code == 200
     assert json.loads(response.data)['code'] == "OKAY"
 
     with app.app_context():
         user = User.query.filter_by(id=user_not_owner.id).first()
-        assert user.disabled == True
+        assert user.disabled is True
 
         response = client.post(
             "admins/"+str(user_not_owner.id)+"/togglestatus")
         assert response.status_code == 200
         assert json.loads(response.data)['code'] == "OKAY"
         user = User.query.filter_by(id=user_not_owner.id).first()
-        assert user.disabled == False
+        assert user.disabled is False

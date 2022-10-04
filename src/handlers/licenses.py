@@ -16,16 +16,16 @@ def displayLicense(licenseID):
         return Utils.render404("License not found", "Sorry, but the license you have entered is invalid ...")
 
     try:
-        license = DBAPI.getKeyAndClient(licenseID)
-        if(license.expirydate != 0 and license.status != 3 and license.expirydate < int(time())):
-            license = DBAPI.applyExpirationState(license.id)
+        licenseEntry = DBAPI.getKeyAndClient(licenseID)
+        if(licenseEntry.expirydate != 0 and licenseEntry.status != 3 and licenseEntry.expirydate < int(time())):
+            licenseEntry = DBAPI.applyExpirationState(licenseEntry.id)
         changelog = DBAPI.getKeyLogs(licenseID)
         changelog.reverse()
         devices = DBAPI.getKeyHWIDs(licenseID)
     except Exception:
         return Utils.render404("Unknown Error", "Sorry, but there was an error acquiring the data from the database ...")
 
-    if(license == None):
+    if(licenseEntry is None):
         return Utils.render404("License not found", "Sorry, but the license you have entered does not exist ...")
     return render_template('license.html', license=license, changelog=changelog, devices=devices, mode=request.cookies.get('mode'))
 
@@ -36,7 +36,7 @@ def createLicense(productID, requestData):
         The return comes in a JSON format, made out of a 'code' field and a 'message' field. The function will always return an error as a 'code' if the productID is invalid or does not exist, if the request data is also invalid or if an error occurs while handling the Database. 
     """
     adminAcc = current_user
-    if((not str(productID).isnumeric()) or DBAPI.getProductByID(productID) == None):
+    if((not str(productID).isnumeric()) or DBAPI.getProductByID(productID) is None):
         return json.dumps({'code': "ERROR", 'message': "The product you have indicated is invalid or does not exist."}), 500
 
     client = requestData.get('idclient')
@@ -69,7 +69,7 @@ def changeLicenseState(requestData):
         return json.dumps({'code': "ERROR", 'message': "The license and (or) the action request you have indicated is (are) invalid ..."}), 500
 
     licenseObject = DBAPI.getKeyData(licenseID)
-    if(licenseObject == None):
+    if(licenseObject is None):
         return json.dumps({'code': "ERROR", 'message': "The license you have indicated does not exist ..."}), 500
 
     try:

@@ -1,7 +1,7 @@
 import json
-from bin import database_api, db
+from src import database_api, db
+from src.models import Client
 import pytest
-from bin.models import Client
 from time import time
 
 
@@ -16,7 +16,7 @@ def created_customer(app):
     yield final_client
     with app.app_context():
         test_if_exists = Client.query.filter_by(id=newClient.id).first()
-        if(test_if_exists != None):
+        if(test_if_exists is not None):
             database_api.deleteCustomer(test_if_exists.id)
 
 
@@ -51,7 +51,7 @@ def test_creation(auth, client, app):
 
     with app.app_context():
         customer = database_api.getCustomerByID(1)
-        assert customer != None
+        assert customer is not None
         assert customer.id == 1
         assert customer.name == newCustomer['name']
         assert customer.country == newCustomer['country']
@@ -102,7 +102,7 @@ def test_edit(auth, client, app, created_customer):
     assert response.status_code == 200
     with app.app_context():
         customer = database_api.getCustomerByID(1)
-        assert customer != None
+        assert customer is not None
         assert created_customer != changedCustomer
         assert customer.id == 1
         assert customer.name == changedCustomer['name']
@@ -135,7 +135,7 @@ def test_delete(auth, client, app, created_customer):
     auth.login()
     with app.app_context():
         customer = database_api.getCustomerByID(created_customer.id)
-        assert customer != None
+        assert customer is not None
 
         # Tries to delete an unexistent customer
         response = client.post("/customers/delete/"+str(created_customer.id+1))
@@ -151,4 +151,4 @@ def test_delete(auth, client, app, created_customer):
         assert json_loaded['code'] == "OKAY"
 
         customer = database_api.getCustomerByID(created_customer.id)
-        assert customer == None
+        assert customer is None

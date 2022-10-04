@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import render_template, request
 from flask_login import current_user as adminAcc
 from .. import database_api as DBAPI
 from . import utils as Utils
@@ -50,6 +50,6 @@ def toggleAdminStatus(adminID):
         return 'Unauthorized access', 401
     try:
         DBAPI.toggleUserStatus(adminID)
-    except:
+    except Exception:
         return json.dumps({'code': "ERROR", 'message': 'The database failed to disable/enable the account - #UNKNOWN ERROR'})
     return json.dumps({'code': "OKAY"})

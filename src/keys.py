@@ -1,4 +1,4 @@
-from uuid import uuid4, uuid1
+from uuid import uuid4
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
@@ -40,7 +40,6 @@ def generateSerialKey(length):
     return serialKey
 
 # Data Format: licensekey:hardwareID
-# TODO - CATCH ERROR IF DECRYPTION FAILS. SERVER CRASHES
 
 
 def decrypt_data(payload, product):

@@ -1,12 +1,8 @@
-from ctypes import util
-from pydoc import cli
-from bin import database_api as DBAPI
-from bin.handlers import admins, customers, licenses, logs, products, utils, validation
-from bin import keys
-from bin.models import User
+from src import database_api as DBAPI
+from src.handlers import customers, licenses, utils
+from src import keys
 import pytest
 import time
-from datetime import datetime
 
 
 def test_edits(auth, client, app):
@@ -92,7 +88,7 @@ def test_license(auth, client, app):
                     'maxdevices': '10', 'expirydate': '1000000'}
             licenses.changeLicenseState(data)
             licens = DBAPI.getKeys(1)
-            assert licens != None
+            assert licens is not None
             assert len(licens) == 0
 
 

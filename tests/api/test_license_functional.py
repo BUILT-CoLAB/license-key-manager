@@ -1,15 +1,11 @@
 from datetime import datetime
 import json
-from math import prod
 from time import time
-from uuid import uuid4
-from bin import database_api
 import pytest
-from bin import db
-from bin.keys import create_product_keys, generateSerialKey
-from flask_login import current_user
-
-from bin.models import Client, Key, Product, Registration
+from src import db
+from src import database_api
+from src.keys import create_product_keys, generateSerialKey
+from src.models import Client, Key, Product, Registration
 
 
 @pytest.fixture()
@@ -52,7 +48,7 @@ def create_license(app, create_customer, create_product):
     yield key
     with app.app_context():
         final_key = Key.query.filter_by(id=key.id).first()
-        if(final_key != None):
+        if(final_key is not None):
             db.session.delete(final_key)
             db.session.commit()
 
@@ -68,7 +64,7 @@ def add_device(app, create_customer, create_product, create_license):
     yield registration
     with app.app_context():
         final_registration = Registration.query.first()
-        if(final_registration != None):
+        if(final_registration is not None):
             database_api.deleteRegistrationOfHWID(create_license.id, hw_id)
 
 
@@ -99,26 +95,26 @@ def test_creation(auth, client, app, create_product, create_customer):
     auth.login()
     expiryDate = datetime.timestamp(datetime.fromisoformat('2023-10-10'))
 
-    license = {
+    licenseEntry = {
         'idclient': create_customer.id,
         'maxdevices': 4,
         'expirydate': expiryDate
     }
     endpoint = "/product/"+str(create_product.id)+"/createlicense"
-    response = client.post(endpoint, json=license)
+    response = client.post(endpoint, json=licenseEntry)
     assert response.status_code == 200
 
     assert json.loads(response.data)['code'] == "OKAY"
 
     with app.app_context():
         licenses = database_api.getKeys(1)
-        assert licenses != None
+        assert licenses is not None
         assert len(licenses) == 1
         assert licenses[0].id == 1
         assert licenses[0].productid == 1
-        assert licenses[0].clientid == license['idclient']
-        assert licenses[0].maxdevices == license['maxdevices']
-        assert licenses[0].expirydate == int(license['expirydate'])
+        assert licenses[0].clientid == licenseEntry['idclient']
+        assert licenses[0].maxdevices == licenseEntry['maxdevices']
+        assert licenses[0].expirydate == int(licenseEntry['expirydate'])
         assert licenses[0].status == 0
         assert licenses[0].devices == 0
 
@@ -155,7 +151,7 @@ def test_delete_without_associated_device(auth, client, app, create_license):
 
     with app.app_context():
         licenses = database_api.getKeys(1)
-        assert licenses != None
+        assert licenses is not None
         assert len(licenses) == 0
 
 
@@ -191,11 +187,11 @@ def test_delete_with_associated_device(auth, client, app, create_license):
 
     with app.app_context():
         licenses = database_api.getKeys(create_license.id)
-        assert licenses != None
+        assert licenses is not None
         assert len(licenses) == 0
 
         registrations = database_api.getKeyHWIDs(create_license.id)
-        assert registrations != None
+        assert registrations is not None
         assert len(registrations) == 0
 
 
@@ -238,7 +234,7 @@ def test_switch_state_no_active_devices(auth, client, app, create_product, creat
 
     with app.app_context():
         licenses = database_api.getKeys(1)
-        assert licenses != None
+        assert licenses is not None
         assert len(licenses) == 1
         assert licenses[0].status == 2
 
@@ -247,7 +243,7 @@ def test_switch_state_no_active_devices(auth, client, app, create_product, creat
         assert json.loads(response.data)['code'] == "OKAY"
 
         licenses = database_api.getKeys(1)
-        assert licenses != None
+        assert licenses is not None
         assert len(licenses) == 1
         assert licenses[0].status == 0
 
@@ -295,7 +291,7 @@ def test_switch_state_with_active_devices(auth, client, app, create_product, cre
 
     with app.app_context():
         licenses = database_api.getKeys(1)
-        assert licenses != None
+        assert licenses is not None
         assert len(licenses) == 1
         assert licenses[0].status == 2
 
@@ -304,7 +300,7 @@ def test_switch_state_with_active_devices(auth, client, app, create_product, cre
         assert json.loads(response.data)['code'] == "OKAY"
 
         licenses = database_api.getKeys(1)
-        assert licenses != None
+        assert licenses is not None
         assert len(licenses) == 1
         assert licenses[0].status == 1
 
@@ -412,7 +408,7 @@ def test_unlinking_device(auth, client, app, create_product, create_customer, cr
     with app.app_context():
         registrations = database_api.getRegistration(
             create_license.id, add_device.hardwareID)
-        assert registrations == None
+        assert registrations is None
 
 
 @pytest.mark.parametrize(('licenseID', 'hardwareID', 'message'), (
@@ -477,5 +473,5 @@ def test_invalid_unlinking_device(auth, client, app, create_product, create_cust
     with app.app_context():
         registrations = database_api.getRegistration(
             create_license.id, add_device.hardwareID)
-        assert registrations != None
+        assert registrations is not None
         assert registrations.id == add_device.id

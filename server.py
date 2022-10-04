@@ -1,6 +1,6 @@
 import os
-import bin
+import src
 
 if __name__ == "__main__":
-    app = bin.create_app()
+    app = src.create_app()
     app.run(debug=True)

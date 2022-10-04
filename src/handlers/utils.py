@@ -3,6 +3,9 @@ from .. import database_api as DBAPI
 import re
 from time import time
 from datetime import datetime
+from binascii import unhexlify
+from cryptography.hazmat.primitives import serialization
+from base64 import standard_b64encode
 
 
 def validateMultiple_Customer(name, email, phoneNumber):
@@ -64,7 +67,7 @@ def validateName(name):
 
 
 def validateClientID(clientID):
-    if((not str(clientID).isnumeric()) or DBAPI.getCustomerByID(clientID) == None):
+    if((not str(clientID).isnumeric()) or DBAPI.getCustomerByID(clientID) is None):
         raise Exception("- Invalid Client ID (must exist)")
 
 
@@ -87,22 +90,21 @@ def validateExpiryDate(expiryDate):
 # #######################################################################################
 
 def render404(mainMessage=None, subMessage=None):
-    mainMessage = "Page not found" if mainMessage == None else mainMessage
-    subMessage = "Sorry, but the page you are looking for does not exist ..." if subMessage == None else subMessage
+    mainMessage = "Page not found" if mainMessage is None else mainMessage
+    subMessage = "Sorry, but the page you are looking for does not exist." if subMessage is None else subMessage
 
     return render_template('404.html', mode=request.cookies.get('mode'), main=mainMessage, sub=subMessage), 404
 
 
 def PemToXML(pubkey):
     def long_to_bytes(val, endianness='big'):
-        from binascii import unhexlify
         # one (1) hex digit per four (4) bits
         width = val.bit_length()
         # unhexlify wants an even multiple of eight (8) bits, but we don't
         # want more digits than we need (hence the ternary-ish 'or')
         width += 8 - ((width % 8) or 8)
         # format width specifier: four (4) bits per hex digit
-        fmt = '%%0%dx' % (width // 4)
+        fmt = '%%0%dx' % (width // 4)  # pylint: disable=C0209
         # prepend zero (0) to the width, to zero-pad the output
         s = unhexlify(fmt % val)
         if endianness == 'little':
@@ -110,9 +112,6 @@ def PemToXML(pubkey):
             s = s[::-1]
         return s
 
-    from cryptography.hazmat.primitives.asymmetric import rsa
-    from cryptography.hazmat.primitives import serialization
-    from base64 import standard_b64encode
     pubk = serialization.load_pem_public_key(pubkey)
     pubKxml = '<RSAKeyValue>'
     pubKxml += '<Modulus>'

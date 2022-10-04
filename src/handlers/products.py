@@ -3,7 +3,6 @@ from flask import render_template, request
 from flask_login import current_user
 from .. import database_api as DBAPI
 from . import utils as Utils
-import json
 
 
 def displayProductList():
@@ -57,7 +56,7 @@ def editProduct(requestData):
     details = requestData.get('details')
     # ###################################################
 
-    if(DBAPI.getProductByID(int(id)) == None):
+    if(DBAPI.getProductByID(int(id)) is None):
         return Utils.render404("Product not found", "Sorry, but the product you have entered doesn't yet exist ...")
 
     DBAPI.editProduct(int(id), name, category, image, details)

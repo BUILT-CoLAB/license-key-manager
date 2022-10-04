@@ -37,7 +37,7 @@ jobs:
 
       - name: Analysing the code with pylint
         run: |
-          find . -name '*.py' -exec pylint {} \;
+          find . -name '*.py' -exec pylint --fail_under=6.0 --rcfile=.pylintrc {} \;
 
       - name: Run test suite
         run: |

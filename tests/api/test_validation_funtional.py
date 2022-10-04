@@ -1,15 +1,13 @@
 import base64
 import json
-from plistlib import load
-from sre_constants import SUCCESS
 from uuid import uuid4
 import pytest
-from bin import database_api, db
-from bin.models import Product, Client, Key, Registration
-from bin.keys import create_product_keys, generateSerialKey
+from src import database_api, db
+from src.models import Product, Client, Key, Registration
+from src.keys import create_product_keys, generateSerialKey
 from datetime import datetime
 from time import time
-from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
 
@@ -70,7 +68,7 @@ def created_license(app, created_customer, created_product_1):
     yield key
     with app.app_context():
         final_key = Key.query.filter_by(id=key.id).first()
-        if(final_key != None):
+        if(final_key is not None):
             db.session.delete(final_key)
             db.session.commit()
 
@@ -86,7 +84,7 @@ def created_expired_license(app, created_customer, created_product_1):
     yield key
     with app.app_context():
         final_key = Key.query.filter_by(id=key.id).first()
-        if(final_key != None):
+        if(final_key is not None):
             db.session.delete(final_key)
             db.session.commit()
 
@@ -102,7 +100,7 @@ def add_device_valid(app, created_customer, created_product_1, created_license):
     yield registration
     with app.app_context():
         final_registration = Registration.query.first()
-        if(final_registration != None):
+        if(final_registration is not None):
             database_api.deleteRegistrationOfHWID(created_license.id, hw_id)
 
 
@@ -117,7 +115,7 @@ def add_device_expired(app, created_customer, created_product_1, created_expired
     yield registration
     with app.app_context():
         final_registration = Registration.query.first()
-        if(final_registration != None):
+        if(final_registration is not None):
             database_api.deleteRegistrationOfHWID(
                 created_expired_license.id, hw_id)
 
@@ -175,10 +173,10 @@ def test_device_validation(auth, client, app, created_product_1, created_custome
 
     with app.app_context():
         registration = database_api.getRegistration(created_license.id, hw_id)
-        assert registration != None
-        license = database_api.getKeyData(created_license.id)
-        assert license.devices == 1
-        assert license.maxdevices >= license.devices
+        assert registration is not None
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry.devices == 1
+        assert licenseEntry.maxdevices >= licenseEntry.devices
 
 
 def test_max_devices_fail(auth, client, app, created_product_1, created_customer, created_license):
@@ -263,10 +261,10 @@ def test_max_devices_fail(auth, client, app, created_product_1, created_customer
     with app.app_context():
         registration = database_api.getRegistration(
             created_license.id, hw_id_1)
-        assert registration != None
-        license = database_api.getKeyData(created_license.id)
-        assert license.devices == 1
-        assert license.maxdevices >= license.devices
+        assert registration is not None
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry.devices == 1
+        assert licenseEntry.maxdevices >= licenseEntry.devices
 
         # Sending second request
         json_info = {
@@ -283,10 +281,10 @@ def test_max_devices_fail(auth, client, app, created_product_1, created_customer
 
         registration = database_api.getRegistration(
             created_license.id, hw_id_2)
-        assert registration != None
-        license = database_api.getKeyData(created_license.id)
-        assert license.devices == 2
-        assert license.maxdevices == license.devices
+        assert registration is not None
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry.devices == 2
+        assert licenseEntry.maxdevices == licenseEntry.devices
 
         # Sending third request
         json_info = {
@@ -303,10 +301,10 @@ def test_max_devices_fail(auth, client, app, created_product_1, created_customer
 
         registration = database_api.getRegistration(
             created_license.id, hw_id_3)
-        assert registration == None
-        license = database_api.getKeyData(created_license.id)
-        assert license.devices == 2
-        assert license.maxdevices == license.devices
+        assert registration is None
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry.devices == 2
+        assert licenseEntry.maxdevices == licenseEntry.devices
 
 
 def test_device_validation_on_expired_license(auth, client, app, created_product_1, created_customer, created_expired_license):
@@ -364,10 +362,10 @@ def test_device_validation_on_expired_license(auth, client, app, created_product
     with app.app_context():
         registration = database_api.getRegistration(
             created_expired_license.id, hw_id)
-        assert registration == None
-        license = database_api.getKeyData(created_expired_license.id)
-        assert license.devices == 0
-        assert license.maxdevices >= license.devices
+        assert registration is None
+        licenseEntry = database_api.getKeyData(created_expired_license.id)
+        assert licenseEntry.devices == 0
+        assert licenseEntry.maxdevices >= licenseEntry.devices
 
 
 def test_device_revalidation_on_valid_license(auth, client, app, created_product_1, created_customer, created_license, add_device_valid):
@@ -403,10 +401,10 @@ def test_device_revalidation_on_valid_license(auth, client, app, created_product
         # asserts that devices number is 1
         registration = database_api.getRegistration(
             created_license.id, add_device_valid.hardwareID)
-        assert registration != None
-        license = database_api.getKeyData(created_license.id)
-        assert license.devices == 1
-        assert license.maxdevices >= license.devices
+        assert registration is not None
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry.devices == 1
+        assert licenseEntry.maxdevices >= licenseEntry.devices
 
         # Tries revalidation
         public_key = serialization.load_pem_public_key(
@@ -436,10 +434,10 @@ def test_device_revalidation_on_valid_license(auth, client, app, created_product
 
         registration = database_api.getRegistration(
             created_license.id, add_device_valid.hardwareID)
-        assert registration != None
-        license = database_api.getKeyData(created_license.id)
-        assert license.devices == 1
-        assert license.maxdevices >= license.devices
+        assert registration is not None
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry.devices == 1
+        assert licenseEntry.maxdevices >= licenseEntry.devices
 
 
 def test_device_revalidation_on_expired_license(auth, client, app, created_product_1, created_customer, created_expired_license, add_device_expired):
@@ -475,10 +473,10 @@ def test_device_revalidation_on_expired_license(auth, client, app, created_produ
         # asserts that devices number is 1
         registration = database_api.getRegistration(
             created_expired_license.id, add_device_expired.hardwareID)
-        assert registration != None
-        license = database_api.getKeyData(created_expired_license.id)
-        assert license.devices == 1
-        assert license.maxdevices >= license.devices
+        assert registration is not None
+        licenseEntry = database_api.getKeyData(created_expired_license.id)
+        assert licenseEntry.devices == 1
+        assert licenseEntry.maxdevices >= licenseEntry.devices
 
         # Tries revalidation
         public_key = serialization.load_pem_public_key(
@@ -508,11 +506,11 @@ def test_device_revalidation_on_expired_license(auth, client, app, created_produ
 
         registration = database_api.getRegistration(
             created_expired_license.id, add_device_expired.hardwareID)
-        assert registration != None
-        license = database_api.getKeyData(created_expired_license.id)
-        assert license.devices == 1
-        assert license.status == 3
-        assert license.maxdevices >= license.devices
+        assert registration is not None
+        licenseEntry = database_api.getKeyData(created_expired_license.id)
+        assert licenseEntry.devices == 1
+        assert licenseEntry.status == 3
+        assert licenseEntry.maxdevices >= licenseEntry.devices
 
 
 def test_invalid_validation_input_serial_key(auth, client, app, created_product_1, created_customer):
@@ -566,9 +564,9 @@ def test_invalid_validation_input_serial_key(auth, client, app, created_product_
     with app.app_context():
         registration = database_api.getKeysBySerialKey(
             license_key, created_product_1.id)
-        assert registration == None
-        license = Key.query.filter_by(serialkey=license_key).first()
-        assert license == None
+        assert registration is None
+        licenseEntry = Key.query.filter_by(serialkey=license_key).first()
+        assert licenseEntry is None
 
 
 def test_invalid_validation_input_api_key(auth, client, app, created_product_1, created_customer, created_license):
@@ -624,10 +622,10 @@ def test_invalid_validation_input_api_key(auth, client, app, created_product_1, 
     with app.app_context():
         registration = database_api.getKeyHWIDs(created_license.id)
         assert registration == []
-        license = database_api.getKeyData(created_license.id)
-        assert license != None
-        assert license.productid == created_product_1.id
-        assert license.devices == 0
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry is not None
+        assert licenseEntry.productid == created_product_1.id
+        assert licenseEntry.devices == 0
 
 
 def test_bad_encryption(auth, client, app, created_product_1, created_product_2, created_customer, created_license):
@@ -683,7 +681,7 @@ def test_bad_encryption(auth, client, app, created_product_1, created_product_2,
 
     with app.app_context():
         registration = database_api.getRegistration(created_license.id, hw_id)
-        assert registration == None
-        license = database_api.getKeyData(created_license.id)
-        assert license.devices == 0
-        assert license.maxdevices >= license.devices
+        assert registration is None
+        licenseEntry = database_api.getKeyData(created_license.id)
+        assert licenseEntry.devices == 0
+        assert licenseEntry.maxdevices >= licenseEntry.devices

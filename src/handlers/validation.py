@@ -15,7 +15,7 @@ def handleValidation(requestData):
 def validate(requestData):
     # STEP 1 :: Validate the existence of an API Key
     product = DBAPI.getProductThroughAPI(requestData.get('apiKey'))
-    if(product == None or product == []):
+    if(product is None or product == []):
         return responseMessage(401, 'ERR_API_KEY', 'ERROR :: The API Key you have entered is invalid. The validation request did not go through.')
     # ##############################################################################
 
@@ -32,11 +32,11 @@ def validate(requestData):
 
     # STEP 3 :: Validate the Serial Key by matching it to an existing License object
     keyObject = DBAPI.getKeysBySerialKey(decryptedData[0], product.id)
-    if(keyObject == None or keyObject == []):
+    if(keyObject is None or keyObject == []):
         return responseMessage(401, 'ERR_SERIAL_KEY', 'ERROR :: The Serial Key you have entered is invalid. The validation request went through but was rejected.', decryptedData)
     # ##############################################################################
 
-    if(DBAPI.getRegistration(keyObject.id, decryptedData[1]) == None):
+    if(DBAPI.getRegistration(keyObject.id, decryptedData[1]) is None):
         return handleNonExistingState(keyObject, decryptedData)
     else:
         return handleExistingState(keyObject, decryptedData)
@@ -79,27 +79,29 @@ def handleNonExistingState(keyObject, decryptedData):
 
 
 # Utility Functions
-def responseMessage(HTTPCode=200, ResponseCode='OKAY', Message='Everything is okay (DEFAULT RESPONSE)', decryptedData=[None, None], expirationDate=None):
+def responseMessage(HTTPCode=200, ResponseCode='OKAY', Message='Everything is okay (DEFAULT RESPONSE)', decryptedData=None, expirationDate=None):
     """
         Creates a JSON string that contains all the individual components of a standard response.
     """
+    if(decryptedData is None):
+        decryptedData = [None, None]
     return {
         'HttpCode': str(HTTPCode),
         'Message': str(Message),
         'Code': str(ResponseCode),
         'SerialKey': decryptedData[0],
         'HardwareID': decryptedData[1],
-        'ExpirationDate': int(-1) if expirationDate == None else int(expirationDate)
+        'ExpirationDate': int(-1) if expirationDate is None else int(expirationDate)
     }
 
 
-def generateLogContents(requestData, responseMessage):
+def generateLogContents(requestData, responseMsg):
     # ################################################# SET-UP DATABASE FIELDS
-    result = 'ERROR' if ('ERR' in responseMessage['Code']) else 'SUCCESS'
-    code = str(responseMessage['Code'])
+    result = 'ERROR' if ('ERR' in responseMsg['Code']) else 'SUCCESS'
+    code = str(responseMsg['Code'])
     apiKey = str(requestData.get('apiKey'))
-    serialKey = str(str(responseMessage['SerialKey']))
-    hardwareID = str(responseMessage['HardwareID'])
+    serialKey = str(str(responseMsg['SerialKey']))
+    hardwareID = str(responseMsg['HardwareID'])
     ipaddress = str(request.access_route[-1])
     # ########################################################################
     DBAPI.submitValidationLog(result, code, ipaddress,

@@ -1,8 +1,7 @@
 import os
 import tempfile
-
 import pytest
-from bin import create_app, database_api
+from src import create_app, database_api
 
 
 @pytest.fixture
@@ -27,8 +26,8 @@ def client(app):
 
     Parameters
     ----------    
-    app : FlaskApp
-        The base FlaskApp
+    app : app
+        The base app
 
     Returns
     -------
@@ -46,8 +45,8 @@ def runner(app):
 
     Parameters
     ----------    
-    app : FlaskApp
-        The base FlaskApp
+    app : app
+        The base app
 
     Returns
     -------

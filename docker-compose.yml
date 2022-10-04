@@ -6,7 +6,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./bin/database:/license-manager/bin/database
+      - ./src/database:/license-manager/src/database
     environment:
       - WORKERS=2
       - THREADS=4

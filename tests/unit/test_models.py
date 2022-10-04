@@ -1,7 +1,7 @@
-from bin import database_api as DBAPI
-from bin.models import User, Product
-from bin import keys
-from bin.handlers import products
+from src import database_api as DBAPI
+from src.models import User, Product
+from src import keys
+from src.handlers import products
 from werkzeug.security import check_password_hash
 
 
@@ -21,7 +21,7 @@ def test_newuser(auth, client, app):
         assert user.password != 'manuel2'
 
         DBAPI.toggleUserStatus(1)
-        assert user.disabled == False
+        assert user.disabled is False
 
 
 def test_changePassword(auth, client, app):
@@ -37,7 +37,7 @@ def test_changePassword(auth, client, app):
         DBAPI.changeUserPassword(user.id, 'newTestPass123')
         user = DBAPI.obtainUser('Marry')
         assert user.password != 'newTestPass123'
-        assert check_password_hash(user.password, 'newTestPass123') == True
+        assert check_password_hash(user.password, 'newTestPass123') is True
 
 
 def test_new_old_user(auth, client, app):
@@ -57,12 +57,12 @@ def test_new_old_user(auth, client, app):
         DBAPI.modifyCustomer(1, 'modTest', 'email@test.com',
                              '987654214', 'Mozambique')
         cust = DBAPI.getCustomerByID(1)
-        assert cust != None
+        assert cust is not None
         assert cust.name == 'modTest'
 
         DBAPI.deleteCustomer(1)
         cust = DBAPI.getCustomerByID(1)
-        assert cust == None
+        assert cust is None
 
 
 def test_new_product(auth, client, app):
@@ -113,7 +113,7 @@ def test_key_registration(auth, client, app):
 
         serial = keys.generateSerialKey(10)
         keyidd = DBAPI.createKey(product.id, 1, serial, 3, 1000000000000000000)
-        assert keyidd != None
+        assert keyidd is not None
 
         # this shouldnt fail but does
         #all_keys = DBAPI.getKeys(product.id)

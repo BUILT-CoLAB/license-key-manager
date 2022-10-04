@@ -1,9 +1,8 @@
-from bin import database_api
 import pytest
-
-from bin.keys import create_product_keys
-from bin.models import Product
-from bin import db
+from src import db
+from src import database_api
+from src.keys import create_product_keys
+from src.models import Product
 
 
 @pytest.fixture
@@ -53,7 +52,7 @@ def test_creation(auth, client, app):
 
     with app.app_context():
         addedProduct = database_api.getProductByID(1)
-        assert addedProduct != None
+        assert addedProduct is not None
         assert addedProduct.id == 1
         assert addedProduct.name == product['name']
         assert addedProduct.category == product['category']
@@ -143,7 +142,7 @@ def test_edit(auth, client, app, created_product):
 
     with app.app_context():
         addedProduct = database_api.getProductByID(1)
-        assert addedProduct != None
+        assert addedProduct is not None
         assert addedProduct != created_product
         assert addedProduct.id == changedProduct['id']
         assert addedProduct.name == changedProduct['name']

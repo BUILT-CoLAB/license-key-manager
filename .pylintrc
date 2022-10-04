@@ -1,82 +1,69 @@
+[MASTER]
+
 disable=
-    too-many-instance-attributes,
-    len-as-condition,
-    too-few-public-methods,
-    anomalous-backslash-in-string,
-    no-else-return,
-    simplifiable-if-statement,
+	unused-argument,
+	unused-variable,
+    trailing-whitespace,
+    superfluous-parens,
+    line-too-long,
     too-many-arguments,
-    duplicate-code,
-    no-name-in-module,
-    no-member,
-    print-statement,
-    parameter-unpacking,
-    unpacking-in-except,
-    old-raise-syntax,
-    backtick,
-    long-suffix,
-    old-ne-operator,
-    old-octal-literal,
-    import-star-module-level,
-    raw-checker-failed,
-    bad-inline-option,
-    locally-disabled,
-    locally-enabled,
-    file-ignored,
-    suppressed-message,
-    useless-suppression,
-    deprecated-pragma,
-    apply-builtin,
-    basestring-builtin,
-    buffer-builtin,
-    cmp-builtin,
-    coerce-builtin,
-    execfile-builtin,
-    file-builtin,
-    long-builtin,
-    raw_input-builtin,
-    reduce-builtin,
-    standarderror-builtin,
-    unicode-builtin,
-    xrange-builtin,
-    coerce-method,
-    delslice-method,
-    getslice-method,
-    setslice-method,
-    no-absolute-import,
-    old-division,
-    dict-iter-method,
-    dict-view-method,
-    next-method-called,
-    metaclass-assignment,
-    indexing-exception,
-    raising-string,
-    reload-builtin,
-    oct-method,
-    hex-method,
-    nonzero-method,
-    cmp-method,
-    input-builtin,
-    round-builtin,
-    intern-builtin,
-    unichr-builtin,
-    map-builtin-not-iterating,
-    zip-builtin-not-iterating,
-    range-builtin-not-iterating,
-    filter-builtin-not-iterating,
-    using-cmp-argument,
-    eq-without-hash,
-    div-method,
-    idiv-method,
-    rdiv-method,
-    exception-message-attribute,
-    invalid-str-codec,
-    sys-max-int,
-    bad-python3-import,
-    deprecated-string-function,
-    deprecated-str-translate-call,
-    import-error,
-    missing-docstring,
-    invalid-name,
-    bad-whitespace,
-    consider-using-enumerate
+    relative-beyond-top-level,
+    broad-except,
+	# TODO(https://github.com/PyCQA/pylint/issues/59#issuecomment-283774279):
+	# Enable cyclic-import after a 1.7-or-later pylint release that
+	# recognizes our disable=cyclic-import suppressions.
+	cyclic-import,
+	# TODO(https://github.com/grpc/grpc/issues/8622): Enable this after the
+	# Beta API is removed.
+	duplicate-code,
+	# TODO(https://github.com/grpc/grpc/issues/261): Doesn't seem to
+	# understand enum and concurrent.futures; look into this later with the
+	# latest pylint version.
+	import-error,
+	# TODO(https://github.com/grpc/grpc/issues/261): Enable this one.
+	# Should take a little configuration but not much.
+	invalid-name,
+	# TODO(https://github.com/grpc/grpc/issues/261): This doesn't seem to
+	# work for now? Try with a later pylint?
+	locally-disabled,
+	# NOTE(nathaniel): We don't write doc strings for most private code
+	# elements.
+	missing-docstring,
+	# TODO(https://github.com/grpc/grpc/issues/261): Doesn't yet play
+	# nicely with some of our code being implemented in Cython. Maybe in a
+	# later version?
+	no-name-in-module,
+	# TODO(https://github.com/grpc/grpc/issues/261): Suppress these where
+	# the odd shape of the authentication portion of the API forces them on
+	# us and enable everywhere else.
+	protected-access,
+	# NOTE(nathaniel): Pylint and I will probably never agree on this.
+	too-few-public-methods,
+	# NOTE(nathaniel): Pylint and I wil probably never agree on this for
+	# private classes. For public classes maybe?
+	too-many-instance-attributes,
+	# NOTE(nathaniel): Some of our modules have a lot of lines... of
+	# specification and documentation. Maybe if this were
+	# lines-of-code-based we would use it.
+	too-many-lines,
+	# TODO(https://github.com/grpc/grpc/issues/261): Maybe we could have
+	# this one if we extracted just a few more helper functions...
+	too-many-nested-blocks,
+	# TODO(https://github.com/grpc/grpc/issues/261): Disable unnecessary
+	# super-init requirement for abstract class implementations for now.
+	super-init-not-called,
+	# NOTE(nathaniel): A single statement that always returns program
+	# control is better than two statements the first of which sometimes
+	# returns program control and the second of which always returns
+	# program control. Probably generally, but definitely in the cases of
+	# if:/else: and for:/else:.
+	useless-else-on-loop,
+	no-else-return,
+	# NOTE(lidiz): Python 3 make object inheritance default, but not PY2
+	useless-object-inheritance,
+	# NOTE(lidiz): the import order will be enforced by isort instead
+	wrong-import-order,
+	# TODO(https://github.com/PyCQA/pylint/issues/3882): Upgrade Pylint
+	unsubscriptable-object,
+	# NOTE(rbellevi): Pylint doesn't understand .pyi files.
+	no-member
