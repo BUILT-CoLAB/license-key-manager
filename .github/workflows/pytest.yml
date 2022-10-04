@@ -23,7 +23,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install autopep8
-          pip install pylint
+          pip install pylint==2.15.3
 
       - name: autopep8
         id: autopep8
