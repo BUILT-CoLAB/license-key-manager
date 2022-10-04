@@ -24,6 +24,8 @@ jobs:
           pip install autopep8
           pip install pylint==2.15.3
   autopep8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: setup
     steps:
       - name: autopep8
@@ -37,6 +39,8 @@ jobs:
         run: exit 1
 
   pylint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: setup
     steps:
       - name: Analysing the code with pylint
@@ -44,6 +48,8 @@ jobs:
           pylint --fail-under 7.0 --recursive y --enable W --rcfile .pylintrc
 
   pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: setup
     steps:
       - name: Run test suite
