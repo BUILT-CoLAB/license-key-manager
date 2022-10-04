@@ -19,7 +19,8 @@ COPY ./bin /license-manager/bin
 COPY .env /license-manager/bin
 
 RUN mkdir -p /license-manager/bin/database
-RUN chown -R appuser:appgroup /license-manager/bin/database
+VOLUME /license-manager/bin/database
+
 
 ARG DEFAULT_WORKERS=2
 ARG DEFAULT_THREADS=4

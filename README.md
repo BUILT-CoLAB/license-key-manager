@@ -146,7 +146,7 @@ In a more graphical way, the directory structure is represented bellow, with som
         └── test_models.py
     └── __init__.py
     └── conftest.py                                               # Pytest main configuration file
-        
+
 
 ├── .env                                                          # Environment Variables used by Docker
 ├── Dockerfile                                                    # The Dockerfile used to set-up the Docker Image.
@@ -699,7 +699,18 @@ BODY:
 
 **Response** : A `JSON` dictionary array containing four fields. It has a code indicating whether or not the validation succeeded (if the code starts with `ERR_` then the validation failed). It also has a description elaborating the reason why it failed.
 
-\*`RESPONSE_FORM` - For every single endpoint above, this type of JSON dictionary response carries a CODE and a MESSAGE. The CODE is used by the script to know if the request succeeded. If it didn't, then the javascript will show the server-generated message to the client.
+\*`RESPONSE_FORM` - For every single endpoint above, this type of JSON dictionary response carries a CODE and a MESSAGE. The CODE is used by the script to know if the request succeeded. If it didn't, then the javascript will show the server-generated message to the client. Example:
+
+```json
+{
+    'HttpCode' : str(HTTPCode),
+    'Message' : str(Message),
+    'Code' : str(ResponseCode),
+    'SerialKey' : str(key),
+    'HardwareID' : str(hwid),
+    'ExpirationDate' : int( -1 ) || int( expirationDate )
+}
+```
 
 ## Helping out
 
