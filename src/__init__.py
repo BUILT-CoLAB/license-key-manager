@@ -4,10 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
 from os.path import exists
-from . import database_api as DBAPI
-from .models import User
-from .auth import auth as auth_blueprint
-from .main import main as main_blueprint
+
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 _KEY_LENGTH_ = 64
@@ -32,6 +29,10 @@ def create_app(testing=None, database=None):
     login_manager.login_view = 'main.index'
     login_manager.init_app(app)
 
+    from .models import User  # pylint: disable=C0415
+    from .auth import auth as auth_blueprint  # pylint: disable=C0415
+    from .main import main as main_blueprint  # pylint: disable=C0415
+
     @ login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
@@ -46,6 +47,7 @@ def create_app(testing=None, database=None):
 
         load_dotenv()
         if(not exists('sqlite.db')):
+            from . import database_api as DBAPI  # pylint: disable=C0415
             db.create_all(app=app)
         DBAPI.generateUser(os.getenv("ADMINUSERNAME"), os.getenv(
             "ADMINPASSWORD"), os.getenv("ADMINEMAIL"))
