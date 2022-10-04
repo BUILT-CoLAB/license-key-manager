@@ -5,3 +5,4 @@ nginx/certs
 nginx/cache
 nginx/logs
 *.log
+.vs
