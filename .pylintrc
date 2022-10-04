@@ -1,5 +1,6 @@
 [MASTER]
-
+recursive=y
+fail-under=7.0
 disable=
 	unused-argument,
 	unused-variable,

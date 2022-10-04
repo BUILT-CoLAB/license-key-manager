@@ -1,7 +1,6 @@
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
-from uuid import uuid1
 import requests
 import base64
 
@@ -41,6 +40,6 @@ if(isinstance(public_key, rsa.RSAPublicKey)):
     print(final_payload)
     r = requests.post('http://localhost:8000/api/v1/validate', json={
         "apiKey": api_key, "payload": final_payload
-    })
+    }, timeout=10)
 
     print(f"Response: {r.json()}")

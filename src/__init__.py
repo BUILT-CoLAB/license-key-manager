@@ -1,7 +1,13 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-
+import os
+from dotenv import load_dotenv
+from os.path import exists
+from . import database_api as DBAPI
+from .models import User
+from .auth import auth as auth_blueprint
+from .main import main as main_blueprint
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 _KEY_LENGTH_ = 64
@@ -12,7 +18,7 @@ def create_app(testing=None, database=None):
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    if(testing is None or testing == False):
+    if(testing is None or testing is False):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/sqlite.db'
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+database
@@ -26,25 +32,17 @@ def create_app(testing=None, database=None):
     login_manager.login_view = 'main.index'
     login_manager.init_app(app)
 
-    from .models import User
-
     @ login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
     # blueprint for auth routes in our app
-    from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
     # blueprint for non-auth parts of app
-    from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
     with app.app_context():
-        import os
-        from dotenv import load_dotenv
-        from os.path import exists
-        from . import database_api as DBAPI
 
         load_dotenv()
         if(not exists('sqlite.db')):
