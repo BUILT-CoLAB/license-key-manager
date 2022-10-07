@@ -21,12 +21,12 @@ def generateUser(username, password, email):
     if(len(User.query.filter_by(name=username).all()) > 0):
         print("OK Exists: User already exists.", flush=True)
         return
-    print("USER DOES NOT EXIST --- ", end="", flush=True)
+    print("Uuser does not exists. ", end="", flush=True)
     newAccount = User(email=email, password=generate_password_hash(
         password), name=username, timestamp=int(time()), owner=True)
     db.session.add(newAccount)
     db.session.commit()
-    print("OK Empty: User created.", flush=True)
+    print("OK: User created.", flush=True)
 
 
 def obtainUser(username):

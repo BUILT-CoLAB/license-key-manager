@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-import os
 from dotenv import load_dotenv
+import os
 from os.path import exists
 
 # init SQLAlchemy so we can use it later in our models
@@ -10,15 +10,16 @@ db = SQLAlchemy()
 _KEY_LENGTH_ = 64
 
 
-def create_app(testing=None, database=None):
+def create_app(testing=None, database="database/sqlite.db"):
 
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
     if(testing is None or testing is False):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/sqlite.db'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + database
     else:
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+database
+        # in-memory db for testing
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -46,7 +47,7 @@ def create_app(testing=None, database=None):
     with app.app_context():
 
         load_dotenv()
-        if(not exists('sqlite.db')):
+        if(not exists(app.config['SQLALCHEMY_DATABASE_URI'])):
             from . import database_api as DBAPI  # pylint: disable=C0415
             db.create_all(app=app)
         DBAPI.generateUser(os.getenv("ADMINUSERNAME"), os.getenv(
