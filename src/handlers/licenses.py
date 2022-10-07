@@ -27,7 +27,7 @@ def displayLicense(licenseID):
 
     if(licenseEntry is None):
         return Utils.render404("License not found", "Sorry, but the license you have entered does not exist ...")
-    return render_template('license.html', license=license, changelog=changelog, devices=devices, mode=request.cookies.get('mode'))
+    return render_template('license.html', license=licenseEntry, changelog=changelog, devices=devices, mode=request.cookies.get('mode'))
 
 
 def createLicense(productID, requestData):
