@@ -17,7 +17,7 @@ def generateUser(username, password, email):
         The following function creates a user account with the indicated data.
     """
     print("Creating user (username='" + username +
-          "', password='" + password + "') ", end="", flush=True)
+          "') ", end="", flush=True)
     if(len(User.query.filter_by(name=username).all()) > 0):
         print("OK Exists: User already exists.", flush=True)
         return

@@ -12,9 +12,12 @@ _KEY_LENGTH_ = 64
 
 def create_app(testing=None, database="database/sqlite.db"):
 
+    load_dotenv()
+
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'secret-key-goes-here'
+    app.config['SECRET_KEY'] = os.getenv(
+        "SECRET_KEY") or 'secret-key-goes-here'
     if(testing is None or testing is False):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + database
     else:
@@ -46,7 +49,6 @@ def create_app(testing=None, database="database/sqlite.db"):
 
     with app.app_context():
 
-        load_dotenv()
         if(not exists(app.config['SQLALCHEMY_DATABASE_URI'])):
             from . import database_api as DBAPI  # pylint: disable=C0415
             db.create_all(app=app)
