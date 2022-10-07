@@ -15,11 +15,12 @@ COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 
-COPY ./bin /license-manager/bin
-COPY .env /license-manager/bin
+COPY ./src /license-manager/src
+COPY .env /license-manager/src
 
-RUN mkdir -p /license-manager/bin/database
-RUN chown -R appuser:appgroup /license-manager/bin/database
+RUN mkdir -p /license-manager/src/database
+VOLUME /license-manager/src/database
+
 
 ARG DEFAULT_WORKERS=2
 ARG DEFAULT_THREADS=4
@@ -40,4 +41,4 @@ HEALTHCHECK --interval=15m --timeout=5s \
 # Tell docker that all future commands should run as the appuser user
 USER appuser
 
-CMD ["bash", "-c", "gunicorn -w ${WORKERS} --threads ${THREADS} -b :${PORT} -k gevent --preload 'bin:create_app()'"]
+CMD ["bash", "-c", "gunicorn -w ${WORKERS} --threads ${THREADS} -b :${PORT} -k gevent --preload 'src:create_app()'"]

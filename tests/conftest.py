@@ -1,21 +1,18 @@
 import os
 import tempfile
-
 import pytest
-from bin import create_app, databaseAPI
+from src import create_app, database_api
 
 
 @pytest.fixture
 def app():
-    db_fd,db_path = tempfile.mkstemp()
-    app = create_app(testing=True,database=db_path)
-    
-    with app.app_context():                
-        databaseAPI.generateUser("test","test", "test@test.com")    
-        user = databaseAPI.obtainUser("test")
-        databaseAPI.toggleUserStatus(user.id)
-        
-        
+    db_fd, db_path = tempfile.mkstemp()
+    app = create_app(testing=True, database=db_path)
+
+    with app.app_context():
+        database_api.generateUser("test", "test", "test@test.com")
+        user = database_api.obtainUser("test")
+        database_api.toggleUserStatus(user.id)
 
     yield app
 
@@ -29,14 +26,14 @@ def client(app):
 
     Parameters
     ----------    
-    app : FlaskApp
-        The base FlaskApp
+    app : app
+        The base app
 
     Returns
     -------
     client: FlaskClient
         FlaskClient to be used by test functions
-        
+
     """
 
     return app.test_client()
@@ -48,14 +45,14 @@ def runner(app):
 
     Parameters
     ----------    
-    app : FlaskApp
-        The base FlaskApp
+    app : app
+        The base app
 
     Returns
     -------
     cliRunner: FlaskCliRunner
         FlaskCliRunner to be used by test functions
-        
+
     """
 
     return app.test_cli_runner()

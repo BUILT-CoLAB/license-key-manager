@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}CPanel | Dashboard{% endblock %}
+{% block first %}text-gray-600 bg-gray-50 dark:bg-gray-700{% endblock %}
+
+{% block content %}
+<dl class="grid grid-cols-4 gap-5">
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
+				</svg>
+			</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Products</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{products}}</p>	
+		</dd>
+	</div>
+
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path>
+				</svg>
+			</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Claimed Licenses</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{activated}}</p>	
+		</dd>
+	</div>
+
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+				</svg>
+			</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Claimed Proportion</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ratio}}%</p>	
+		</dd>
+	</div>
+
+	<div class="relative dark:bg-slate-800 pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden max-h-24">
+		<dt>
+			<div class="absolute bg-sky-500 dark:bg-sky-600 rounded-md p-3">
+				<svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+				</svg>
+			</div>
+			<p class="ml-16 text-sm font-medium text-gray-500 truncate dark:text-gray-300">Licenses Awaiting Activation</p>
+		</dt>
+		<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+			<p class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{awaitingApproval}}</p>	
+		</dd>
+	</div>
+</dl>		
+							
+<div class="relative mt-6 mb-6 border border-gray-100 dark:border-slate-900">
+	<div aria-hidden="true" class="hidden absolute w-1/2 h-full lg:block"></div>
+	<div class="relative bg-transparent dark:bg-slate-900">
+	  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:grid lg:grid-cols-2">
+		<div class="max-w-2xl mx-auto py-24 lg:py-64 lg:max-w-none">
+		  <div class="lg:pr-16">
+			<h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl xl:text-6xl dark:text-gray-200">Multi-purpose License Manager</h1>
+			<p class="mt-4 text-xl text-gray-600 dark:text-gray-500">As an administrator, you are offered multiple ways to create, remove and monitor licenses for your products. </p>
+			<div class="mt-6">
+			  <a href="{{ url_for('main.tutorial') }}" class="inline-block bg-indigo-600 border border-transparent py-2 px-8 rounded-md font-medium text-white hover:bg-indigo-700">Tutorial</a>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="absolute top-0 right-0 w-1/2 h-full">
+		<dl class="flex items-center justify-center flex-col h-full space-y-5">
+			<h3 class="text-2xl text-gray-800 font-bold italic dark:text-slate-200">In the last 30 days</h3>
+			<div class="relative bg-white pb-12 pt-6 px-6 shadow rounded-lg overflow-hidden w-4/5 dark:bg-slate-800">
+				<dt>
+					<div class="absolute bg-teal-600 rounded-md p-3">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+						</svg>
+					</div>
+					<p class="ml-16 text-sm font-medium text-teal-600 truncate">Successful Validations</p>
+				</dt>
+				<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+					<p class="text-2xl font-semibold text-gray-900 dark:text-slate-200">{{successV}}</p>
+				</dd>
+
+				<dt class="pt-4">
+					<div class="absolute bg-rose-600 rounded-md p-3">
+						<!-- Heroicon name: outline/users -->
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</div>
+					<p class="ml-16 text-sm font-medium text-rose-600 truncate">Failed Validations</p>
+				</dt>
+				<dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
+					<p class="text-2xl font-semibold text-gray-900 dark:text-slate-200">{{unsuccessV}}</p>
+					<div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6 dark:bg-slate-700">
+						<div class="text-sm">
+						<a href="#" class="font-medium text-gray-900 hover:text-sky-500 dark:text-slate-200 dark:hover:text-sky-400"> Check validation logs</a>
+						</div>
+					</div>
+				</dd>
+			</div>
+
+		</dl>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+	
+{% endblock %}

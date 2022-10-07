@@ -4,5 +4,6 @@
 venv/
 docs/
 client/
-bin/sqlite.db
+src/sqlite.db
+src/database/*
 *.pyc
