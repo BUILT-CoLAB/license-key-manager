@@ -1,9 +1,10 @@
 name: Sonarqube
 on:
-  push:
-    branches:
-      - main # or the name of your main branch
-  pull_request: {}
+  #push:
+  #  branches:
+  #    - main # or the name of your main branch
+  #pull_request: {}
+  #disabled for now
   workflow_dispatch: {}
 
 jobs:
