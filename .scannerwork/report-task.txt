@@ -1,0 +1,6 @@
+projectKey=BUILT-CoLAB_license-key-manager_AYSFSVDvui8LOEYXS3Ga
+serverUrl=http://bobcat.dev.lan:9000
+serverVersion=9.7.1.62043
+dashboardUrl=http://bobcat.dev.lan:9000/dashboard?id=BUILT-CoLAB_license-key-manager_AYSFSVDvui8LOEYXS3Ga
+ceTaskId=AYSLFUHUdKpuxL0NYXUn
+ceTaskUrl=http://bobcat.dev.lan:9000/api/ce/task?id=AYSLFUHUdKpuxL0NYXUn
