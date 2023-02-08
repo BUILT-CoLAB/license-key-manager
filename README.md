@@ -723,6 +723,7 @@ SLM is still a work in progress and is completely available for improvement. You
 
 You are also encouraged to write unit tests for new functionalities or even existing ones. Although one of the achievements of this application is to make a clear and readable interface, ensuring security is still the top priority in the issue list. Make sure to tag any security issues clearly.
 
+
 ### Style
 
 - Linter: `pylint`
