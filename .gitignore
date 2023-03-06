@@ -1,6 +1,6 @@
 __pycache__/
 .DS_Store
-src/database/*
+src/database/*.db
 nginx/certs
 nginx/cache
 nginx/logs
