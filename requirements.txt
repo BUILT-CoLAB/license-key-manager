@@ -1,5 +1,5 @@
 cryptography==39.0.1
-Flask==2.1.1
+Flask==2.3.2
 Flask_HTTPAuth==4.5.0
 Flask_Login==0.6.0
 SQLAlchemy==1.4
