@@ -1,4 +1,4 @@
-cryptography==39.0.1
+cryptography==41.0.0
 Flask==2.1.1
 Flask_HTTPAuth==4.5.0
 Flask_Login==0.6.0
